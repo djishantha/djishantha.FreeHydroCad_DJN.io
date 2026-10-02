@@ -11,205 +11,351 @@
 
     <title>HYPACK XYZ VDATUM Z Adjuster</title>
 
+
     <style>
 
         * {
             box-sizing: border-box;
         }
 
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background: #f2f4f7;
+
             margin: 0;
+
             padding: 30px;
+
             color: #222;
         }
 
+
         .container {
+
             max-width: 850px;
+
             margin: auto;
+
             background: white;
+
             padding: 30px;
+
             border-radius: 12px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+
+            box-shadow:
+                0 3px 15px
+                rgba(0,0,0,0.12);
         }
+
 
         h1 {
+
             margin-top: 0;
+
             color: #1f4e79;
+
             text-align: center;
         }
 
+
         .description {
+
             text-align: center;
+
             color: #555;
+
             margin-bottom: 30px;
+
             line-height: 1.5;
         }
 
+
         .section {
-            border: 1px solid #d9d9d9;
+
+            border:
+                1px solid #d9d9d9;
+
             border-radius: 8px;
+
             padding: 20px;
+
             margin-bottom: 20px;
+
             background: #fafafa;
         }
 
+
         .section h2 {
+
             margin-top: 0;
+
             font-size: 19px;
+
             color: #1f4e79;
         }
 
+
         label {
+
             display: block;
+
             font-weight: bold;
+
             margin-bottom: 8px;
         }
 
+
         input[type="file"] {
+
             width: 100%;
+
             padding: 10px;
+
             background: white;
-            border: 1px solid #bbb;
+
+            border:
+                1px solid #bbb;
+
             border-radius: 5px;
+
             cursor: pointer;
         }
 
+
         .file-name {
+
             margin-top: 8px;
+
             color: #555;
+
             font-size: 14px;
+
             word-break: break-all;
         }
 
+
         button {
+
             width: 100%;
+
             padding: 14px;
+
             border: none;
+
             border-radius: 6px;
+
             background: #1f6feb;
+
             color: white;
+
             font-size: 17px;
+
             font-weight: bold;
+
             cursor: pointer;
         }
 
+
         button:hover {
+
             background: #1557b0;
         }
 
+
         button:disabled {
+
             background: #999;
+
             cursor: not-allowed;
         }
 
+
         #downloadButton {
+
             background: #198754;
+
             margin-top: 5px;
         }
 
+
         #downloadButton:hover {
+
             background: #146c43;
         }
 
+
+        #refreshButton {
+
+            background: #6c757d;
+
+            margin-top: 12px;
+        }
+
+
+        #refreshButton:hover {
+
+            background: #5a6268;
+        }
+
+
         #status {
+
             margin-top: 20px;
+
             padding: 15px;
+
             background: #eef5ff;
-            border-left: 5px solid #1f6feb;
+
+            border-left:
+                5px solid #1f6feb;
+
             border-radius: 5px;
+
             white-space: pre-line;
+
             line-height: 1.5;
         }
 
+
         #progressContainer {
+
             display: none;
+
             margin-top: 15px;
         }
 
+
         progress {
+
             width: 100%;
+
             height: 22px;
         }
 
+
         #progressText {
+
             text-align: center;
+
             margin-top: 5px;
+
             font-weight: bold;
         }
 
-        #preview {
-            margin-top: 20px;
-            display: none;
-        }
-
-        #preview h3 {
-            color: #1f4e79;
-        }
-
-        pre {
-            background: #111;
-            color: #eee;
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-size: 13px;
-            line-height: 1.5;
-        }
 
         .formula {
+
             background: #fff;
-            border: 1px solid #ddd;
+
+            border:
+                1px solid #ddd;
+
             padding: 14px;
+
             border-radius: 6px;
+
             text-align: center;
-            font-family: Consolas, monospace;
+
+            font-family:
+                Consolas,
+                monospace;
+
             font-size: 17px;
+
             font-weight: bold;
+
             margin-top: 10px;
         }
 
+
         .note {
+
             font-size: 13px;
+
             color: #666;
+
             margin-top: 10px;
+
             line-height: 1.5;
         }
 
+
         #downloadSection {
+
             display: none;
+
             margin-top: 25px;
+
             padding: 20px;
-            border: 2px solid #198754;
+
+            border:
+                2px solid #198754;
+
             border-radius: 8px;
+
             background: #f1fff7;
         }
 
+
         #downloadSection h3 {
+
             color: #198754;
+
             margin-top: 0;
         }
 
+
         #outputFileName {
+
             background: white;
-            border: 1px solid #ddd;
+
+            border:
+                1px solid #ddd;
+
             padding: 12px;
+
             border-radius: 6px;
+
             margin-bottom: 12px;
+
             word-break: break-all;
-            font-family: Consolas, monospace;
+
+            font-family:
+                Consolas,
+                monospace;
+
             font-size: 14px;
         }
 
+
         .info-box {
+
             background: #fff8e1;
-            border-left: 5px solid #f0ad4e;
+
+            border-left:
+                5px solid #f0ad4e;
+
             padding: 12px;
+
             margin-top: 15px;
+
             border-radius: 4px;
+
             font-size: 13px;
+
             line-height: 1.5;
+        }
+
+
+        .button-area {
+
+            margin-top: 20px;
         }
 
     </style>
@@ -246,7 +392,7 @@
 
         <h2>
             1. Select VDATUM XYZ File
-        </2>
+        </h2>
 
 
         <label for="vdatumFile">
@@ -274,8 +420,8 @@
 
         <div class="note">
 
-            Select the VDATUM XYZ file that
-            contains X, Y and Z values.
+            Select the VDATUM XYZ file containing
+            X, Y and Z values.
 
         </div>
 
@@ -319,8 +465,9 @@
 
         <div class="note">
 
-            The X and Y coordinates from this
-            file will be retained.
+            X and Y from this file will be retained.
+            The Z value will be adjusted using the
+            closest VDATUM point.
 
         </div>
 
@@ -383,12 +530,24 @@
          PROCESS BUTTON
          ========================================= -->
 
-    <button
-        id="processButton">
+    <div class="button-area">
 
-        Process XYZ File
+        <button
+            id="processButton">
 
-    </button>
+            Process XYZ File
+
+        </button>
+
+
+        <button
+            id="refreshButton">
+
+            Refresh / Clear All
+
+        </button>
+
+    </div>
 
 
 
@@ -404,6 +563,7 @@
             value="0"
             max="100">
         </progress>
+
 
         <div
             id="progressText">
@@ -429,24 +589,6 @@
 
 
     <!-- =========================================
-         PREVIEW
-         ========================================= -->
-
-    <div id="preview">
-
-        <h3>
-            Output Preview
-        </h3>
-
-        <pre
-            id="previewText">
-        </pre>
-
-    </div>
-
-
-
-    <!-- =========================================
          DOWNLOAD SECTION
          ========================================= -->
 
@@ -454,7 +596,9 @@
         id="downloadSection">
 
         <h3>
+
             Output File Ready
+
         </h3>
 
 
@@ -495,7 +639,7 @@ let outputFileName = "";
 
 
 /* =====================================================
-   FILE NAME DISPLAY
+   VDATUM FILE NAME DISPLAY
    ===================================================== */
 
 document
@@ -526,6 +670,10 @@ document
 );
 
 
+
+/* =====================================================
+   SURVEY FILE NAME DISPLAY
+   ===================================================== */
 
 document
 .getElementById("surveyFile")
@@ -565,6 +713,7 @@ function parseXYZ(text) {
     const lines =
         text.split(/\r?\n/);
 
+
     const points = [];
 
 
@@ -579,7 +728,9 @@ function parseXYZ(text) {
 
 
         if (!line) {
+
             continue;
+
         }
 
 
@@ -587,31 +738,45 @@ function parseXYZ(text) {
             line.split(/\s+/);
 
 
-        if (parts.length < 3) {
+        if (
+            parts.length < 3
+        ) {
+
             continue;
+
         }
 
 
         const x =
             Number(parts[0]);
 
+
         const y =
             Number(parts[1]);
+
 
         const z =
             Number(parts[2]);
 
 
         if (
+
             Number.isFinite(x) &&
+
             Number.isFinite(y) &&
+
             Number.isFinite(z)
+
         ) {
 
             points.push({
+
                 x: x,
+
                 y: y,
+
                 z: z
+
             });
 
         }
@@ -656,7 +821,9 @@ function buildKDTree(
     depth = 0
 ) {
 
-    if (points.length === 0) {
+    if (
+        points.length === 0
+    ) {
 
         return null;
 
@@ -670,11 +837,14 @@ function buildKDTree(
     points.sort(
         function(a, b) {
 
-            if (axis === 0) {
+            if (
+                axis === 0
+            ) {
 
                 return a.x - b.x;
 
             }
+
 
             return a.y - b.y;
 
@@ -747,7 +917,7 @@ function distanceSquared(
 
 
 /* =====================================================
-   FIND CLOSEST POINT
+   FIND CLOSEST VDATUM POINT
    ===================================================== */
 
 function nearestPoint(
@@ -757,11 +927,17 @@ function nearestPoint(
     bestDistance = Infinity
 ) {
 
-    if (node === null) {
+
+    if (
+        node === null
+    ) {
 
         return {
+
             point: best,
+
             distance: bestDistance
+
         };
 
     }
@@ -795,7 +971,9 @@ function nearestPoint(
     let difference;
 
 
-    if (axis === 0) {
+    if (
+        axis === 0
+    ) {
 
         difference =
             target.x -
@@ -817,7 +995,9 @@ function nearestPoint(
     let farBranch;
 
 
-    if (difference < 0) {
+    if (
+        difference < 0
+    ) {
 
         nearBranch =
             node.left;
@@ -840,10 +1020,15 @@ function nearestPoint(
 
     let result =
         nearestPoint(
+
             nearBranch,
+
             target,
+
             best,
+
             bestDistance
+
         );
 
 
@@ -856,16 +1041,24 @@ function nearestPoint(
 
 
     if (
-        difference * difference <
+
+        difference *
+        difference <
         bestDistance
+
     ) {
 
         result =
             nearestPoint(
+
                 farBranch,
+
                 target,
+
                 best,
+
                 bestDistance
+
             );
 
 
@@ -880,8 +1073,11 @@ function nearestPoint(
 
 
     return {
+
         point: best,
+
         distance: bestDistance
+
     };
 
 }
@@ -889,10 +1085,12 @@ function nearestPoint(
 
 
 /* =====================================================
-   STATUS
+   STATUS FUNCTION
    ===================================================== */
 
-function setStatus(message) {
+function setStatus(
+    message
+) {
 
     document
     .getElementById("status")
@@ -904,7 +1102,7 @@ function setStatus(message) {
 
 
 /* =====================================================
-   PROCESS FILE
+   PROCESS BUTTON
    ===================================================== */
 
 document
@@ -913,6 +1111,10 @@ document
     "click",
     async function () {
 
+
+        /* ---------------------------------------------
+           GET FILES
+           --------------------------------------------- */
 
         const vdatumFile =
             document
@@ -929,6 +1131,11 @@ document
             )
             .files[0];
 
+
+
+        /* ---------------------------------------------
+           CHECK FILES
+           --------------------------------------------- */
 
         if (!vdatumFile) {
 
@@ -952,6 +1159,11 @@ document
         }
 
 
+
+        /* ---------------------------------------------
+           PROCESS BUTTON
+           --------------------------------------------- */
+
         const processButton =
             document
             .getElementById(
@@ -967,6 +1179,11 @@ document
             "Processing...";
 
 
+
+        /* ---------------------------------------------
+           PROGRESS
+           --------------------------------------------- */
+
         document
         .getElementById(
             "progressContainer"
@@ -977,30 +1194,47 @@ document
 
         document
         .getElementById(
+            "progressBar"
+        )
+        .value =
+            0;
+
+
+        document
+        .getElementById(
+            "progressText"
+        )
+        .textContent =
+            "0%";
+
+
+
+        /* ---------------------------------------------
+           HIDE OLD DOWNLOAD
+           --------------------------------------------- */
+
+        document
+        .getElementById(
             "downloadSection"
         )
         .style.display =
             "none";
 
 
-        document
-        .getElementById(
-            "preview"
-        )
-        .style.display =
-            "none";
+        outputBlob =
+            null;
 
 
-        outputBlob = null;
+        outputFileName =
+            "";
 
-        outputFileName = "";
 
 
         try {
 
 
             /* =========================================
-               READ VDATUM
+               READ VDATUM FILE
                ========================================= */
 
             setStatus(
@@ -1056,6 +1290,7 @@ document
             );
 
 
+
             /* =========================================
                BUILD KD TREE
                ========================================= */
@@ -1068,7 +1303,7 @@ document
 
 
             /* =========================================
-               READ SURVEY
+               READ SURVEY FILE
                ========================================= */
 
             setStatus(
@@ -1086,16 +1321,16 @@ document
                 );
 
 
-            const outputLines = [];
+            const outputLines =
+                [];
 
-            const previewLines = [];
+
+            let validPoints =
+                0;
 
 
-            let validPoints = 0;
-
-            let unchangedLines = 0;
-
-            let maxDistance = 0;
+            let unchangedLines =
+                0;
 
 
 
@@ -1118,6 +1353,7 @@ document
                     originalLine.trim();
 
 
+
                 /* -------------------------------------
                    BLANK LINE
                    ------------------------------------- */
@@ -1135,8 +1371,9 @@ document
                 }
 
 
+
                 /* -------------------------------------
-                   SPLIT LINE
+                   SPLIT XYZ
                    ------------------------------------- */
 
                 const parts =
@@ -1160,26 +1397,42 @@ document
                 }
 
 
+
                 /* -------------------------------------
                    READ XYZ
                    ------------------------------------- */
 
                 const x =
-                    Number(parts[0]);
+                    Number(
+                        parts[0]
+                    );
 
 
                 const y =
-                    Number(parts[1]);
+                    Number(
+                        parts[1]
+                    );
 
 
                 const z =
-                    Number(parts[2]);
+                    Number(
+                        parts[2]
+                    );
 
+
+
+                /* -------------------------------------
+                   INVALID LINE
+                   ------------------------------------- */
 
                 if (
+
                     !Number.isFinite(x) ||
+
                     !Number.isFinite(y) ||
+
                     !Number.isFinite(z)
+
                 ) {
 
                     outputLines.push(
@@ -1193,39 +1446,27 @@ document
                 }
 
 
+
                 /* -------------------------------------
-                   CLOSEST VDATUM POINT
+                   FIND CLOSEST VDATUM POINT
                    ------------------------------------- */
 
                 const nearest =
                     nearestPoint(
+
                         kdTree,
+
                         {
                             x: x,
                             y: y
                         }
+
                     );
 
 
                 const vdatumPoint =
                     nearest.point;
 
-
-                const distance =
-                    Math.sqrt(
-                        nearest.distance
-                    );
-
-
-                if (
-                    distance >
-                    maxDistance
-                ) {
-
-                    maxDistance =
-                        distance;
-
-                }
 
 
                 /* -------------------------------------
@@ -1237,8 +1478,9 @@ document
                     vdatumPoint.z;
 
 
+
                 /* -------------------------------------
-                   OUTPUT
+                   OUTPUT FORMAT
 
                    X = 2 decimals
                    Y = 2 decimals
@@ -1246,11 +1488,15 @@ document
                    ------------------------------------- */
 
                 const outputLine =
+
                     x.toFixed(2) +
                     " " +
+
                     y.toFixed(2) +
                     " " +
+
                     newZ.toFixed(2);
+
 
 
                 outputLines.push(
@@ -1261,20 +1507,6 @@ document
                 validPoints++;
 
 
-                /* -------------------------------------
-                   PREVIEW FIRST 10 POINTS
-                   ------------------------------------- */
-
-                if (
-                    previewLines.length < 10
-                ) {
-
-                    previewLines.push(
-                        outputLine
-                    );
-
-                }
-
 
                 /* -------------------------------------
                    UPDATE PROGRESS
@@ -1284,7 +1516,9 @@ document
                     i % 5000 === 0
                 ) {
 
+
                     const percent =
+
                         (
                             i /
                             surveyLines.length
@@ -1304,9 +1538,11 @@ document
                         "progressText"
                     )
                     .textContent =
+
                         Math.round(
                             percent
-                        ) + "%";
+                        ) +
+                        "%";
 
 
                     setStatus(
@@ -1322,7 +1558,9 @@ document
 
                         Math.round(
                             percent
-                        ) + "%"
+                        ) +
+
+                        "%"
 
                     );
 
@@ -1345,7 +1583,7 @@ document
 
 
             /* =========================================
-               PROCESSING COMPLETE
+               COMPLETE
                ========================================= */
 
             document
@@ -1377,22 +1615,25 @@ document
 
 
             /* =========================================
-               CREATE BLOB
+               CREATE OUTPUT BLOB
                ========================================= */
 
             outputBlob =
                 new Blob(
+
                     [outputText],
+
                     {
                         type:
                             "text/plain;charset=utf-8"
                     }
+
                 );
 
 
 
             /* =========================================
-               OUTPUT FILE NAME
+               CREATE OUTPUT FILE NAME
                ========================================= */
 
             const originalName =
@@ -1413,10 +1654,10 @@ document
 
 
             /* =========================================
-               SHOW DOWNLOAD BUTTON
+               SHOW DOWNLOAD SECTION
                
                IMPORTANT:
-               NO DOWNLOAD IS STARTED HERE.
+               NO AUTOMATIC DOWNLOAD
                ========================================= */
 
             document
@@ -1433,29 +1674,6 @@ document
             )
             .textContent =
                 outputFileName;
-
-
-
-            /* =========================================
-               SHOW PREVIEW
-               ========================================= */
-
-            document
-            .getElementById(
-                "preview"
-            )
-            .style.display =
-                "block";
-
-
-            document
-            .getElementById(
-                "previewText"
-            )
-            .textContent =
-                previewLines.join(
-                    "\n"
-                );
 
 
 
@@ -1489,19 +1707,13 @@ document
 
                 "\n\n" +
 
-                "Maximum XY matching distance: " +
-
-                maxDistance.toFixed(3) +
-
-                "\n\n" +
-
                 "Calculation:\n" +
 
                 "New Z = Survey Z + VDATUM Z" +
 
                 "\n\n" +
 
-                "The output file is ready.\n" +
+                "Output file is ready.\n" +
 
                 "Click the green Download XYZ File button."
 
@@ -1509,6 +1721,7 @@ document
 
 
         }
+
 
         catch (error) {
 
@@ -1538,6 +1751,7 @@ document
 
         finally {
 
+
             processButton.disabled =
                 false;
 
@@ -1555,7 +1769,7 @@ document
 /* =====================================================
    DOWNLOAD BUTTON
 
-   THIS IS THE ONLY PLACE WHERE DOWNLOAD OCCURS.
+   THIS IS THE ONLY DOWNLOAD ACTION.
    ===================================================== */
 
 document
@@ -1624,6 +1838,178 @@ document
 
             },
             1000
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   REFRESH / CLEAR ALL BUTTON
+   ===================================================== */
+
+document
+.getElementById(
+    "refreshButton"
+)
+.addEventListener(
+    "click",
+    function () {
+
+
+        /* ---------------------------------------------
+           CLEAR FILE INPUTS
+           --------------------------------------------- */
+
+        document
+        .getElementById(
+            "vdatumFile"
+        )
+        .value =
+            "";
+
+
+        document
+        .getElementById(
+            "surveyFile"
+        )
+        .value =
+            "";
+
+
+
+        /* ---------------------------------------------
+           CLEAR FILE NAMES
+           --------------------------------------------- */
+
+        document
+        .getElementById(
+            "vdatumName"
+        )
+        .textContent =
+            "No VDATUM file selected";
+
+
+        document
+        .getElementById(
+            "surveyName"
+        )
+        .textContent =
+            "No survey file selected";
+
+
+
+        /* ---------------------------------------------
+           CLEAR DATA
+           --------------------------------------------- */
+
+        vdatumPoints =
+            [];
+
+
+        kdTree =
+            null;
+
+
+        outputBlob =
+            null;
+
+
+        outputFileName =
+            "";
+
+
+
+        /* ---------------------------------------------
+           HIDE DOWNLOAD
+           --------------------------------------------- */
+
+        document
+        .getElementById(
+            "downloadSection"
+        )
+        .style.display =
+            "none";
+
+
+        document
+        .getElementById(
+            "outputFileName"
+        )
+        .textContent =
+            "";
+
+
+
+        /* ---------------------------------------------
+           RESET PROGRESS
+           --------------------------------------------- */
+
+        document
+        .getElementById(
+            "progressContainer"
+        )
+        .style.display =
+            "none";
+
+
+        document
+        .getElementById(
+            "progressBar"
+        )
+        .value =
+            0;
+
+
+        document
+        .getElementById(
+            "progressText"
+        )
+        .textContent =
+            "0%";
+
+
+
+        /* ---------------------------------------------
+           RESET PROCESS BUTTON
+           --------------------------------------------- */
+
+        const processButton =
+            document
+            .getElementById(
+                "processButton"
+            );
+
+
+        processButton.disabled =
+            false;
+
+
+        processButton.textContent =
+            "Process XYZ File";
+
+
+
+        /* ---------------------------------------------
+           RESET STATUS
+           --------------------------------------------- */
+
+        setStatus(
+            "Select both files to begin."
+        );
+
+
+
+        /* ---------------------------------------------
+           SCROLL TO TOP
+           --------------------------------------------- */
+
+        window.scrollTo(
+            {
+                top: 0,
+                behavior: "smooth"
+            }
         );
 
     }
