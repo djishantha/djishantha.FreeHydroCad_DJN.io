@@ -1,627 +1,1711 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>HYPACK XYZ VDATUM Z Adjuster</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            background: #f2f4f7;
-
-            margin: 0;
-
-            padding: 30px;
-
-            color: #222;
-        }
-
-
-        .container {
-
-            max-width: 850px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 3px 15px
-                rgba(0,0,0,0.12);
-        }
-
-
-        h1 {
-
-            margin-top: 0;
-
-            color: #1f4e79;
-
-            text-align: center;
-        }
-
-
-        .description {
-
-            text-align: center;
-
-            color: #555;
-
-            margin-bottom: 30px;
-
-            line-height: 1.5;
-        }
-
-
-        .section {
-
-            border:
-                1px solid #d9d9d9;
-
-            border-radius: 8px;
-
-            padding: 20px;
-
-            margin-bottom: 20px;
-
-            background: #fafafa;
-        }
-
-
-        .section h2 {
-
-            margin-top: 0;
-
-            font-size: 19px;
-
-            color: #1f4e79;
-        }
-
-
-        label {
-
-            display: block;
-
-            font-weight: bold;
-
-            margin-bottom: 8px;
-        }
-
-
-        input[type="file"] {
-
-            width: 100%;
-
-            padding: 10px;
-
-            background: white;
-
-            border:
-                1px solid #bbb;
-
-            border-radius: 5px;
-
-            cursor: pointer;
-        }
-
-
-        .file-name {
-
-            margin-top: 8px;
-
-            color: #555;
-
-            font-size: 14px;
-
-            word-break: break-all;
-        }
-
-
-        button {
-
-            width: 100%;
-
-            padding: 14px;
-
-            border: none;
-
-            border-radius: 6px;
-
-            background: #1f6feb;
-
-            color: white;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-
-        button:hover {
-
-            background: #1557b0;
-        }
-
-
-        button:disabled {
-
-            background: #999;
-
-            cursor: not-allowed;
-        }
-
-
-        #downloadButton {
-
-            background: #198754;
-
-            margin-top: 5px;
-        }
-
-
-        #downloadButton:hover {
-
-            background: #146c43;
-        }
-
-
-        #refreshButton {
-
-            background: #6c757d;
-
-            margin-top: 12px;
-        }
-
-
-        #refreshButton:hover {
-
-            background: #5a6268;
-        }
-
-
-        #status {
-
-            margin-top: 20px;
-
-            padding: 15px;
-
-            background: #eef5ff;
-
-            border-left:
-                5px solid #1f6feb;
-
-            border-radius: 5px;
-
-            white-space: pre-line;
-
-            line-height: 1.5;
-        }
-
-
-        #progressContainer {
-
-            display: none;
-
-            margin-top: 15px;
-        }
-
-
-        progress {
-
-            width: 100%;
-
-            height: 22px;
-        }
-
-
-        #progressText {
-
-            text-align: center;
-
-            margin-top: 5px;
-
-            font-weight: bold;
-        }
-
-
-        .formula {
-
-            background: #fff;
-
-            border:
-                1px solid #ddd;
-
-            padding: 14px;
-
-            border-radius: 6px;
-
-            text-align: center;
-
-            font-family:
-                Consolas,
-                monospace;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            margin-top: 10px;
-        }
-
-
-        .note {
-
-            font-size: 13px;
-
-            color: #666;
-
-            margin-top: 10px;
-
-            line-height: 1.5;
-        }
-
-
-        #downloadSection {
-
-            display: none;
-
-            margin-top: 25px;
-
-            padding: 20px;
-
-            border:
-                2px solid #198754;
-
-            border-radius: 8px;
-
-            background: #f1fff7;
-        }
-
-
-        #downloadSection h3 {
-
-            color: #198754;
-
-            margin-top: 0;
-        }
-
-
-        #outputFileName {
-
-            background: white;
-
-            border:
-                1px solid #ddd;
-
-            padding: 12px;
-
-            border-radius: 6px;
-
-            margin-bottom: 12px;
-
-            word-break: break-all;
-
-            font-family:
-                Consolas,
-                monospace;
-
-            font-size: 14px;
-        }
-
-
-        .info-box {
-
-            background: #fff8e1;
-
-            border-left:
-                5px solid #f0ad4e;
-
-            padding: 12px;
-
-            margin-top: 15px;
-
-            border-radius: 4px;
-
-            font-size: 13px;
-
-            line-height: 1.5;
-        }
-
-
-        .button-area {
-
-            margin-top: 20px;
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREE HYDRO-CAD Tools</title>
+<style>
+:root{--ink:#0b4f7a;--sea:#0a6ea5;--sea-d:#085888;--paper:#eef6fb;--line:#cfe1ec;--mut:#546e80;
+      --ok:#0a6b43;--okbg:#e6f5ec;--bad:#a32017;--badbg:#fdeceb;--tint:#e1f1fa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:#14303f;font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.wrap{max-width:1100px;margin:0 auto}
+.top{position:relative;width:min(1060px,calc(100% - 40px));margin:0 auto;background:linear-gradient(180deg,#3fa6df 0%,#8fd2f1 60%,#cfeefb 100%);overflow:hidden}
+.top .sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.top .wrap{position:relative;padding:26px 20px 6px}
+h1{margin:0;font-size:1.75rem;font-weight:800;color:#06385a;letter-spacing:.3px}
+.surf{position:relative;display:block;width:100%;height:46px;margin-bottom:-1px}
+.sea{position:relative;background:#0a6ea5}
+.sea .wrap{padding:0 20px}
+.tabs{display:flex;gap:8px;overflow-x:hidden;flex-wrap:wrap;padding-top:4px;padding-bottom:4px;align-items:flex-end}
+.tab-button{flex:1 1 auto;margin:0;padding:11px 18px;border:0;border-radius:8px 8px 0 0;background:transparent;color:#dff2fb;font:600 15px/1.2 inherit;cursor:pointer}
+.tab-button:hover{color:#fff;background:rgba(255,255,255,.12)}
+.tab-button.active{background:var(--paper);color:var(--ink)}
+main{max-width:1100px;margin:0 auto;padding:22px 20px 48px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.convert-sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:6px;background:#dceef8;border:1px solid var(--line);border-radius:10px}
+.convert-sub-button{flex:1 1 140px;padding:10px 16px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ink);font-weight:700;cursor:pointer}
+.convert-sub-button:hover{background:rgba(10,110,165,.10)}
+.convert-sub-button.active{background:var(--sea);color:#fff}
+.convert-sub-content{display:none}
+.convert-sub-content.active{display:block}
+.section{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:16px}
+.section h2{margin:0 0 2px;font-size:1.15rem;color:var(--ink)}
+.description{margin:0;color:var(--mut);font-size:.92rem}
+label{display:block;margin:18px 0 6px;font-weight:600;font-size:.9rem;color:#2c4252}
+input[type=file],input[type=number],select{width:100%;padding:10px 12px;font:inherit;font-size:15px;color:inherit;background:#fff;border:1px solid var(--line);border-radius:8px}
+input[type=file]::file-selector-button{margin-right:12px;padding:7px 14px;border:0;border-radius:6px;background:var(--ink);color:#fff;font:600 14px inherit;cursor:pointer}
+.hint{margin:8px 0 0;color:var(--mut);font-size:.86rem}
+.file-name{margin-top:6px;color:var(--mut);font-size:.86rem}
+.check{display:flex;align-items:center;gap:10px;margin-top:18px;font-weight:600;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--sea)}
+.formula{margin-top:18px;padding:10px 14px;border-radius:8px;background:var(--tint);color:var(--ink);font:600 15px Consolas,Menlo,monospace}
+button{font:inherit;font-weight:600;padding:11px 20px;border:1px solid transparent;border-radius:8px;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.actionRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.processBtn{background:var(--sea);color:#fff}
+.processBtn:hover:not(:disabled){background:var(--sea-d)}
+.downloadBtn{display:none;background:var(--ink);color:#fff}
+.downloadBtn:hover{opacity:.88}
+.clearBtn{background:transparent;color:var(--mut);border-color:var(--line)}
+.clearBtn:hover{color:var(--ink);border-color:var(--mut)}
+.info,.success,.error{margin-top:16px;padding:12px 14px;border-radius:8px}
+.info{background:var(--tint)}
+.success{background:var(--okbg);color:var(--ok)}
+.error{background:var(--badbg);color:var(--bad)}
+.result{margin-top:16px;padding:12px 14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;font:13px/1.5 Consolas,Menlo,monospace;white-space:pre-wrap;max-height:260px;overflow:auto}
+.result:empty{display:none}
+#ciProgress{display:none;width:100%;height:14px;margin-top:16px;accent-color:var(--sea)}
+#vdatumProgressContainer{display:none;margin-top:16px}
+#vdatumProgressBar{width:100%;height:14px;accent-color:var(--sea)}
+#vdatumProgressText{margin-top:4px;text-align:center;font-weight:600;font-size:.9rem}
+#vdatumDownloadSection{display:none;margin-top:16px;padding:16px;border-radius:8px;background:var(--tint)}
+#vdatumDownloadSection h3{margin:0 0 4px;font-size:1rem}
+#vdatumDownloadButton{margin-top:12px;background:var(--ink);color:#fff}
+#cvPreview{overflow-x:auto}
+#cvPreview h3{margin:18px 0 6px;font-size:.95rem;color:var(--ink)}
+#cvPreview table{width:100%;border-collapse:collapse;font-size:13px}
+#cvPreview th,#cvPreview td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+#cvPreview th{color:var(--mut);font-weight:600}
+.footer{display:flex;justify-content:flex-end;margin-top:4px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.file-picker-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.file-picker-label{display:inline-block;margin:0;padding:11px 20px;border-radius:8px;background:var(--ink);color:#fff;font-weight:600;cursor:pointer}
+.file-picker-label:hover{opacity:.9}
+.file-picker-label:focus-within{outline:3px solid var(--sea);outline-offset:2px}
+@media(max-width:560px){.tab-button{padding:10px 12px;font-size:14px}.section{padding:16px}}
+
+    .combine-file-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 12px;
+      align-items: flex-end;
+    }
+    .combine-file-item {
+      flex: 1;
+      min-width: 0;
+    }
+    .combine-file-item label {
+      display: block;
+      margin-bottom: 6px;
+    }
+    .combine-file-item input[type="file"] {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 700px) {
+      .combine-file-row {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+      }
+    }
+</style>
 </head>
-
-
 <body>
+<header class="top">
+  <svg class="sky" viewBox="0 0 800 160" preserveAspectRatio="xMaxYMin slice" aria-hidden="true">
+    <g fill="#fff" opacity=".85">
+      <ellipse cx="600" cy="38" rx="46" ry="13"/><ellipse cx="632" cy="30" rx="30" ry="14"/><ellipse cx="572" cy="34" rx="26" ry="10"/>
+      <ellipse cx="730" cy="78" rx="34" ry="9"/><ellipse cx="752" cy="72" rx="20" ry="10"/>
+      <ellipse cx="430" cy="22" rx="30" ry="8" opacity=".7"/>
+    </g>
+    <circle cx="690" cy="26" r="16" fill="#fff6c9" opacity=".9"/>
+  </svg>
+  <div class="wrap"><h1>FREE HYDRO-CAD Tools</h1></div>
+  <svg class="surf" viewBox="0 0 1440 46" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 22 C120 6 240 6 360 22 S600 38 720 22 S960 6 1080 22 S1320 38 1440 22 V46 H0 Z" fill="#5db9e6" opacity=".75"/>
+    <path d="M0 30 C140 14 260 14 400 30 S640 46 780 30 S1020 14 1160 30 S1340 42 1440 30 V46 H0 Z" fill="#0a6ea5"/>
+  </svg>
+  <div class="sea"><div class="wrap">
+    <nav class="tabs">
+      <button class="tab-button active" onclick="openTab('vdatumTab', this)">VDATUM</button>
+      <button class="tab-button" onclick="openTab('zAdjustTab', this)">Z Adjust</button>
+      <button class="tab-button" onclick="openTab('combineXYZTab', this)">Combine XYZ</button>
+      <button class="tab-button" onclick="openTab('cvTab', this)">Convert Data</button>
+      <button class="tab-button" onclick="openTab('ciTab', this)">Convert Image</button>
+      <button class="tab-button" onclick="openTab('mtxChnTab', this)">Extract XYZ</button>
+    </nav>
+  </div></div>
+</header>
 
+<main>
 
-<div class="container">
-
-
-    <h1>
-        HYPACK XYZ VDATUM Z Adjuster
-    </h1>
-
-
-    <div class="description">
-
-        Match every survey XYZ point to the
-        closest VDATUM XY point and calculate
-        the adjusted Z value.
-
+<div id="vdatumTab" class="tab-content active">
+  <div class="section">
+    <h2>VDATUM Z Adjustment</h2>
+    <p class="description">Matches each survey point to the nearest VDATUM point.</p>
+    <label for="vdatumFile">VDATUM MLLW XYZ file in Elevation</label>
+    <input type="file" id="vdatumFile" accept=".xyz,.txt">
+    <div id="vdatumName" class="file-name">No VDATUM file selected</div>
+    <label for="surveyFile">Survey XYZ file in Depth</label>
+    <input type="file" id="surveyFile" accept=".xyz,.txt">
+    <div id="surveyName" class="file-name">No survey file selected</div>
+    <label class="check"><input type="checkbox" id="vdatumRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
+    <div class="formula">New Z = Survey Z + VDATUM Z</div>
+    <div class="actionRow">
+      <button id="vdatumProcessButton" class="processBtn">Process</button>
+      <button id="vdatumRefreshButton" class="clearBtn">Clear</button>
     </div>
-
-
-
-    <!-- =========================================
-         VDATUM FILE
-         ========================================= -->
-
-    <div class="section">
-
-        <h2>
-            1. Select VDATUM XYZ File
-        </h2>
-
-
-        <label for="vdatumFile">
-
-            VDATUM MLLW XYZ File
-
-        </label>
-
-
-        <input
-            type="file"
-            id="vdatumFile"
-            accept=".xyz,.txt"
-        >
-
-
-        <div
-            id="vdatumName"
-            class="file-name">
-
-            No VDATUM file selected
-
-        </div>
-
-
-        <div class="note">
-
-            Select the VDATUM XYZ file containing
-            X, Y and Z values.
-
-        </div>
-
+    <div id="vdatumProgressContainer">
+      <progress id="vdatumProgressBar" value="0" max="100"></progress>
+      <div id="vdatumProgressText">0%</div>
     </div>
-
-
-
-    <!-- =========================================
-         SURVEY FILE
-         ========================================= -->
-
-    <div class="section">
-
-        <h2>
-            2. Select Survey / Second XYZ File
-        </h2>
-
-
-        <label for="surveyFile">
-
-            XYZ Data File to Process
-
-        </label>
-
-
-        <input
-            type="file"
-            id="surveyFile"
-            accept=".xyz,.txt"
-        >
-
-
-        <div
-            id="surveyName"
-            class="file-name">
-
-            No survey file selected
-
-        </div>
-
-
-        <div class="note">
-
-            X and Y from this file will be retained.
-            The Z value will be adjusted using the
-            closest VDATUM point.
-
-        </div>
-
+    <div id="vdatumStatus" class="result"></div>
+    <div id="vdatumDownloadSection">
+      <h3>Output ready</h3>
+      <div id="vdatumOutputFileName" class="file-name"></div>
+      <button id="vdatumDownloadButton">Download XYZ</button>
     </div>
-
-
-
-    <!-- =========================================
-         CALCULATION
-         ========================================= -->
-
-    <div class="section">
-
-        <h2>
-            Calculation
-        </h2>
-
-
-        <div class="formula">
-
-            New Z = Survey Z + VDATUM Z
-
-        </div>
-
-
-        <div class="note">
-
-            For every point in the survey file,
-            the program finds the VDATUM point
-            with the closest X and Y location.
-
-        </div>
-
-
-        <div class="info-box">
-
-            <b>Example:</b>
-
-            <br><br>
-
-            Survey Z = 8.30
-
-            <br>
-
-            VDATUM Z = -0.71
-
-            <br><br>
-
-            New Z =
-            8.30 + (-0.71) =
-            <b>7.59</b>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================================
-         PROCESS BUTTON
-         ========================================= -->
-
-    <div class="button-area">
-
-        <button
-            id="processButton">
-
-            Process XYZ File
-
-        </button>
-
-
-        <button
-            id="refreshButton">
-
-            Refresh / Clear All
-
-        </button>
-
-    </div>
-
-
-
-    <!-- =========================================
-         PROGRESS
-         ========================================= -->
-
-    <div
-        id="progressContainer">
-
-        <progress
-            id="progressBar"
-            value="0"
-            max="100">
-        </progress>
-
-
-        <div
-            id="progressText">
-
-            0%
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================================
-         STATUS
-         ========================================= -->
-
-    <div id="status">
-
-        Select both files to begin.
-
-    </div>
-
-
-
-    <!-- =========================================
-         DOWNLOAD SECTION
-         ========================================= -->
-
-    <div
-        id="downloadSection">
-
-        <h3>
-
-            Output File Ready
-
-        </h3>
-
-
-        <div
-            id="outputFileName">
-        </div>
-
-
-        <button
-            id="downloadButton">
-
-            Download XYZ File
-
-        </button>
-
-    </div>
-
-
+  </div>
 </div>
 
+<div id="zAdjustTab" class="tab-content">
+  <div class="section">
+    <h2>Z Adjust / Invert</h2>
+    <p class="description">Shift, invert and round Z values.</p>
+    <label for="zAdjustFile">XYZ/TXT file in Depth</label>
+    <input type="file" id="zAdjustFile" accept=".txt,.xyz">
+    <label for="zAdjustment">Z adjustment</label>
+    <input type="number" id="zAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
+    <p class="hint">Positive adds, negative subtracts.</p>
+    <label class="check"><input type="checkbox" id="invertZAdjust"> Invert Z values</label>
+    <label class="check"><input type="checkbox" id="zRound" checked> Round X Y to 2 decimals, Z to 1 decimal</label>
+    <div class="actionRow">
+      <button id="zProcessBtn" class="processBtn">Process</button>
+      <button id="zDownloadBtn" class="downloadBtn">Download XYZ</button>
+    </div>
+    <div id="zStatus"></div>
+    <div id="zResult" class="result"></div>
+  </div>
+</div>
 
+<div id="combineXYZTab" class="tab-content">
+  <div class="section">
+    <h2>Combine XYZ</h2>
+    <p class="description">Choose up to 6 XYZ files. They are combined in order File 1 &rarr; File 6.</p>
 
+    <div class="combine-file-row">
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile1" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile4" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+    </div>
+
+    <div class="combine-file-row">
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile2" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile5" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+    </div>
+
+    <div class="combine-file-row">
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile3" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+      <div class="combine-file-item">
+        
+        <input type="file" id="combineFile6" accept=".xyz,.txt,.csv,.pts,.dat">
+      </div>
+    </div>
+
+    <label class="check"><input type="checkbox" id="combineRemoveOverlap"> Remove overlap points</label>
+    <p class="hint">When selected, overlapping points are removed from the later file. File 2 is checked against File 1, File 3 against File 2, etc. Overlap: XY within 3 ft and Z within 0.15 ft.</p>
+
+    <label for="combineZAdjustment">Z adjustment</label>
+    <input type="number" id="combineZAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
+    <p class="hint">Positive adds, negative subtracts.</p>
+    <label class="check"><input type="checkbox" id="combineInvertZ"> Invert Z values</label>
+    <label class="check"><input type="checkbox" id="combineRound" checked> Round XY to 2 decimals, Z to 1 decimal</label>
+
+    <div class="actionRow">
+      <button id="combineProcessBtn" class="processBtn">Process</button>
+      <button id="combineDownloadBtn" class="downloadBtn">Download XYZ</button>
+      <button id="combineClearBtn" class="clearBtn">Clear</button>
+    </div>
+
+    <div id="combineStatus"></div>
+  </div>
+</div>
+
+<div id="cvTab" class="tab-content">
+  <nav class="convert-sub-tabs" aria-label="Convert Data tools">
+    <button type="button" class="convert-sub-button active" onclick="openConvertSubTab('convertXYZPane', this)">Convert XYZ</button>
+    <button type="button" class="convert-sub-button" onclick="openConvertSubTab('convertRAWPane', this)">Convert RAW</button>
+    <button type="button" class="convert-sub-button" onclick="openConvertSubTab('convertHSXPane', this)">Convert HSX</button>
+  </nav>
+  <div id="convertXYZPane" class="convert-sub-content active">
+  <div class="section">
+    <h2>Convert XYZ</h2>
+    <p class="description">NAD83, US survey feet. Z is unchanged.</p>
+    <label for="cvDir">Conversion</label>
+    <select id="cvDir">
+      <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
+      <option value="NJ>NYE">NJ 2900 &rarr; NY East 3101</option>
+      <option value="NYE>NJ">NY East 3101 &rarr; NJ 2900</option>
+      <option value="NYE>NYLI">NY East 3101 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NYE">NY Long Island 3104 &rarr; NY East 3101</option>
+    </select>
+    <p id="cvNote" class="hint" style="display:none">Same projection, so X Y stay the same.</p>
+    <label for="cvFile">Input files</label>
+    <input type="file" id="cvFile" class="file-picker-input" accept=".txt,.xyz,.csv,.pts,.dat" multiple>
+    <label for="cvFile" class="file-picker-label">Choose Files</label>
+    <p id="cvFileNames" class="file-name">No files selected</p>
+    <label class="check"><input type="checkbox" id="cvRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
+    <p class="hint">Columns are detected automatically. Projection only; no datum shift applied.</p>
+    <div class="actionRow">
+      <button id="cvConvertBtn" class="processBtn" disabled>Convert All</button>
+      <button id="cvDownloadBtn" class="downloadBtn">Download ZIP</button>
+    </div>
+    <div id="cvStatus"></div>
+    <div id="cvPreview"></div>
+  </div>
+
+  </div>
+  <div id="convertRAWPane" class="convert-sub-content">
+  <div class="section">
+    <h2>Convert RAW</h2>
+    <p class="description">Convert HYPACK RAW navigation coordinates between the same six NAD83 State Plane options. Z and survey measurements are unchanged.</p>
+    <label for="rawDir">Conversion</label>
+    <select id="rawDir">
+      <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
+      <option value="NJ>NYE">NJ 2900 &rarr; NY East 3101</option>
+      <option value="NYE>NJ">NY East 3101 &rarr; NJ 2900</option>
+      <option value="NYE>NYLI">NY East 3101 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NYE">NY Long Island 3104 &rarr; NY East 3101</option>
+    </select>
+    <label for="rawFile">RAW files</label>
+    <input type="file" id="rawFile" class="file-picker-input" accept=".raw" multiple>
+    <label for="rawFile" class="file-picker-label">Choose Files</label>
+    <p id="rawFileNames" class="file-name">No files selected</p>
+    <label class="check"><input type="checkbox" id="rawRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
+    <div class="actionRow">
+      <button id="rawConvertBtn" class="processBtn" disabled>Convert All RAW</button>
+      <button id="rawDownloadBtn" class="downloadBtn">Download ZIP</button>
+    </div>
+    <div id="rawStatus"></div>
+  </div>
+
+  </div>
+  <div id="convertHSXPane" class="convert-sub-content">
+  <div class="section">
+    <h2>Convert HSX</h2>
+    <p class="description">Convert HYPACK HSX navigation coordinates between the same six NAD83 State Plane options. Soundings and other measurements are unchanged.</p>
+    <label for="hsxDir">Conversion</label>
+    <select id="hsxDir">
+      <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
+      <option value="NJ>NYE">NJ 2900 &rarr; NY East 3101</option>
+      <option value="NYE>NJ">NY East 3101 &rarr; NJ 2900</option>
+      <option value="NYE>NYLI">NY East 3101 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NYE">NY Long Island 3104 &rarr; NY East 3101</option>
+    </select>
+    <label for="hsxFile">HSX files</label>
+    <input type="file" id="hsxFile" class="file-picker-input" accept=".hsx" multiple>
+    <label for="hsxFile" class="file-picker-label">Choose Files</label>
+    <p id="hsxFileNames" class="file-name">No files selected</p>
+    <label class="check"><input type="checkbox" id="hsxRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
+    <div class="actionRow">
+      <button id="hsxConvertBtn" class="processBtn" disabled>Convert All HSX</button>
+      <button id="hsxDownloadBtn" class="downloadBtn">Download ZIP</button>
+    </div>
+    <div id="hsxStatus"></div>
+  </div>
+  </div>
+</div>
+
+<div id="ciTab" class="tab-content">
+  <div class="section">
+    <h2>Convert Image</h2>
+    <p class="description">Re-georeference a TIFF using embedded GeoTIFF georeferencing or an optional TFW. NAD83, US survey feet.</p>
+    <label for="ciDir">Conversion</label>
+    <select id="ciDir">
+      <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
+      <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
+      <option value="NYLI>NYE">NY Long Island 3104 &rarr; NY East 3101</option>
+      <option value="NYE>NYLI">NY East 3101 &rarr; NY Long Island 3104</option>
+      <option value="NJ>NYE">NJ 2900 &rarr; NY East 3101</option>
+      <option value="NYE>NJ">NY East 3101 &rarr; NJ 2900</option>
+    </select>
+    <label for="ciImg">Image (TIF)</label>
+    <input type="file" id="ciImg" accept=".tif,.tiff">
+    <label for="ciTfw">World file (TFW) — optional</label>
+    <input type="file" id="ciTfw" accept=".tfw,.wld,.txt">
+    <p class="hint">If the TIFF contains embedded GeoTIFF georeferencing, no TFW is required. The embedded CRS is detected automatically.</p>
+    <label for="ciMode">Output</label>
+    <select id="ciMode">
+      <option value="rot">Rotated TFW + NEW TIFF</option>
+      <option value="north">North-up image + TFW (resampled)</option>
+      <option value="geotiff">GeoTIFF (embedded georeferencing, no TFW)</option>
+    </select>
+    <div class="actionRow">
+      <button id="ciConvertBtn" class="processBtn" disabled>Convert</button>
+      <button id="ciDlTfw" class="downloadBtn">Download TFW</button>
+      <button id="ciDlTif" class="downloadBtn">Download TIF</button>
+      <button id="ciDlGeo" class="downloadBtn">Download GeoTIFF</button>
+    </div>
+    <progress id="ciProgress" value="0" max="100"></progress>
+    <div id="ciStatus"></div>
+    <div id="ciResult" class="result"></div>
+  </div>
+</div>
+
+<div id="mtxChnTab" class="tab-content">
+  <div class="section">
+    <h2>Extract XYZ</h2>
+    <p class="description">Choose an extraction type: MTX corners, CHN nodes, channel DXF nodes, contour DXF vertices, or HYPACK sounding DXF points.</p>
+
+    <label for="extractType">Extraction</label>
+    <select id="extractType">
+      <option value="mtx">MTX &rarr; Four Corner XYZ</option>
+      <option value="chn">CHN &rarr; XYZ Nodes</option>
+      <option value="dxf">DXF chn---&gt;XYZ nodes</option>
+      <option value="contourDxf">Contour DXF ---&gt;XYZ Points</option>
+      <option value="soundingDxf">Sounding DXF ---&gt;XYZ Points</option>
+    </select>
+
+    <div id="mtxZRow">
+      <label for="extractMtxZ">Corner Z</label>
+      <input type="number" id="extractMtxZ" value="0" step="0.1">
+    </div>
+
+    <label for="extractFile">File</label>
+    <input type="file" id="extractFile" accept=".mtx,.txt">
+    <div id="extractFileName" class="file-name">No file selected</div>
+
+    <div class="actionRow">
+      <button id="extractProcessBtn" class="processBtn" disabled>Process</button>
+      <button id="extractDownloadBtn" class="downloadBtn">Download XYZ</button>
+      <button id="extractClearBtn" class="clearBtn">Clear</button>
+    </div>
+
+    <div id="extractStatus"></div>
+    <div id="extractResult" class="result"></div>
+  </div>
+</div>
+
+<div class="footer"><button id="clearAllBtn" class="clearBtn">Clear all</button></div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
 <script>
+
+function roundHalfUp(v, d) {
+    const f = Math.pow(10, d);
+    return (Math.sign(v) * Math.round(Math.abs(v) * f + 1e-9) / f).toFixed(d);
+}
+
+
+
+/* ============================================================
+   TAB CONTROL
+============================================================ */
+
+function openConvertSubTab(paneId, button) {
+    const container = document.getElementById("cvTab");
+    container.querySelectorAll(".convert-sub-content").forEach(function(pane) {
+        pane.classList.remove("active");
+    });
+    container.querySelectorAll(".convert-sub-button").forEach(function(btn) {
+        btn.classList.remove("active");
+    });
+    document.getElementById(paneId).classList.add("active");
+    button.classList.add("active");
+}
+
+function openTab(tabId, button) {
+
+    document
+        .querySelectorAll(".tab-content")
+        .forEach(function(tab) {
+            tab.classList.remove("active");
+        });
+
+    document
+        .querySelectorAll(".tab-button")
+        .forEach(function(btn) {
+            btn.classList.remove("active");
+        });
+
+    document
+        .getElementById(tabId)
+        .classList.add("active");
+
+    button.classList.add("active");
+}
+
+
+
+
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
+
+let mtxOutputText = "";
+let mtxOriginalFileName = "";
+
+let chnOutputText = "";
+let chnOriginalFileName = "";
+
+
+
+/* ============================================================
+   EXTRACT XYZ - SIMPLE UNIFIED TOOL
+============================================================ */
+
+let extractOutputText = "";
+let extractOriginalFileName = "";
+
+const extractType = document.getElementById("extractType");
+const extractFile = document.getElementById("extractFile");
+const extractProcessBtn = document.getElementById("extractProcessBtn");
+const extractDownloadBtn = document.getElementById("extractDownloadBtn");
+const extractClearBtn = document.getElementById("extractClearBtn");
+const extractStatus = document.getElementById("extractStatus");
+const extractResult = document.getElementById("extractResult");
+const extractFileName = document.getElementById("extractFileName");
+const mtxZRow = document.getElementById("mtxZRow");
+const extractMtxZ = document.getElementById("extractMtxZ");
+
+function updateExtractFileType(){
+    const type = extractType.value;
+    if(type === "mtx") {
+        extractFile.accept = ".mtx,.txt";
+        mtxZRow.style.display = "block";
+    } else if(type === "chn") {
+        extractFile.accept = ".chn,.txt";
+        mtxZRow.style.display = "none";
+    } else {
+        extractFile.accept = ".dxf";
+        mtxZRow.style.display = "none";
+    }
+    extractFile.value = "";
+    extractFileName.textContent = "No file selected";
+    extractProcessBtn.disabled = true;
+    extractDownloadBtn.style.display = "none";
+    extractStatus.innerHTML = "";
+    extractResult.textContent = "";
+    extractOutputText = "";
+    extractOriginalFileName = "";
+}
+
+extractType.addEventListener("change", updateExtractFileType);
+
+extractFile.addEventListener("change", function(){
+    if(this.files.length){
+        extractFileName.textContent = this.files[0].name;
+        extractProcessBtn.disabled = false;
+    } else {
+        extractFileName.textContent = "No file selected";
+        extractProcessBtn.disabled = true;
+    }
+    extractDownloadBtn.style.display = "none";
+    extractStatus.innerHTML = "";
+    extractResult.textContent = "";
+    extractOutputText = "";
+});
+
+extractProcessBtn.addEventListener("click", async function(){
+    if(!extractFile.files.length){
+        alert("Please select a file.");
+        return;
+    }
+
+    const type = extractType.value;
+    const file = extractFile.files[0];
+    extractOriginalFileName = file.name;
+    extractOutputText = "";
+    extractDownloadBtn.style.display = "none";
+    extractResult.textContent = "";
+    extractStatus.innerHTML = "<div class='info'>Processing...</div>";
+
+    try {
+        if(type === "mtx") {
+            const z = Number(extractMtxZ.value);
+            if(!Number.isFinite(z)) throw new Error("Please enter a valid Corner Z value.");
+
+            const text = await file.text();
+            const values = extractMTXValues(text);
+            if(values.length < 7) throw new Error("Could not find the required 7 MTX values. Values found: " + values.length);
+
+            const corners = calculateCorners(values[0], values[1], values[2], values[3], values[6], z);
+            extractOutputText = corners.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(1);
+            }).join("\n")+"\n";
+
+            extractResult.textContent = extractOutputText;
+            extractStatus.innerHTML = "<div class='success'><strong>MTX processing complete.</strong><br><br>4 corner XYZ points created.</div>";
+        }
+        else if(type === "chn") {
+            const text = await file.text();
+            const points = extractCHNNodes(text);
+            if(!points.length) throw new Error("No CHN nodes were found.");
+
+            extractOutputText = points.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n")+"\n";
+
+            extractResult.textContent = points.slice(0,20).map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n") + (points.length>20 ? "\n\n... "+(points.length-20).toLocaleString()+" more points ..." : "");
+            extractStatus.innerHTML = "<div class='success'><strong>CHN processing complete.</strong><br><br>Nodes extracted: "+points.length.toLocaleString()+"</div>";
+        }
+        else if(type === "dxf") {
+            const text = await file.text();
+            const nodes = processDXFText(text);
+            if(!nodes.length) throw new Error("No channel XYZ nodes were found in the DXF file.");
+
+            extractOutputText = nodes.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n")+"\n";
+
+            extractResult.textContent = nodes.slice(0,20).map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n") + (nodes.length>20 ? "\n\n... "+(nodes.length-20).toLocaleString()+" more points ..." : "");
+            extractStatus.innerHTML = "<div class='success'><strong>DXF channel-node processing complete.</strong><br><br>Final unique channel nodes: "+nodes.length.toLocaleString()+"</div>";
+        }
+        else if(type === "contourDxf") {
+            const text = await file.text();
+            const nodes = processContourDXFText(text);
+            if(!nodes.length) throw new Error("No contour vertices were found. Check that the DXF contains standard contour geometry.");
+
+            extractOutputText = nodes.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\r\n")+"\r\n";
+
+            extractResult.textContent = nodes.slice(0,20).map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n") + (nodes.length>20 ? "\n\n... "+(nodes.length-20).toLocaleString()+" more points ..." : "");
+            extractStatus.innerHTML = "<div class='success'><strong>Contour DXF processing complete.</strong><br><br>Unique contour XYZ points: "+nodes.length.toLocaleString()+"</div>";
+        }
+        else if(type === "soundingDxf") {
+            const text = await file.text();
+            const result = processSoundingDXFText(text);
+            const nodes = result.points;
+            if(!nodes.length) throw new Error("No sounding XYZ points were found. This workflow expects HYPACK sounding DXF XDATA or supported point entities.");
+
+            extractOutputText = nodes.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\r\n")+"\r\n";
+
+            extractResult.textContent = nodes.slice(0,20).map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n") + (nodes.length>20 ? "\n\n... "+(nodes.length-20).toLocaleString()+" more points ..." : "");
+            extractStatus.innerHTML = "<div class='success'><strong>Sounding DXF processing complete.</strong><br><br>Unique XYZ points: "+nodes.length.toLocaleString()+"<br>Using HYPACK sounding positions: "+result.hypack.toLocaleString()+"<br>Fallback TEXT positions: "+result.fallback.toLocaleString()+"</div>";
+        }
+
+        extractDownloadBtn.style.display = "inline-block";
+    } catch(e) {
+        console.error(e);
+        extractStatus.innerHTML = "<div class='error'><strong>Error:</strong><br>" + String(e.message || e).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}) + "</div>";
+    }
+});
+
+extractDownloadBtn.addEventListener("click", function(){
+    if(!extractOutputText){
+        alert("Please process a file first.");
+        return;
+    }
+    const type = extractType.value;
+    const base = extractOriginalFileName.replace(/\.[^/.]+$/, "");
+    const suffix = type === "mtx" ? "_four_corners.xyz"
+        : type === "contourDxf" ? "_contour_points.xyz"
+        : type === "soundingDxf" ? "_sounding_points.xyz"
+        : "_nodes.xyz";
+    const url = URL.createObjectURL(new Blob([extractOutputText], {type:"text/plain;charset=utf-8"}));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = base + suffix;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+});
+
+extractClearBtn.addEventListener("click", function(){
+    extractFile.value = "";
+    extractFileName.textContent = "No file selected";
+    extractStatus.innerHTML = "";
+    extractResult.textContent = "";
+    extractDownloadBtn.style.display = "none";
+    extractProcessBtn.disabled = true;
+    extractOutputText = "";
+    extractOriginalFileName = "";
+});
+
+updateExtractFileType();
+
+/* ============================================================
+   EXTRACT MTX VALUES
+============================================================ */
+
+function extractMTXValues(text) {
+
+
+    const lines =
+        text.split(/\r?\n/);
+
+
+    let values = [];
+
+
+    for (let line of lines) {
+
+
+        line =
+            line.trim();
+
+
+        if (line === "") {
+
+            continue;
+
+        }
+
+
+        /*
+         * Remove comments.
+         */
+
+        line =
+            line.replace(
+                /#.*$/,
+                ""
+            );
+
+
+        line =
+            line.replace(
+                /\/\/.*$/,
+                ""
+            );
+
+
+        if (line.trim() === "") {
+
+            continue;
+
+        }
+
+
+        /*
+         * Find numbers.
+         */
+
+        const matches =
+            line.match(
+                /[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][-+]?\d+)?/g
+            );
+
+
+        if (
+            matches &&
+            matches.length > 0
+        ) {
+
+            const value =
+                Number(matches[0]);
+
+
+            if (
+                Number.isFinite(value)
+            ) {
+
+                values.push(value);
+
+            }
+
+        }
+
+    }
+
+
+    return values;
+
+}
+
+
+
+/* ============================================================
+   CALCULATE FOUR CORNERS
+============================================================ */
+
+function calculateCorners(
+    x0,
+    y0,
+    width,
+    length,
+    bearingDeg,
+    z
+) {
+
+
+    /*
+     * Bearing is clockwise from North.
+     *
+     * 0°   = North
+     * 90°  = East
+     * 180° = South
+     * 270° = West
+     */
+
+
+    const bearing =
+        bearingDeg *
+        Math.PI /
+        180;
+
+
+    /*
+     * First leg direction.
+     */
+
+    const ux =
+        Math.sin(bearing);
+
+    const uy =
+        Math.cos(bearing);
+
+
+    /*
+     * Perpendicular direction.
+     *
+     * Clockwise numbering.
+     */
+
+    const vx =
+        Math.cos(bearing);
+
+    const vy =
+        -Math.sin(bearing);
+
+
+    /*
+     * Corner 1
+     */
+
+    const p1 = {
+
+        x: x0,
+        y: y0,
+        z: z
+
+    };
+
+
+    /*
+     * Corner 2
+     */
+
+    const p2 = {
+
+        x:
+            x0 +
+            length * ux,
+
+        y:
+            y0 +
+            length * uy,
+
+        z: z
+
+    };
+
+
+    /*
+     * Corner 3
+     */
+
+    const p3 = {
+
+        x:
+            x0 +
+            length * ux +
+            width * vx,
+
+        y:
+            y0 +
+            length * uy +
+            width * vy,
+
+        z: z
+
+    };
+
+
+    /*
+     * Corner 4
+     */
+
+    const p4 = {
+
+        x:
+            x0 +
+            width * vx,
+
+        y:
+            y0 +
+            width * vy,
+
+        z: z
+
+    };
+
+
+    return [
+        p1,
+        p2,
+        p3,
+        p4
+    ];
+
+}
+
+
+
+/* ============================================================
+   EXTRACT CHN NODES
+============================================================ */
+
+function extractCHNNodes(text) {
+
+    const lines = text.split(/\r?\n/);
+
+    let points = [];
+    const seen = new Set();
+
+    /*
+     * HYPACK CHN structure:
+     *
+     * NODES <number of nodes>
+     * X Y Z NodeNumber
+     * X Y Z NodeNumber
+     * ...
+     *
+     * The node section ends when FACES, SEGMENTS,
+     * LABELS, ZONES, ELEVATION, or another section
+     * begins.
+     */
+
+    let inNodesSection = false;
+    let expectedNodes = 0;
+
+    for (let line of lines) {
+
+        line = line.trim();
+
+        if (line === "") {
+            continue;
+        }
+
+        /*
+         * Start of NODES section.
+         */
+
+        const nodesMatch = line.match(/^NODES\s+(\d+)/i);
+
+        if (nodesMatch) {
+
+            inNodesSection = true;
+            expectedNodes = Number(nodesMatch[1]);
+
+            continue;
+        }
+
+        /*
+         * Stop when another CHN section begins.
+         */
+
+        if (
+            /^(FACES|SEGMENTS|LABELS|ZONES|ELEVATION|\[Settings\])/i.test(line)
+        ) {
+
+            if (inNodesSection) {
+                break;
+            }
+
+            continue;
+        }
+
+        if (!inNodesSection) {
+            continue;
+        }
+
+        /*
+         * Convert commas and tabs to spaces.
+         */
+
+        const parts = line
+            .replace(/,/g, " ")
+            .trim()
+            .split(/\s+/);
+
+        if (parts.length < 4) {
+            continue;
+        }
+
+        /*
+         * Actual HYPACK CHN node format:
+         *
+         * X Y Z NodeNumber
+         */
+
+        const x = Number(parts[0]);
+        const y = Number(parts[1]);
+        const z = Number(parts[2]);
+        const node = Number(parts[3]);
+
+        /*
+         * All four values must be numeric.
+         */
+
+        if (
+            !Number.isFinite(x) ||
+            !Number.isFinite(y) ||
+            !Number.isFinite(z) ||
+            !Number.isFinite(node)
+        ) {
+            continue;
+        }
+
+        /*
+         * Node number must be an integer.
+         */
+
+        if (
+            Math.abs(node - Math.round(node)) > 0.000001
+        ) {
+            continue;
+        }
+
+        /*
+         * State Plane coordinate check.
+         */
+
+        if (
+            Math.abs(x) < 100000 ||
+            Math.abs(y) < 10000
+        ) {
+            continue;
+        }
+
+        /*
+         * Prevent duplicate XYZ points.
+         */
+
+        const key =
+            x.toFixed(6) +
+            "|" +
+            y.toFixed(6) +
+            "|" +
+            z.toFixed(6);
+
+        if (seen.has(key)) {
+            continue;
+        }
+
+        seen.add(key);
+
+        /*
+         * Save only X Y Z.
+         */
+
+        points.push({
+            x: x,
+            y: y,
+            z: z
+        });
+
+        /*
+         * If the declared number of nodes has
+         * been reached, stop reading nodes.
+         */
+
+        if (
+            expectedNodes > 0 &&
+            points.length >= expectedNodes
+        ) {
+            break;
+        }
+    }
+
+    return points;
+}
+
+
+/* ============================================================
+   CONTOUR DXF -> XYZ POINTS
+   Extracts all stored vertices from common contour entities.
+============================================================ */
+
+function processContourDXFText(text){
+    const pairs = makePairs(text);
+    const entities = splitEntities(pairs);
+    const points = [];
+
+    function addPoint(x,y,z){
+        if(Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)){
+            points.push({x:x,y:y,z:z});
+        }
+    }
+    function num(entity, code, fallback=null){
+        const item = entity.find(p => p.code === code);
+        if(!item) return fallback;
+        const n = Number(item.value);
+        return Number.isFinite(n) ? n : fallback;
+    }
+
+    for(let i=0;i<entities.length;i++){
+        const entity = entities[i];
+        const type = getEntityType(entity);
+
+        if(type === "POINT"){
+            addPoint(num(entity,10),num(entity,20),num(entity,30,0));
+        } else if(type === "LINE"){
+            addPoint(num(entity,10),num(entity,20),num(entity,30,0));
+            addPoint(num(entity,11),num(entity,21),num(entity,31,0));
+        } else if(type === "LWPOLYLINE"){
+            const elevation = num(entity,38,0);
+            let x = null, y = null;
+            for(const p of entity){
+                if(p.code === 10){
+                    if(x !== null && y !== null) addPoint(x,y,elevation);
+                    x = Number(p.value); y = null;
+                } else if(p.code === 20 && x !== null){
+                    y = Number(p.value);
+                    addPoint(x,y,elevation);
+                    x = null; y = null;
+                }
+            }
+        } else if(type === "POLYLINE"){
+            let j = i + 1;
+            const vertices = [];
+            for(;j<entities.length;j++){
+                const nextType = getEntityType(entities[j]);
+                if(nextType === "VERTEX"){
+                    const v = entities[j];
+                    addPoint(num(v,10),num(v,20),num(v,30,0));
+                    vertices.push(v);
+                } else if(nextType === "SEQEND"){
+                    break;
+                } else {
+                    break;
+                }
+            }
+            i = j;
+        } else if(type === "VERTEX"){
+            // Normally consumed with its parent POLYLINE; standalone records are still usable.
+            addPoint(num(entity,10),num(entity,20),num(entity,30,0));
+        } else if(type === "3DFACE"){
+            for(let k=0;k<4;k++){
+                addPoint(num(entity,10+k),num(entity,20+k),num(entity,30+k,0));
+            }
+        } else if(type === "SPLINE"){
+            // DXF SPLINE control points are stored as repeated 10/20/30 groups.
+            let x=null,y=null,z=0;
+            for(const p of entity){
+                if(p.code===10){
+                    x=Number(p.value); y=null; z=0;
+                } else if(p.code===20 && x!==null){
+                    y=Number(p.value);
+                } else if(p.code===30 && x!==null){
+                    z=Number(p.value);
+                    if(y!==null){addPoint(x,y,z);x=null;y=null;z=0;}
+                }
+            }
+            if(x!==null && y!==null) addPoint(x,y,z);
+        }
+    }
+    return removeDuplicates(points);
+}
+
+/* ============================================================
+   SOUNDING DXF -> XYZ POINTS
+   Prefer HYPACK XDATA sounding positions (1011/1021/1031)
+   over shifted TEXT label insertion positions (10/20/30).
+============================================================ */
+
+function processSoundingDXFText(text){
+    const pairs = makePairs(text);
+    const entities = splitEntities(pairs);
+    const points = [];
+    let hypack = 0, fallback = 0;
+
+    function num(entity, code, fallbackValue=null){
+        const item = entity.find(p => p.code === code);
+        if(!item) return fallbackValue;
+        const n = Number(item.value);
+        return Number.isFinite(n) ? n : fallbackValue;
+    }
+    function addPoint(x,y,z){
+        if(Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)){
+            points.push({x:x,y:y,z:z});
+        }
+    }
+
+    for(const entity of entities){
+        const type = getEntityType(entity);
+        if(type === "TEXT" || type === "MTEXT"){
+            const hx = num(entity,1011);
+            const hy = num(entity,1021);
+            let hz = num(entity,1031);
+            if(hx !== null && hy !== null){
+                if(hz === null) hz = num(entity,30,0);
+                addPoint(hx,hy,hz);
+                hypack++;
+            } else {
+                const x = num(entity,10), y = num(entity,20), z = num(entity,30,0);
+                addPoint(x,y,z);
+                if(Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) fallback++;
+            }
+        } else if(type === "POINT"){
+            addPoint(num(entity,10),num(entity,20),num(entity,30,0));
+        }
+    }
+
+    return {points:removeDuplicates(points), hypack:hypack, fallback:fallback};
+}
+
+/* ============================================================
+   DXF PARSER USED BY UNIFIED EXTRACT XYZ TOOL
+============================================================ */
+
+function processDXFText(text){
+    const pairs = makePairs(text);
+    const entities = splitEntities(pairs);
+    const endpoints = [];
+
+    for(const entity of entities){
+        const type = getEntityType(entity);
+
+        if(type === "LINE"){
+            let p1={x:null,y:null,z:0};
+            let p2={x:null,y:null,z:0};
+            for(const p of entity){
+                if(p.code===10) p1.x=Number(p.value);
+                else if(p.code===20) p1.y=Number(p.value);
+                else if(p.code===30) p1.z=Number(p.value);
+                else if(p.code===11) p2.x=Number(p.value);
+                else if(p.code===21) p2.y=Number(p.value);
+                else if(p.code===31) p2.z=Number(p.value);
+            }
+            if(Number.isFinite(p1.x)&&Number.isFinite(p1.y)&&Number.isFinite(p2.x)&&Number.isFinite(p2.y)){
+                endpoints.push(p1,p2);
+            }
+        }
+        else if(type === "LWPOLYLINE"){
+            const vertices=parseLWPolyline(entity);
+            if(vertices.length===2) endpoints.push(vertices[0],vertices[1]);
+        }
+    }
+
+    for(let i=0;i<entities.length;i++){
+        if(getEntityType(entities[i])!=="POLYLINE") continue;
+        let flags=0;
+        for(const p of entities[i]){
+            if(p.code===70){flags=Number(p.value);break;}
+        }
+        if((flags & 8)===0) continue;
+
+        const vertices=[];
+        let j=i+1;
+        for(;j<entities.length;j++){
+            const t=getEntityType(entities[j]);
+            if(t==="VERTEX"){
+                let x=null,y=null,z=0;
+                for(const p of entities[j]){
+                    if(p.code===10)x=Number(p.value);
+                    else if(p.code===20)y=Number(p.value);
+                    else if(p.code===30)z=Number(p.value);
+                }
+                if(Number.isFinite(x)&&Number.isFinite(y)) vertices.push({x,y,z});
+            } else if(t==="SEQEND") break;
+            else break;
+        }
+        if(vertices.length>=2) endpoints.push(vertices[0],vertices[vertices.length-1]);
+        i=j;
+    }
+
+    return removeDuplicates(endpoints);
+}
+
+function makePairs(text){
+    const lines=text.replace(/\r/g,"").split("\n"), pairs=[];
+    for(let i=0;i+1<lines.length;i+=2){
+        const code=Number(lines[i].trim());
+        if(!Number.isFinite(code)) continue;
+        pairs.push({code,value:lines[i+1].trim()});
+    }
+    return pairs;
+}
+
+function splitEntities(pairs){
+    const entities=[]; let inside=false, current=null;
+    for(const p of pairs){
+        if(p.code===2 && p.value.toUpperCase()==="ENTITIES"){inside=true;continue;}
+        if(!inside) continue;
+        if(p.code===0 && p.value.toUpperCase()==="ENDSEC"){
+            if(current) entities.push(current);
+            break;
+        }
+        if(p.code===0){
+            if(current) entities.push(current);
+            current=[p];
+        } else if(current) current.push(p);
+    }
+    return entities;
+}
+
+function getEntityType(e){
+    const p=e.find(x=>x.code===0);
+    return p ? p.value.toUpperCase() : "";
+}
+
+function parseLWPolyline(entity){
+    const vertices=[]; let x=null,y=null,z=0;
+    for(const p of entity){
+        if(p.code===10){
+            if(x!==null && y!==null) vertices.push({x,y,z});
+            x=Number(p.value); y=null; z=0;
+        } else if(p.code===20 && x!==null) y=Number(p.value);
+        else if(p.code===30 && x!==null) z=Number(p.value);
+    }
+    if(x!==null && y!==null) vertices.push({x,y,z});
+    return vertices;
+}
+
+function removeDuplicates(points){
+    const result=[], seen=new Set();
+    for(const p of points){
+        const x=Number(p.x.toFixed(9)), y=Number(p.y.toFixed(9)), z=Number(p.z.toFixed(9));
+        const key=x+"|"+y+"|"+z;
+        if(!seen.has(key)){seen.add(key);result.push({x,y,z});}
+    }
+    return result;
+}
+
+
+/* ============================================================
+   COMBINE XYZ
+============================================================ */
+
+let combineParts = [];
+let combineOutputReady = false;
+
+const combineProcessBtn = document.getElementById("combineProcessBtn");
+const combineDownloadBtn = document.getElementById("combineDownloadBtn");
+const combineClearBtn = document.getElementById("combineClearBtn");
+const combineStatus = document.getElementById("combineStatus");
+const combineRemoveOverlap = document.getElementById("combineRemoveOverlap");
+const combineZAdjustment = document.getElementById("combineZAdjustment");
+const combineInvertZ = document.getElementById("combineInvertZ");
+const combineRound = document.getElementById("combineRound");
+
+function setCombineStatus(message, type) {
+    combineStatus.className = type || "";
+    combineStatus.textContent = message;
+}
+
+/*
+   Large-file-safe XYZ overlap removal.
+   A spatial hash is used instead of comparing every point with every point.
+   Default overlap tolerance:
+      XY distance <= 3.0 ft
+      Z difference <= 0.15 ft
+*/
+function parseXYZForOverlap(text) {
+    const points = [];
+    const lines = text.split(/\r?\n/);
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        const parts = line.split(/\s+/);
+        if (parts.length < 3) continue;
+
+        const x = Number(parts[0]);
+        const y = Number(parts[1]);
+        const z = Number(parts[2]);
+
+        if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
+            points.push({x:x, y:y, z:z});
+        }
+    }
+    return points;
+}
+
+function makeSpatialHash(points, cellSize) {
+    const map = new Map();
+
+    for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        const ix = Math.floor(p.x / cellSize);
+        const iy = Math.floor(p.y / cellSize);
+        const key = ix + "," + iy;
+
+        let bucket = map.get(key);
+        if (!bucket) {
+            bucket = [];
+            map.set(key, bucket);
+        }
+        bucket.push(p);
+    }
+
+    return map;
+}
+
+function hasOverlap(point, spatialHash, cellSize, xyTolerance, zTolerance) {
+    const ix = Math.floor(point.x / cellSize);
+    const iy = Math.floor(point.y / cellSize);
+    const tol2 = xyTolerance * xyTolerance;
+
+    for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            const bucket = spatialHash.get((ix + dx) + "," + (iy + dy));
+            if (!bucket) continue;
+
+            for (let j = 0; j < bucket.length; j++) {
+                const q = bucket[j];
+                const ddx = point.x - q.x;
+                const ddy = point.y - q.y;
+
+                if ((ddx * ddx + ddy * ddy) <= tol2 &&
+                    Math.abs(point.z - q.z) <= zTolerance) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+function applyCombineZOptions(text) {
+    const adjustment = Number(combineZAdjustment.value);
+    if (!Number.isFinite(adjustment)) {
+        throw new Error("Please enter a valid Z adjustment value.");
+    }
+
+    const lines = text.split(/\r?\n/);
+    const output = [];
+    let changed = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+        const originalLine = lines[i];
+        const line = originalLine.trim();
+
+        if (!line) {
+            output.push(originalLine);
+            continue;
+        }
+
+        const parts = line.split(/\s+/);
+        if (parts.length < 3) {
+            output.push(originalLine);
+            continue;
+        }
+
+        const x = Number(parts[0]);
+        const y = Number(parts[1]);
+        const z = Number(parts[2]);
+
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) {
+            output.push(originalLine);
+            continue;
+        }
+
+        let newZ = z + adjustment;
+        if (combineInvertZ.checked) newZ = -newZ;
+
+        if (combineRound.checked) {
+            parts[0] = x.toFixed(2);
+            parts[1] = y.toFixed(2);
+            parts[2] = roundHalfUp(newZ, 1);
+        } else {
+            parts[0] = String(x);
+            parts[1] = String(y);
+            parts[2] = String(newZ);
+        }
+
+        output.push(parts.join(" "));
+        changed++;
+    }
+
+    return { text: output.join("\n").replace(/\s+$/, ""), changed: changed };
+}
+
+function removeOverlapFromLaterFile(previousText, laterText) {
+    const previousPoints = parseXYZForOverlap(previousText);
+    const spatialHash = makeSpatialHash(previousPoints, 3.0);
+    const lines = laterText.split(/\r?\n/);
+    const output = [];
+    let removed = 0;
+    let valid = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+        const originalLine = lines[i];
+        const line = originalLine.trim();
+
+        if (!line) {
+            output.push(originalLine);
+            continue;
+        }
+
+        const parts = line.split(/\s+/);
+        if (parts.length < 3) {
+            output.push(originalLine);
+            continue;
+        }
+
+        const x = Number(parts[0]);
+        const y = Number(parts[1]);
+        const z = Number(parts[2]);
+
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) {
+            output.push(originalLine);
+            continue;
+        }
+
+        valid++;
+
+        if (hasOverlap({x:x, y:y, z:z}, spatialHash, 3.0, 3.0, 0.15)) {
+            removed++;
+        } else {
+            output.push(originalLine);
+        }
+    }
+
+    return {
+        text: output.join("\n").replace(/\s+$/, ""),
+        removed: removed,
+        valid: valid,
+        referencePoints: previousPoints.length
+    };
+}
+
+combineProcessBtn.addEventListener("click", async function () {
+    const files = [];
+
+    for (let i = 1; i <= 6; i++) {
+        const input = document.getElementById("combineFile" + i);
+        if (input.files.length) {
+            files.push({ number: i, file: input.files[0] });
+        }
+    }
+
+    combineParts = [];
+    combineOutputReady = false;
+    combineDownloadBtn.style.display = "none";
+
+    if (!files.length) {
+        setCombineStatus("Please select at least one XYZ file.", "error");
+        return;
+    }
+
+    try {
+        combineProcessBtn.disabled = true;
+        combineProcessBtn.textContent = "Processing...";
+
+        let totalBytes = 0;
+        let totalRemoved = 0;
+        let previousText = null;
+
+        for (let n = 0; n < files.length; n++) {
+            const item = files[n];
+
+            setCombineStatus(
+                "Reading File " + item.number + ": " + item.file.name +
+                "\n\nFiles processed: " + n + " of " + files.length,
+                "info"
+            );
+
+            let text = await item.file.text();
+            text = text.replace(/^\uFEFF/, "").replace(/\s+$/, "");
+
+            if (!text.length) {
+                previousText = text;
+                continue;
+            }
+
+            if (combineRemoveOverlap.checked && n > 0 && previousText !== null) {
+                setCombineStatus(
+                    "Checking File " + item.number + " for overlap...\n\n" +
+                    "File " + files[n - 1].number + " → File " + item.number,
+                    "info"
+                );
+
+                const cleaned = removeOverlapFromLaterFile(previousText, text);
+                text = cleaned.text;
+                totalRemoved += cleaned.removed;
+
+                setCombineStatus(
+                    "File " + item.number + " complete.\n\n" +
+                    "Overlap points removed: " + cleaned.removed.toLocaleString() +
+                    "\nReference points in File " + files[n - 1].number + ": " +
+                    cleaned.referencePoints.toLocaleString(),
+                    "info"
+                );
+            }
+
+            if (text.length) {
+                const adjusted = applyCombineZOptions(text);
+                text = adjusted.text;
+                combineParts.push(text);
+            }
+
+            previousText = text;
+            totalBytes += item.file.size;
+
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 0);
+            });
+        }
+
+        if (!combineParts.length) {
+            throw new Error("The selected files contain no data.");
+        }
+
+        combineOutputReady = true;
+        combineDownloadBtn.style.display = "inline-block";
+
+        let message =
+            "Processing complete.\n\n" +
+            "Files combined: " + files.length +
+            "\nTotal input size: " +
+            (totalBytes / 1024 / 1024).toFixed(2) + " MB";
+
+        if (combineRemoveOverlap.checked) {
+            message += "\nOverlap points removed: " + totalRemoved.toLocaleString();
+        }
+
+        message += "\n\nReady to download.";
+
+        setCombineStatus(message, "success");
+
+    } catch (e) {
+        combineParts = [];
+        combineOutputReady = false;
+        combineDownloadBtn.style.display = "none";
+        setCombineStatus("Error:\n\n" + (e.message || e), "error");
+    } finally {
+        combineProcessBtn.disabled = false;
+        combineProcessBtn.textContent = "Process";
+    }
+});
+
+combineDownloadBtn.addEventListener("click", function () {
+    if (!combineOutputReady || !combineParts.length) {
+        alert("Please process the files first.");
+        return;
+    }
+
+    const output = combineParts.join("\n") + "\n";
+    const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = combineRemoveOverlap.checked
+        ? "combined_XYZ_overlap_removed.xyz"
+        : "combined_XYZ.xyz";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    setTimeout(function() {
+        URL.revokeObjectURL(url);
+    }, 2000);
+});
+
+combineClearBtn.addEventListener("click", function () {
+    for (let i = 1; i <= 6; i++) {
+        document.getElementById("combineFile" + i).value = "";
+    }
+
+    combineParts = [];
+    combineOutputReady = false;
+    combineDownloadBtn.style.display = "none";
+    combineRemoveOverlap.checked = false;
+    combineZAdjustment.value = "0";
+    combineInvertZ.checked = false;
+    combineRound.checked = true;
+    combineStatus.className = "";
+    combineStatus.textContent = "";
+});
+
+/* ============================================================
+   CLEAR ALL
+============================================================ */
+
+document
+.getElementById("clearAllBtn")
+.addEventListener("click", function() {
+
+    /* Extract XYZ */
+    document.getElementById("extractType").value = "mtx";
+    document.getElementById("extractMtxZ").value = "0";
+    document.getElementById("extractFile").value = "";
+    document.getElementById("extractFileName").textContent = "No file selected";
+    document.getElementById("extractStatus").innerHTML = "";
+    document.getElementById("extractResult").textContent = "";
+    document.getElementById("extractDownloadBtn").style.display = "none";
+    document.getElementById("extractProcessBtn").disabled = true;
+    extractOutputText = "";
+    extractOriginalFileName = "";
+    updateExtractFileType();
+
+    /* VDATUM */
+    document.getElementById("vdatumFile").value = "";
+    document.getElementById("surveyFile").value = "";
+    document.getElementById("vdatumName").textContent = "No VDATUM file selected";
+    document.getElementById("surveyName").textContent = "No survey file selected";
+    document.getElementById("vdatumStatus").textContent = "Select both files to begin.";
+    document.getElementById("vdatumDownloadSection").style.display = "none";
+    document.getElementById("vdatumOutputFileName").textContent = "";
+    document.getElementById("vdatumProgressContainer").style.display = "none";
+    document.getElementById("vdatumProgressBar").value = 0;
+    document.getElementById("vdatumProgressText").textContent = "0%";
+    vdatumPoints = [];
+    kdTree = null;
+    outputBlob = null;
+    outputFileName = "";
+
+    /* Z adjustment */
+    document.getElementById("zAdjustFile").value = "";
+    document.getElementById("zAdjustment").value = "0";
+    document.getElementById("invertZAdjust").checked = false;
+    document.getElementById("zStatus").innerHTML = "";
+    document.getElementById("zResult").textContent = "";
+    document.getElementById("zDownloadBtn").style.display = "none";
+    zOutputText = "";
+    zOriginalFileName = "";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+
+
+
+
+/* ================= VDATUM TOOL ================= */
+
 
 
 /* =====================================================
@@ -1093,7 +2177,7 @@ function setStatus(
 ) {
 
     document
-    .getElementById("status")
+    .getElementById("vdatumStatus")
     .textContent =
         message;
 
@@ -1106,10 +2190,13 @@ function setStatus(
    ===================================================== */
 
 document
-.getElementById("processButton")
+.getElementById("vdatumProcessButton")
 .addEventListener(
     "click",
     async function () {
+
+        const vdatumRoundOn =
+            document.getElementById("vdatumRound").checked;
 
 
         /* ---------------------------------------------
@@ -1167,7 +2254,7 @@ document
         const processButton =
             document
             .getElementById(
-                "processButton"
+                "vdatumProcessButton"
             );
 
 
@@ -1186,7 +2273,7 @@ document
 
         document
         .getElementById(
-            "progressContainer"
+            "vdatumProgressContainer"
         )
         .style.display =
             "block";
@@ -1194,7 +2281,7 @@ document
 
         document
         .getElementById(
-            "progressBar"
+            "vdatumProgressBar"
         )
         .value =
             0;
@@ -1202,7 +2289,7 @@ document
 
         document
         .getElementById(
-            "progressText"
+            "vdatumProgressText"
         )
         .textContent =
             "0%";
@@ -1215,7 +2302,7 @@ document
 
         document
         .getElementById(
-            "downloadSection"
+            "vdatumDownloadSection"
         )
         .style.display =
             "none";
@@ -1495,7 +2582,7 @@ document
                     y.toFixed(2) +
                     " " +
 
-                    newZ.toFixed(2);
+                    roundHalfUp(newZ, vdatumRoundOn ? 1 : 2);
 
 
 
@@ -1527,7 +2614,7 @@ document
 
                     document
                     .getElementById(
-                        "progressBar"
+                        "vdatumProgressBar"
                     )
                     .value =
                         percent;
@@ -1535,7 +2622,7 @@ document
 
                     document
                     .getElementById(
-                        "progressText"
+                        "vdatumProgressText"
                     )
                     .textContent =
 
@@ -1588,7 +2675,7 @@ document
 
             document
             .getElementById(
-                "progressBar"
+                "vdatumProgressBar"
             )
             .value =
                 100;
@@ -1596,7 +2683,7 @@ document
 
             document
             .getElementById(
-                "progressText"
+                "vdatumProgressText"
             )
             .textContent =
                 "100%";
@@ -1662,7 +2749,7 @@ document
 
             document
             .getElementById(
-                "downloadSection"
+                "vdatumDownloadSection"
             )
             .style.display =
                 "block";
@@ -1670,7 +2757,7 @@ document
 
             document
             .getElementById(
-                "outputFileName"
+                "vdatumOutputFileName"
             )
             .textContent =
                 outputFileName;
@@ -1774,7 +2861,7 @@ document
 
 document
 .getElementById(
-    "downloadButton"
+    "vdatumDownloadButton"
 )
 .addEventListener(
     "click",
@@ -1851,7 +2938,7 @@ document
 
 document
 .getElementById(
-    "refreshButton"
+    "vdatumRefreshButton"
 )
 .addEventListener(
     "click",
@@ -1927,7 +3014,7 @@ document
 
         document
         .getElementById(
-            "downloadSection"
+            "vdatumDownloadSection"
         )
         .style.display =
             "none";
@@ -1935,7 +3022,7 @@ document
 
         document
         .getElementById(
-            "outputFileName"
+            "vdatumOutputFileName"
         )
         .textContent =
             "";
@@ -1948,7 +3035,7 @@ document
 
         document
         .getElementById(
-            "progressContainer"
+            "vdatumProgressContainer"
         )
         .style.display =
             "none";
@@ -1956,7 +3043,7 @@ document
 
         document
         .getElementById(
-            "progressBar"
+            "vdatumProgressBar"
         )
         .value =
             0;
@@ -1964,7 +3051,7 @@ document
 
         document
         .getElementById(
-            "progressText"
+            "vdatumProgressText"
         )
         .textContent =
             "0%";
@@ -1978,7 +3065,7 @@ document
         const processButton =
             document
             .getElementById(
-                "processButton"
+                "vdatumProcessButton"
             );
 
 
@@ -2016,10 +3103,1586 @@ document
 );
 
 
+
+
+/* ================= Z ADJUST TOOL ================= */
+
+
+let zOutputText = "";
+let zOriginalFileName = "";
+
+
+document.getElementById("zProcessBtn").addEventListener("click", function () {
+
+    const zRoundOn = document.getElementById("zRound").checked;
+
+    const zAdjustFile =
+        document.getElementById("zAdjustFile");
+
+    const adjustmentInput =
+        document.getElementById("zAdjustment");
+
+    const invertZInput =
+        document.getElementById("invertZAdjust");
+
+    const zStatus =
+        document.getElementById("zStatus");
+
+    const zResult =
+        document.getElementById("zResult");
+
+    const zDownloadBtn =
+        document.getElementById("zDownloadBtn");
+
+
+    if (!zAdjustFile.files.length) {
+
+        alert("Please select an XYZ or TXT file.");
+
+        return;
+    }
+
+
+    const zAdjustment =
+        Number(adjustmentInput.value);
+
+
+    if (!Number.isFinite(zAdjustment)) {
+
+        alert("Please enter a valid zAdjustment value.");
+
+        return;
+    }
+
+
+    const invertZAdjust =
+        invertZInput.checked;
+
+
+    const file =
+        zAdjustFile.files[0];
+
+
+    zOriginalFileName =
+        file.name;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function (event) {
+
+        const text =
+            event.target.result;
+
+
+        const lines =
+            text.split(/\r?\n/);
+
+
+        let processedLines = [];
+
+        let validPoints = 0;
+
+        let unchangedLines = 0;
+
+
+        for (let line of lines) {
+
+
+            // Keep blank lines unchanged
+
+            if (line.trim() === "") {
+
+                processedLines.push(line);
+
+                continue;
+            }
+
+
+            /*
+             * Split the line by whitespace.
+             *
+             * Expected:
+             * X Y Z
+             */
+
+            const parts =
+                line.trim().split(/\s+/);
+
+
+            if (parts.length >= 3) {
+
+                const x =
+                    Number(parts[0]);
+
+                const y =
+                    Number(parts[1]);
+
+                const z =
+                    Number(parts[2]);
+
+
+                if (
+                    Number.isFinite(x) &&
+                    Number.isFinite(y) &&
+                    Number.isFinite(z)
+                ) {
+
+
+                    /*
+                     * Apply Z zAdjustment
+                     */
+
+                    let newZ =
+                        z + zAdjustment;
+
+
+                    /*
+                     * Invert Z if selected
+                     */
+
+                    if (invertZAdjust) {
+
+                        newZ =
+                            -newZ;
+                    }
+
+
+                    /*
+                     * Format output:
+                     *
+                     * X = 2 decimals
+                     * Y = 2 decimals
+                     * Z = 1 decimal
+                     */
+
+                    processedLines.push(
+
+                        x.toFixed(zRoundOn ? 2 : 3) + " " +
+                        y.toFixed(zRoundOn ? 2 : 3) + " " +
+                        roundHalfUp(newZ, zRoundOn ? 1 : 3)
+
+                    );
+
+
+                    validPoints++;
+
+
+                } else {
+
+                    processedLines.push(line);
+
+                    unchangedLines++;
+                }
+
+
+            } else {
+
+                /*
+                 * Keep lines that don't contain
+                 * at least X Y Z unchanged.
+                 */
+
+                processedLines.push(line);
+
+                unchangedLines++;
+            }
+
+        }
+
+
+        /*
+         * Create final output
+         */
+
+        zOutputText =
+            processedLines.join("\n");
+
+
+        /*
+         * Display processing information
+         */
+
+        zStatus.innerHTML =
+
+            "<div class='info'>" +
+
+            "<strong>Processing complete.</strong><br>" +
+
+            "Points processed: " +
+            validPoints.toLocaleString() +
+            "<br>" +
+
+            "Lines unchanged: " +
+            unchangedLines.toLocaleString() +
+            "<br>" +
+
+            "Z zAdjustment: " +
+            zAdjustment.toFixed(2) +
+            "<br>" +
+
+            "Invert Z: " +
+            (invertZAdjust ? "YES" : "NO") +
+            "<br>" +
+
+            (zRoundOn ? "Output: X Y 2 decimals, Z 1 decimal" : "Output: X Y Z 3 decimals") +
+
+            "</div>";
+
+
+        /*
+         * Show first 10 processed lines
+         */
+
+        zResult.textContent =
+            processedLines
+                .slice(0, 10)
+                .join("\n");
+
+
+        /*
+         * Show download button
+         */
+
+        zDownloadBtn.style.display =
+            "inline-block";
+
+    };
+
+
+    reader.readAsText(file);
+
+});
+
+
+/*
+ * Download corrected file
+ */
+
+document.getElementById("zDownloadBtn").addEventListener("click", function () {
+
+    if (!zOutputText) {
+
+        alert("Please process a file first.");
+
+        return;
+    }
+
+
+    /*
+     * Create downloadable text file
+     */
+
+    const blob =
+        new Blob(
+            [zOutputText],
+            {
+                type:
+                    "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        url;
+
+
+    /*
+     * Create output filename
+     */
+
+    const baseName =
+        zOriginalFileName
+            .replace(/\.[^/.]+$/, "");
+
+
+    link.download =
+        baseName + "_Z_ADJUSTED.xyz";
+
+
+    document.body.appendChild(link);
+
+
+    link.click();
+
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+
+/* ============================================================
+   GLOBAL CLEAR ALL
+============================================================ */
+
+document
+.getElementById("clearAllBtn")
+.addEventListener("click", function() {
+
+    /* MTX */
+    if (document.getElementById("mtxFile"))
+        document.getElementById("mtxFile").value = "";
+
+    if (document.getElementById("mtxZ"))
+        document.getElementById("mtxZ").value = "0";
+
+    if (document.getElementById("mtxStatus"))
+        document.getElementById("mtxStatus").innerHTML = "";
+
+    if (document.getElementById("mtxResult"))
+        document.getElementById("mtxResult").textContent = "";
+
+    if (document.getElementById("mtxDownloadBtn"))
+        document.getElementById("mtxDownloadBtn").style.display = "none";
+
+    if (typeof mtxOutputText !== "undefined") mtxOutputText = "";
+    if (typeof mtxOriginalFileName !== "undefined") mtxOriginalFileName = "";
+
+    /* CHN */
+    if (document.getElementById("chnFile"))
+        document.getElementById("chnFile").value = "";
+
+    if (document.getElementById("chnStatus"))
+        document.getElementById("chnStatus").innerHTML = "";
+
+    if (document.getElementById("chnResult"))
+        document.getElementById("chnResult").textContent = "";
+
+    if (document.getElementById("chnDownloadBtn"))
+        document.getElementById("chnDownloadBtn").style.display = "none";
+
+    if (typeof chnOutputText !== "undefined") chnOutputText = "";
+    if (typeof chnOriginalFileName !== "undefined") chnOriginalFileName = "";
+
+    /* VDATUM */
+    if (document.getElementById("vdatumFile"))
+        document.getElementById("vdatumFile").value = "";
+
+    if (document.getElementById("surveyFile"))
+        document.getElementById("surveyFile").value = "";
+
+    if (document.getElementById("vdatumName"))
+        document.getElementById("vdatumName").textContent =
+            "No VDATUM file selected";
+
+    if (document.getElementById("surveyName"))
+        document.getElementById("surveyName").textContent =
+            "No survey file selected";
+
+    if (typeof vdatumPoints !== "undefined") vdatumPoints = [];
+    if (typeof kdTree !== "undefined") kdTree = null;
+    if (typeof vdatumOutputBlob !== "undefined") vdatumOutputBlob = null;
+    if (typeof vdatumOutputFileName !== "undefined") vdatumOutputFileName = "";
+
+    if (document.getElementById("vdatumDownloadSection"))
+        document.getElementById("vdatumDownloadSection").style.display = "none";
+
+    if (document.getElementById("vdatumOutputFileName"))
+        document.getElementById("vdatumOutputFileName").textContent = "";
+
+    if (document.getElementById("vdatumProgressContainer"))
+        document.getElementById("vdatumProgressContainer").style.display = "none";
+
+    if (document.getElementById("vdatumProgressBar"))
+        document.getElementById("vdatumProgressBar").value = 0;
+
+    if (document.getElementById("vdatumProgressText"))
+        document.getElementById("vdatumProgressText").textContent = "0%";
+
+    if (document.getElementById("vdatumStatus"))
+        document.getElementById("vdatumStatus").textContent =
+            "Select both files to begin.";
+
+    /* Z ADJUST / INVERT */
+    if (document.getElementById("zAdjustFile"))
+        document.getElementById("zAdjustFile").value = "";
+
+    if (document.getElementById("zAdjustment"))
+        document.getElementById("zAdjustment").value = "0";
+
+    if (document.getElementById("invertZAdjust"))
+        document.getElementById("invertZAdjust").checked = false;
+
+    if (document.getElementById("zStatus"))
+        document.getElementById("zStatus").innerHTML = "";
+
+    if (document.getElementById("zResult"))
+        document.getElementById("zResult").textContent = "";
+
+    if (document.getElementById("zDownloadBtn"))
+        document.getElementById("zDownloadBtn").style.display = "none";
+
+    if (typeof zOutputText !== "undefined") zOutputText = "";
+    if (typeof zOriginalFileName !== "undefined") zOriginalFileName = "";
+});
+
 </script>
 
 
-</body>
+<script>
 
+/* ============================================================
+   COORDINATE CONVERTER TAB (NJ 2900 / NY East 3101 / NY Long Island 3104)
+   Wrapped in its own scope so it cannot clash with the other tools.
+============================================================ */
+
+(function () {
+
+/* ---------- Projection math (GRS80, US survey foot) ---------- */
+const A_ = 6378137.0, F_ = 1 / 298.257222101, E2 = 2 * F_ - F_ * F_, E = Math.sqrt(E2);
+const FT = 1200 / 3937; // metres per US survey foot
+const rad = d => d * Math.PI / 180;
+const {sin, cos, tan, atan, atan2, asin, sinh, cosh, tanh, log, sqrt, PI} = Math;
+const atanh = Math.atanh;
+
+/* Transverse Mercator (used by NJ 2900 and NY East 3101) */
+function makeTM(p) {
+  const n = F_ / (2 - F_);
+  const AK = A_ / (1 + n) * (1 + n ** 2 / 4 + n ** 4 / 64);
+  const AL = [n / 2 - 2 * n ** 2 / 3 + 5 * n ** 3 / 16, 13 * n ** 2 / 48 - 3 * n ** 3 / 5, 61 * n ** 3 / 240];
+  const BE = [n / 2 - 2 * n ** 2 / 3 + 37 * n ** 3 / 96, n ** 2 / 48 + n ** 3 / 15, 17 * n ** 3 / 480];
+  const conf = lat => atan(sinh(atanh(sin(lat)) - E * atanh(E * sin(lat))));
+  const arc = lat => { const x = conf(lat); return AK * (x + AL.reduce((s, a, j) => s + a * sin(2 * (j + 1) * x), 0)); };
+  const M0 = p.k0 * arc(p.lat0);
+  return {
+    toLL(Em, Nm) {
+      const xi = (Nm - p.fn + M0) / (p.k0 * AK), eta = (Em - p.fe) / (p.k0 * AK);
+      let xi_ = xi, eta_ = eta;
+      for (let j = 0; j < 3; j++) {
+        xi_ -= BE[j] * sin(2 * (j + 1) * xi) * cosh(2 * (j + 1) * eta);
+        eta_ -= BE[j] * cos(2 * (j + 1) * xi) * sinh(2 * (j + 1) * eta);
+      }
+      const chi = asin(sin(xi_) / cosh(eta_));
+      let lat = chi;
+      for (let i = 0; i < 10; i++) lat = asin(tanh(atanh(sin(chi)) + E * atanh(E * sin(lat))));
+      return [lat, p.lon0 + atan2(sinh(eta_), cos(xi_))];
+    },
+    fromLL(lat, lon) {
+      const c = conf(lat), dl = lon - p.lon0;
+      const xi_ = atan2(tan(c), cos(dl)), eta_ = atanh(sin(dl) * cos(c));
+      let xi = xi_, eta = eta_;
+      for (let j = 0; j < 3; j++) {
+        xi += AL[j] * sin(2 * (j + 1) * xi_) * cosh(2 * (j + 1) * eta_);
+        eta += AL[j] * cos(2 * (j + 1) * xi_) * sinh(2 * (j + 1) * eta_);
+      }
+      return [p.fe + p.k0 * AK * eta, p.fn + p.k0 * AK * xi - M0];
+    }
+  };
+}
+
+/* Lambert Conformal Conic, 2 standard parallels (NY Long Island 3104) */
+function makeLCC(p) {
+  const mm = q => cos(q) / sqrt(1 - E2 * sin(q) ** 2);
+  const tt = q => tan(PI / 4 - q / 2) / (((1 - E * sin(q)) / (1 + E * sin(q))) ** (E / 2));
+  const n = (log(mm(p.p1)) - log(mm(p.p2))) / (log(tt(p.p1)) - log(tt(p.p2)));
+  const F = mm(p.p1) / (n * tt(p.p1) ** n), R0 = A_ * F * tt(p.p0) ** n;
+  return {
+    fromLL(lat, lon) {
+      const r = A_ * F * tt(lat) ** n, th = n * (lon - p.lon0);
+      return [p.fe + r * sin(th), R0 - r * cos(th)];
+    },
+    toLL(Em, Nm) {
+      const x = Em - p.fe, y = R0 - Nm;
+      const r = sqrt(x * x + y * y), th = atan2(x, y);
+      const t = (r / (A_ * F)) ** (1 / n);
+      let lat = PI / 2 - 2 * atan(t);
+      for (let i = 0; i < 10; i++) lat = PI / 2 - 2 * atan(t * ((1 - E * sin(lat)) / (1 + E * sin(lat))) ** (E / 2));
+      return [lat, th / n + p.lon0];
+    }
+  };
+}
+
+const ZONES = {
+  NJ:   {label: "NJ FIPS 2900 (EPSG:3424)",              tag: "NJ_FIPS2900",
+         ...makeTM({lat0: rad(38 + 50 / 60), lon0: rad(-74.5), k0: 0.9999, fe: 150000, fn: 0})},
+  NYE:  {label: "NY East FIPS 3101 (EPSG:2260)",         tag: "NYE_FIPS3101",
+         ...makeTM({lat0: rad(38 + 50 / 60), lon0: rad(-74.5), k0: 0.9999, fe: 150000, fn: 0})},
+  NYLI: {label: "NY Long Island FIPS 3104 (EPSG:2263)",  tag: "NYLI_FIPS3104",
+         ...makeLCC({p1: rad(41 + 2 / 60), p2: rad(40 + 40 / 60), p0: rad(40 + 10 / 60), lon0: rad(-74), fe: 300000})}
+};
+
+/* coordinates in US survey feet in and out */
+function convertXY(from, to, x, y) {
+  const [la, lo] = ZONES[from].toLL(x * FT, y * FT);
+  const [e, n] = ZONES[to].fromLL(la, lo);
+  return [e / FT, n / FT];
+}
+
+
+function cvRoundHalfUp(v, d) {
+  const f = Math.pow(10, d);
+  return (Math.sign(v) * Math.round(Math.abs(v) * f + 1e-9) / f).toFixed(d);
+}
+const isNum = t => /^[+-]?(\d+\.?\d*|\.\d+)$/.test(t || "");
+/* returns index of the X column (0 = X Y [Z], 1 = ID X Y [Z]) or -1 if the line is not coordinates */
+function detectIdx(p) {
+  if (isNum(p[0]) && isNum(p[1])) {
+    return (p.length >= 4 && /^\d+$/.test(p[0]) && isNum(p[2]) && isNum(p[3])) ? 1 : 0;
+  }
+  return (isNum(p[1]) && isNum(p[2])) ? 1 : -1;
+}
+
+function cvConvertText(text, dir, round) {
+  const [from, to] = dir.split(">");
+  const lines = text.split(/\r?\n/);
+  const first = lines.find(l => l.trim()) || "";
+  const sep = first.includes("\t") ? "\t" : first.includes(",") ? "," : " ";
+  const split = line => sep === " " ? line.trim().split(/\s+/) : line.split(sep).map(s => s.trim());
+  let idx = -1;
+  for (const l of lines) { if (!l.trim()) continue; const d = detectIdx(split(l)); if (d !== -1) { idx = d; break; } }
+  let ok = 0; const bad = []; const rows = []; const out = [];
+  lines.forEach((line, i) => {
+    if (!line.trim()) { out.push(line); return; }
+    const parts = split(line);
+    const x = parseFloat(parts[idx]), y = parseFloat(parts[idx + 1]);
+    if (idx < 0 || !isFinite(x) || !isFinite(y)) { bad.push(i + 1); out.push(line); return; }
+    const [nx, ny] = convertXY(from, to, x, y);
+    let z = parts[idx + 2];
+    if (round && z !== undefined && isNum(z)) z = cvRoundHalfUp(parseFloat(z), 1);
+    if (rows.length < 10) rows.push({id: idx ? parts[0] : "", x, y, z: z === undefined ? "" : z, nx, ny});
+    parts[idx] = nx.toFixed(2); parts[idx + 1] = ny.toFixed(2);
+    if (z !== undefined) parts[idx + 2] = z;
+    ok++;
+    out.push(parts.join(sep === " " ? " " : sep));
+  });
+  return {text: out.join("\n"), ok, bad, rows, hasId: idx === 1};
+}
+
+if (typeof document !== "undefined") {
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t).replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+  let cvFiles = [];
+  let cvZipBlob = null;
+
+  function resetOutput() {
+    cvZipBlob = null;
+    $("cvDownloadBtn").style.display = "none";
+    $("cvPreview").innerHTML = "";
+    $("cvStatus").innerHTML = "";
+  }
+  function note() {
+    const d = $("cvDir").value;
+    $("cvNote").style.display = (d === "NJ>NYE" || d === "NYE>NJ") ? "block" : "none";
+  }
+
+  $("cvFile").addEventListener("change", e => {
+    cvFiles = Array.from(e.target.files || []);
+    resetOutput();
+    $("cvConvertBtn").disabled = !cvFiles.length;
+    $("cvFileNames").textContent = cvFiles.length
+      ? cvFiles.length + " file(s) selected: " + cvFiles.map(f => f.name).join(", ")
+      : "No files selected";
+    $("cvStatus").innerHTML = cvFiles.length
+      ? '<div class="info">Ready to convert ' + cvFiles.length + ' file(s).</div>'
+      : "";
+  });
+  $("cvDir").addEventListener("change", () => { resetOutput(); note(); });
+  $("cvRound").addEventListener("change", resetOutput);
+  note();
+
+  $("cvConvertBtn").addEventListener("click", async () => {
+    if (!cvFiles.length) return;
+    if (typeof JSZip === "undefined") {
+      $("cvStatus").innerHTML = '<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';
+      return;
+    }
+
+    const btn = $("cvConvertBtn");
+    btn.disabled = true;
+    btn.textContent = "Converting...";
+    resetOutput();
+
+    const zip = new JSZip();
+    let totalPoints = 0;
+    const failures = [];
+    let firstPreview = null;
+    const dir = $("cvDir").value;
+    const to = dir.split(">")[1];
+    const tag = ZONES[to].tag;
+
+    try {
+      for (let i = 0; i < cvFiles.length; i++) {
+        const file = cvFiles[i];
+        $("cvStatus").innerHTML = '<div class="info">Converting ' + (i + 1) + ' of ' + cvFiles.length + ': ' + esc(file.name) + '</div>';
+        try {
+          const source = await file.text();
+          const res = cvConvertText(source, dir, $("cvRound").checked);
+          if (!res.ok) throw new Error("No valid coordinate rows found.");
+          const output = res.text.replace(/\n*$/, "\n");
+          const base = file.name.replace(/\.[^/.]+$/, "");
+          const outName = base + "_" + tag + ".xyz";
+          zip.file(outName, output);
+          totalPoints += res.ok;
+          if (!firstPreview) firstPreview = {res, fileName:file.name};
+        } catch (e) {
+          failures.push(file.name + ": " + (e.message || e));
+        }
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+
+      if (!Object.keys(zip.files).length) {
+        throw new Error("No files could be converted. " + failures.join(" | "));
+      }
+
+      cvZipBlob = await zip.generateAsync({type:"blob"});
+      $("cvDownloadBtn").style.display = "inline-block";
+
+      let msg = "Converted " + Object.keys(zip.files).length + " of " + cvFiles.length +
+        " file(s) to " + ZONES[to].label + ". Total points converted: " + totalPoints.toLocaleString() + ".";
+      if (failures.length) msg += " Files not converted: " + failures.join(" | ");
+      msg += " Download ZIP to save the converted files.";
+      $("cvStatus").innerHTML = '<div class="success">' + esc(msg) + '</div>';
+
+      if (firstPreview) {
+        const res = firstPreview.res;
+        let h = "<h3>Preview: " + esc(firstPreview.fileName) + " — first " + res.rows.length + " converted points</h3><table><tr>" +
+          (res.hasId ? "<th>ID</th>" : "") + "<th>Input X</th><th>Input Y</th><th>Z</th><th>Output X</th><th>Output Y</th></tr>";
+        res.rows.forEach(r => {
+          h += "<tr>" + (res.hasId ? "<td>" + esc(r.id) + "</td>" : "") + "<td>" + r.x.toFixed(2) + "</td><td>" + r.y.toFixed(2) +
+            "</td><td>" + esc(r.z) + "</td><td>" + r.nx.toFixed(2) + "</td><td>" + r.ny.toFixed(2) + "</td></tr>";
+        });
+        $("cvPreview").innerHTML = h + "</table>";
+      }
+    } catch (e) {
+      $("cvStatus").innerHTML = '<div class="error">' + esc(e.message || e) + '</div>';
+    } finally {
+      btn.disabled = !cvFiles.length;
+      btn.textContent = "Convert All";
+    }
+  });
+
+  $("cvDownloadBtn").addEventListener("click", () => {
+    if (!cvZipBlob) return;
+    const tag = ZONES[$("cvDir").value.split(">")[1]].tag;
+    const url = URL.createObjectURL(cvZipBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Converted_Grid_" + tag + ".zip";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  });
+
+  /* Clear All button */
+  const clr = $("clearAllBtn");
+  if (clr) clr.addEventListener("click", () => {
+    $("cvFile").value = "";
+    cvFiles = [];
+    $("cvFileNames").textContent = "No files selected";
+    $("cvConvertBtn").disabled = true;
+    $("cvConvertBtn").textContent = "Convert All";
+    $("cvDir").selectedIndex = 0;
+    $("cvRound").checked = false;
+    resetOutput();
+    note();
+  });
+}
+
+/* ============================================================
+   CONVERT HYPACK RAW / HSX NAVIGATION COORDINATES
+   Converts POS X/Y and RAW FIX X/Y records, then updates the
+   projection metadata to match the destination zone.
+============================================================ */
+(function(){
+  const zoneMeta = {
+    NJ: {pro:'PRO TM -74.500000 0.999900 38.833333 0.000000 0.000000 492125.0000 0.0000', central:'-74.5000000000', epsg:'3424', fe:'492125', north:'0.0000000000', projection:'TM', ref:'38.8333333333', scale:'0.9999000000', south:'0.0000000000', zoneId:'0', zoneName:'NJ-2900 NEW JERSEY'},
+    NYE:{pro:'PRO TM -74.500000 0.999900 38.833333 0.000000 0.000000 492125.0000 0.0000', central:'-74.5000000000', epsg:'2260', fe:'492125', north:'0.0000000000', projection:'TM', ref:'38.8333333333', scale:'0.9999000000', south:'0.0000000000', zoneId:'1210', zoneName:'NY-3101 NEW YORK EAST'},
+    NYLI:{pro:'PRO LCC -74.000000 1.000000 40.166667 41.033333 40.666667 984250.0000 0.0000', central:'-74.0000000000', epsg:'2263', fe:'984250', north:'41.0333333333', projection:'LCC', ref:'40.1666666667', scale:'1.0000000000', south:'40.6666666667', zoneId:'1220', zoneName:'NY-3104 NEW YORK LONG ISLAND'}
+  };
+  function updateRawMetadata(lines, dest){
+    const m=zoneMeta[dest];
+    return lines.map(line=>{
+      if(/^PRO\s/.test(line)) return m.pro;
+      if(!/^INI\s/.test(line)) return line;
+      const k=line.match(/^INI\s+([^=]+)=/); if(!k) return line;
+      const key=k[1].trim();
+      const values={CentralMeridian:m.central,EPSG:m.epsg,FalseEasting:m.fe,FalseNorthing:'0',NorthParallel:m.north,Projection:m.projection,RefLatitude:m.ref,ScaleFactor:m.scale,SouthParallel:m.south,UnitsName:'US Survey Foot',ZoneId:m.zoneId,ZoneName:m.zoneName};
+      return Object.prototype.hasOwnProperty.call(values,key) ? 'INI '+key+'='+values[key] : line;
+    });
+  }
+  function convertHypackText(text, dir, kind, round){
+    const [from,to]=dir.split('>');
+    const lines=text.split(/\r?\n/); let converted=0, posCount=0, fixCount=0;
+    for(let i=0;i<lines.length;i++){
+      const line=lines[i];
+      if(!line) continue;
+      const match=line.match(/^(POS|FIX)\s+/);
+      if(!match) continue;
+      const type=match[1];
+      const parts=line.trim().split(/\s+/);
+      let xi=-1, yi=-1;
+      if(type==='POS' && parts.length>=5){xi=3; yi=4; posCount++;}
+      else if(type==='FIX' && kind==='raw' && parts.length>=6){xi=4; yi=5; fixCount++;}
+      if(xi<0 || !isNum(parts[xi]) || !isNum(parts[yi])) continue;
+      const x=Number(parts[xi]), y=Number(parts[yi]);
+      const [nx,ny]=convertXY(from,to,x,y);
+      parts[xi]=round?cvRoundHalfUp(nx,2):nx.toFixed(3);
+      parts[yi]=round?cvRoundHalfUp(ny,2):ny.toFixed(3);
+      lines[i]=parts.join(' '); converted++;
+    }
+    const updated=updateRawMetadata(lines,to);
+    if(!converted) throw new Error('No supported POS navigation coordinates were found in this file.');
+    return {text:updated.join('\r\n'),converted,posCount,fixCount};
+  }
+  function wire(kind){
+    const cap=kind.toUpperCase(), fileEl=document.getElementById(kind+'File'), dirEl=document.getElementById(kind+'Dir'), roundEl=document.getElementById(kind+'Round'), convertBtn=document.getElementById(kind+'ConvertBtn'), downloadBtn=document.getElementById(kind+'DownloadBtn'), status=document.getElementById(kind+'Status'), namesEl=document.getElementById(kind+'FileNames');
+    let selectedFiles=[], zipBlob=null;
+    fileEl.addEventListener('change',()=>{
+      selectedFiles=Array.from(fileEl.files||[]); zipBlob=null; downloadBtn.style.display='none'; status.innerHTML='';
+      convertBtn.disabled=!selectedFiles.length;
+      namesEl.textContent=selectedFiles.length ? selectedFiles.length+' file(s) selected: '+selectedFiles.map(f=>f.name).join(', ') : 'No files selected';
+      if(selectedFiles.length) status.innerHTML='<div class="info">Ready to convert '+selectedFiles.length+' '+cap+' file(s).</div>';
+    });
+    convertBtn.addEventListener('click',async()=>{
+      if(!selectedFiles.length) return;
+      if(typeof JSZip==='undefined'){
+        status.innerHTML='<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';
+        return;
+      }
+      convertBtn.disabled=true; convertBtn.textContent='Converting...'; downloadBtn.style.display='none'; zipBlob=null;
+      const zip=new JSZip(); let totalConverted=0, totalPos=0, totalFix=0, failed=[];
+      try{
+        const [from,to]=dirEl.value.split('>');
+        for(let i=0;i<selectedFiles.length;i++){
+          const file=selectedFiles[i];
+          status.innerHTML='<div class="info">Converting '+(i+1)+' of '+selectedFiles.length+': '+file.name+'</div>';
+          try{
+            const source=await file.text();
+            const res=convertHypackText(source,dirEl.value,kind,roundEl.checked);
+            const ext=kind==='raw'?'.RAW':'.HSX';
+            const tag=ZONES[to].tag;
+            const outName=file.name.replace(/\.[^/.]+$/,'')+'_'+tag+ext;
+            zip.file(outName,res.text);
+            totalConverted+=res.converted; totalPos+=res.posCount; totalFix+=res.fixCount;
+          }catch(e){failed.push(file.name+': '+(e.message||e));}
+          await new Promise(resolve=>setTimeout(resolve,0));
+        }
+        if(!Object.keys(zip.files).length) throw new Error('No files could be converted. '+failed.join(' | '));
+        zipBlob=await zip.generateAsync({type:'blob'});
+        downloadBtn.style.display='inline-block';
+        let msg='Converted '+Object.keys(zip.files).length+' of '+selectedFiles.length+' '+cap+' file(s). Total navigation records converted: '+totalConverted.toLocaleString()+'.';
+        if(kind==='raw') msg+=' POS records: '+totalPos.toLocaleString()+'; FIX records: '+totalFix.toLocaleString()+'.';
+        if(failed.length) msg+=' Failed files: '+failed.join(' | ');
+        status.innerHTML='<div class="success">'+msg+' Download ZIP to save all converted files together.</div>';
+      }catch(e){status.innerHTML='<div class="error">'+String(e.message||e).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</div>';}
+      finally{convertBtn.disabled=!selectedFiles.length;convertBtn.textContent='Convert All '+cap;}
+    });
+    downloadBtn.addEventListener('click',()=>{
+      if(!zipBlob)return;
+      const tag=ZONES[dirEl.value.split('>')[1]].tag;
+      const url=URL.createObjectURL(zipBlob); const a=document.createElement('a');
+      a.href=url; a.download='Converted_'+cap+'_'+tag+'.zip'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+    });
+    dirEl.addEventListener('change',()=>{zipBlob=null;downloadBtn.style.display='none';status.innerHTML='';});
+    roundEl.addEventListener('change',()=>{zipBlob=null;downloadBtn.style.display='none';status.innerHTML='';});
+  }
+  wire('raw'); wire('hsx');
+})();
+
+window.GridCore = {convertXY, ZONES, cvConvertText};
+})();
+
+</script>
+<script>
+/* ============================================================
+   CONVERT IMAGE TAB: re-georeference a TIFF + TFW between
+   NJ 2900 / NY East 3101 / NY Long Island 3104.
+   Uses the projection code from the Convert Grid tab (window.GridCore).
+============================================================ */
+
+(function () {
+
+const GC = window.GridCore;
+
+/* ---------- TIFF reading ---------- */
+
+function parseIFD(buf) {
+  const dv = new DataView(buf);
+  if (buf.byteLength < 8) throw new Error("This is not a TIFF file.");
+  const bo = dv.getUint16(0);
+  const le = bo === 0x4949 ? true : bo === 0x4D4D ? false : null;
+  if (le === null) throw new Error("This is not a TIFF file.");
+  const magic = dv.getUint16(2, le);
+  if (magic === 43) throw new Error("BigTIFF is not supported.");
+  if (magic !== 42) throw new Error("This is not a TIFF file.");
+  const off = dv.getUint32(4, le);
+  const n = dv.getUint16(off, le);
+  const sizes = {1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 6: 1, 7: 1, 8: 2, 9: 4, 10: 8, 11: 4, 12: 8, 16: 8};
+  const tags = {};
+  for (let i = 0; i < n; i++) {
+    const e = off + 2 + i * 12;
+    const tag = dv.getUint16(e, le), type = dv.getUint16(e + 2, le), count = dv.getUint32(e + 4, le);
+    const sz = (sizes[type] || 1) * count;
+    const vo = sz <= 4 ? e + 8 : dv.getUint32(e + 8, le);
+    const vals = new Array(count);
+    for (let k = 0; k < count; k++) {
+      switch (type) {
+        case 3: vals[k] = dv.getUint16(vo + k * 2, le); break;
+        case 4: vals[k] = dv.getUint32(vo + k * 4, le); break;
+        case 8: vals[k] = dv.getInt16(vo + k * 2, le); break;
+        case 9: vals[k] = dv.getInt32(vo + k * 4, le); break;
+        case 5: vals[k] = dv.getUint32(vo + k * 8, le) / (dv.getUint32(vo + k * 8 + 4, le) || 1); break;
+        case 12: vals[k] = dv.getFloat64(vo + k * 8, le); break;
+        case 16: vals[k] = dv.getUint32(vo + k * 8, le) + dv.getUint32(vo + k * 8 + 4, le) * 4294967296; break;
+        default: vals[k] = dv.getUint8(vo + k);
+      }
+    }
+    tags[tag] = vals;
+  }
+  return {le, tags};
+}
+
+function imageSize(buf) {
+  const {tags} = parseIFD(buf);
+  if (!tags[256] || !tags[257]) throw new Error("Could not read the image size from the TIFF.");
+  return {width: tags[256][0], height: tags[257][0]};
+}
+
+function lzwDecode(src, expected) {
+  const out = new Uint8Array(expected);
+  const prefix = new Int32Array(4096), suffix = new Uint8Array(4096), stack = new Uint8Array(4097);
+  let op = 0, next = 258, bits = 9, bitBuf = 0, bitCnt = 0, sp = 0, prev = -1;
+  function emit(code) {
+    let n = 0, c = code;
+    while (c >= 258) { stack[n++] = suffix[c]; c = prefix[c]; }
+    stack[n++] = c;
+    const first = c;
+    for (let i = n - 1; i >= 0; i--) { if (op < expected) out[op++] = stack[i]; }
+    return first;
+  }
+  while (op < expected) {
+    while (bitCnt < bits && sp < src.length) { bitBuf = ((bitBuf << 8) | src[sp++]) & 0xFFFFFF; bitCnt += 8; }
+    if (bitCnt < bits) break;
+    const code = (bitBuf >> (bitCnt - bits)) & ((1 << bits) - 1);
+    bitCnt -= bits;
+    if (code === 257) break;
+    if (code === 256) { next = 258; bits = 9; prev = -1; continue; }
+    if (prev === -1) {
+      if (op < expected) out[op++] = code;
+      prev = code;
+      continue;
+    }
+    let first;
+    if (code < next) {
+      first = emit(code);
+    } else {
+      let c = prev;
+      while (c >= 258) c = prefix[c];
+      first = c;
+      emit(prev);
+      if (op < expected) out[op++] = first;
+    }
+    if (next < 4096) {
+      prefix[next] = prev; suffix[next] = first; next++;
+      if (next === 511) bits = 10; else if (next === 1023) bits = 11; else if (next === 2047) bits = 12;
+    }
+    prev = code;
+  }
+  return out;
+}
+
+function packBitsDecode(src, expected) {
+  const out = new Uint8Array(expected);
+  let ip = 0, op = 0;
+  while (op < expected && ip < src.length) {
+    const n = (src[ip++] << 24) >> 24;
+    if (n >= 0) {
+      for (let i = 0; i <= n && op < expected; i++) out[op++] = src[ip++];
+    } else if (n !== -128) {
+      const v = src[ip++];
+      for (let i = 0; i < 1 - n && op < expected; i++) out[op++] = v;
+    }
+  }
+  return out;
+}
+
+async function inflate(src) {
+  if (typeof DecompressionStream === "undefined") throw new Error("This browser cannot read Deflate-compressed TIFF files.");
+  const stream = new Blob([src]).stream().pipeThrough(new DecompressionStream("deflate"));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+async function decodeTiff(buf) {
+  const {tags} = parseIFD(buf);
+  const t = (k, d) => (tags[k] ? tags[k] : d);
+  const W = t(256)[0], H = t(257)[0];
+  const bits = t(258, [1]), spp = t(277, [1])[0], comp = t(259, [1])[0];
+  const photo = t(262, [1])[0], planar = t(284, [1])[0], pred = t(317, [1])[0];
+  if (bits.some(b => b !== 8)) throw new Error("Only 8-bit TIFF images are supported for the north-up option.");
+  if (planar !== 1) throw new Error("Planar TIFF layout is not supported for the north-up option.");
+  if (comp === 7 || comp === 6) throw new Error("JPEG-compressed TIFF is not supported for the north-up option.");
+  if (![1, 5, 8, 32946, 32773].includes(comp)) throw new Error("This TIFF compression is not supported for the north-up option.");
+  const bytes = new Uint8Array(buf);
+  const raw = new Uint8Array(W * H * spp);
+
+  async function chunk(off, len, expected) {
+    const src = bytes.subarray(off, off + len);
+    if (comp === 1) return src;
+    if (comp === 5) return lzwDecode(src, expected);
+    if (comp === 32773) return packBitsDecode(src, expected);
+    return inflate(src);
+  }
+  function unpredict(d, rows, w) {
+    if (pred !== 2) return;
+    for (let r = 0; r < rows; r++) {
+      const base = r * w * spp;
+      for (let i = spp; i < w * spp; i++) d[base + i] = (d[base + i] + d[base + i - spp]) & 255;
+    }
+  }
+
+  if (tags[322]) {
+    const tw = tags[322][0], th = tags[323][0], offs = tags[324], cnts = tags[325];
+    const across = Math.ceil(W / tw);
+    for (let i = 0; i < offs.length; i++) {
+      const d = await chunk(offs[i], cnts[i], tw * th * spp);
+      const tmp = d.length >= tw * th * spp ? d : (() => { const z = new Uint8Array(tw * th * spp); z.set(d); return z; })();
+      const copy = comp === 1 ? Uint8Array.from(tmp) : tmp;
+      unpredict(copy, th, tw);
+      const tx = (i % across) * tw, ty = Math.floor(i / across) * th;
+      const cw = Math.min(tw, W - tx), chh = Math.min(th, H - ty);
+      for (let r = 0; r < chh; r++) {
+        raw.set(copy.subarray(r * tw * spp, r * tw * spp + cw * spp), ((ty + r) * W + tx) * spp);
+      }
+    }
+  } else {
+    const rps = Math.min(t(278, [H])[0], H), offs = tags[273], cnts = tags[279];
+    for (let s = 0; s < offs.length; s++) {
+      const rows = Math.min(rps, H - s * rps);
+      if (rows <= 0) break;
+      const need = rows * W * spp;
+      const len = cnts ? cnts[s] : need;
+      let d = await chunk(offs[s], len, need);
+      if (comp === 1) d = Uint8Array.from(d.subarray(0, need));
+      unpredict(d, rows, W);
+      raw.set(d.subarray(0, need), s * rps * W * spp);
+    }
+  }
+
+  /* to RGB or RGBA */
+  const n = W * H;
+  if (photo === 2 && spp >= 3) {
+    const ch = spp >= 4 ? 4 : 3;
+    if (spp === ch) return {width: W, height: H, ch, data: raw};
+    const data = new Uint8Array(n * ch);
+    for (let i = 0; i < n; i++) for (let k = 0; k < ch; k++) data[i * ch + k] = raw[i * spp + k];
+    return {width: W, height: H, ch, data};
+  }
+  if ((photo === 0 || photo === 1) && spp >= 1) {
+    const ch = spp >= 2 ? 4 : 3;
+    const data = new Uint8Array(n * ch);
+    for (let i = 0; i < n; i++) {
+      const g = photo === 0 ? 255 - raw[i * spp] : raw[i * spp];
+      data[i * ch] = data[i * ch + 1] = data[i * ch + 2] = g;
+      if (ch === 4) data[i * ch + 3] = raw[i * spp + 1];
+    }
+    return {width: W, height: H, ch, data};
+  }
+  if (photo === 3 && tags[320]) {
+    const cm = tags[320], cnt = cm.length / 3;
+    const data = new Uint8Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const v = raw[i * spp];
+      data[i * 3] = cm[v] >> 8; data[i * 3 + 1] = cm[cnt + v] >> 8; data[i * 3 + 2] = cm[2 * cnt + v] >> 8;
+    }
+    return {width: W, height: H, ch: 3, data};
+  }
+  throw new Error("This TIFF color type is not supported for the north-up option.");
+}
+
+/* ---------- TIFF writing (uncompressed 8-bit RGB / RGBA) ---------- */
+
+function encodeTiff(data, W, H, ch, geo) {
+  const rps = Math.max(1, Math.floor(65536 / (W * ch)));
+  const nStrips = Math.ceil(H / rps);
+  const dataLen = W * H * ch;
+
+  /* Optional embedded GeoTIFF information.  The raster itself remains
+     uncompressed 8-bit RGB/RGBA, just like the normal TIFF writer. */
+  const hasGeo = !!geo;
+  const nTags = (ch === 4 ? 14 : 13) + (hasGeo ? 2 : 0);
+  let pos = 8 + dataLen;
+  if (pos % 2) pos++;
+  const bitsOff = pos; pos += ch * 2;
+  const xresOff = pos; pos += 8;
+  const yresOff = pos; pos += 8;
+  const soOff = pos; pos += nStrips > 1 ? nStrips * 4 : 0;
+  const scOff = pos; pos += nStrips > 1 ? nStrips * 4 : 0;
+
+  let mtOff = 0, keyOff = 0;
+  if (hasGeo) {
+    if (pos % 8) pos += 8 - (pos % 8);
+    mtOff = pos; pos += 16 * 8;
+    if (pos % 2) pos++;
+    keyOff = pos; pos += 20 * 2; // GeoKeyDirectory: 4 header + 4 keys x 4 shorts
+  }
+
+  const ifdOff = pos;
+  const total = ifdOff + 2 + nTags * 12 + 4;
+  const buf = new ArrayBuffer(total);
+  const dv = new DataView(buf);
+  new Uint8Array(buf, 8, dataLen).set(data);
+  dv.setUint8(0, 0x49); dv.setUint8(1, 0x49); dv.setUint16(2, 42, true); dv.setUint32(4, ifdOff, true);
+  for (let i = 0; i < ch; i++) dv.setUint16(bitsOff + i * 2, 8, true);
+  dv.setUint32(xresOff, 72, true); dv.setUint32(xresOff + 4, 1, true);
+  dv.setUint32(yresOff, 72, true); dv.setUint32(yresOff + 4, 1, true);
+
+  const counts = [];
+  for (let st = 0; st < nStrips; st++) {
+    const rows = Math.min(rps, H - st * rps);
+    counts.push(rows * W * ch);
+    if (nStrips > 1) {
+      dv.setUint32(soOff + st * 4, 8 + st * rps * W * ch, true);
+      dv.setUint32(scOff + st * 4, rows * W * ch, true);
+    }
+  }
+
+  if (hasGeo) {
+    const m = geo.matrix;
+    for (let i = 0; i < 16; i++) dv.setFloat64(mtOff + i * 8, Number(m[i]), true);
+
+    const epsg = Number(geo.epsg);
+    const keys = [
+      1024, 0, 1, 1,       // GTModelTypeGeoKey = Projected
+      1025, 0, 1, 1,       // GTRasterTypeGeoKey = PixelIsArea
+      2048, 0, 1, 4269,    // GeographicTypeGeoKey = NAD83
+      3072, 0, 1, epsg     // ProjectedCSTypeGeoKey
+    ];
+    dv.setUint16(keyOff, 1, true);      // GeoTIFF version
+    dv.setUint16(keyOff + 2, 1, true);  // revision major
+    dv.setUint16(keyOff + 4, 0, true);  // revision minor
+    dv.setUint16(keyOff + 6, 4, true);  // number of keys
+    for (let i = 0; i < keys.length; i++) dv.setUint16(keyOff + 8 + i * 2, keys[i], true);
+  }
+
+  let e = ifdOff;
+  dv.setUint16(e, nTags, true); e += 2;
+  function entry(tag, type, count, value) {
+    dv.setUint16(e, tag, true); dv.setUint16(e + 2, type, true); dv.setUint32(e + 4, count, true);
+    if (type === 3 && count === 1) dv.setUint16(e + 8, value, true); else dv.setUint32(e + 8, value, true);
+    e += 12;
+  }
+  entry(256, 4, 1, W);
+  entry(257, 4, 1, H);
+  entry(258, 3, ch, bitsOff);
+  entry(259, 3, 1, 1);
+  entry(262, 3, 1, 2);
+  entry(273, 4, nStrips, nStrips > 1 ? soOff : 8);
+  entry(277, 3, 1, ch);
+  entry(278, 4, 1, rps);
+  entry(279, 4, nStrips, nStrips > 1 ? scOff : counts[0]);
+  entry(282, 5, 1, xresOff);
+  entry(283, 5, 1, yresOff);
+  entry(284, 3, 1, 1);
+  entry(296, 3, 1, 2);
+  if (ch === 4) entry(338, 3, 1, 2);
+  if (hasGeo) {
+    entry(34264, 12, 16, mtOff); // ModelTransformationTag
+    entry(34735, 3, 20, keyOff); // GeoKeyDirectoryTag
+  }
+  dv.setUint32(e, 0, true);
+  return buf;
+}
+/* ---------- Georeferencing math ---------- */
+
+function parseTfw(text) {
+  const v = text.split(/\s+/).filter(Boolean).slice(0, 6).map(Number);
+  if (v.length < 6 || v.some(x => !isFinite(x))) throw new Error("The TFW file must contain 6 numbers.");
+  return v; /* A D B E C F */
+}
+
+/* Read embedded GeoTIFF CRS and convert its pixel-corner georeferencing to TFW pixel-center form. */
+function embeddedGeoTfw(image) {
+  const fd = image.getFileDirectory ? image.getFileDirectory() : {};
+  const rawKeys = image.getGeoKeys ? image.getGeoKeys() : null;
+  const keys = rawKeys || {};
+  const epsg = Number(keys.ProjectedCSTypeGeoKey || keys.ProjectedCRSGeoKey || 0);
+  const zones = {2260:"NYE",6538:"NYE",2263:"NYLI",6539:"NYLI",3424:"NJ"};
+  const zone = zones[epsg] || null;
+
+  const mt = fd.ModelTransformation;
+  if (mt && mt.length >= 16) {
+    const a=Number(mt[0]), b=Number(mt[1]), d=Number(mt[4]), e=Number(mt[5]);
+    const c=Number(mt[3]), f=Number(mt[7]);
+    if ([a,b,c,d,e,f].every(Number.isFinite))
+      return {tfw:[a,d,b,e,c+.5*a+.5*b,f+.5*d+.5*e],zone,epsg,source:"Embedded GeoTIFF ModelTransformation"};
+  }
+
+  const scale=fd.ModelPixelScale, tie=fd.ModelTiepoint;
+  if (scale && tie && scale.length>=2 && tie.length>=6) {
+    const sx=Number(scale[0]), sy=Math.abs(Number(scale[1])), tx=Number(tie[3]), ty=Number(tie[4]);
+    if ([sx,sy,tx,ty].every(Number.isFinite))
+      return {tfw:[sx,0,0,-sy,tx+sx/2,ty-sy/2],zone,epsg,source:"Embedded GeoTIFF ModelPixelScale/ModelTiepoint"};
+  }
+  return null;
+}
+
+/* Fit X = a*u + b*v + c, Y = d*u + e*v + f over the whole image (u,v = continuous pixel coords). */
+function fitAffine(S, W, H, from, to) {
+  const N = 15, cu = W / 2, cv = H / 2;
+  const rows = [], X = [], Y = [];
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const u = W * j / (N - 1), v = H * i / (N - 1);
+    const col = u - 0.5, row = v - 0.5;
+    const x = S[0] * col + S[2] * row + S[4], y = S[1] * col + S[3] * row + S[5];
+    const p = GC.convertXY(from, to, x, y);
+    rows.push([u - cu, v - cv, 1]); X.push(p[0]); Y.push(p[1]);
+  }
+  function solve(T) {
+    const M = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], r = [0, 0, 0];
+    for (let k = 0; k < rows.length; k++) for (let a = 0; a < 3; a++) {
+      r[a] += rows[k][a] * T[k];
+      for (let b = 0; b < 3; b++) M[a][b] += rows[k][a] * rows[k][b];
+    }
+    for (let c = 0; c < 3; c++) {
+      let piv = c;
+      for (let q = c + 1; q < 3; q++) if (Math.abs(M[q][c]) > Math.abs(M[piv][c])) piv = q;
+      [M[c], M[piv]] = [M[piv], M[c]]; [r[c], r[piv]] = [r[piv], r[c]];
+      for (let q = c + 1; q < 3; q++) {
+        const f = M[q][c] / M[c][c];
+        for (let b = c; b < 3; b++) M[q][b] -= f * M[c][b];
+        r[q] -= f * r[c];
+      }
+    }
+    const s = [0, 0, 0];
+    for (let c = 2; c >= 0; c--) {
+      let acc = r[c];
+      for (let b = c + 1; b < 3; b++) acc -= M[c][b] * s[b];
+      s[c] = acc / M[c][c];
+    }
+    return s;
+  }
+  const sx = solve(X), sy = solve(Y);
+  const a = sx[0], b = sx[1], c = sx[2] - a * cu - b * cv;
+  const d = sy[0], e = sy[1], f = sy[2] - d * cu - e * cv;
+  let maxErr = 0;
+  for (let k = 0; k < rows.length; k++) {
+    const u = rows[k][0] + cu, v = rows[k][1] + cv;
+    maxErr = Math.max(maxErr, Math.hypot(a * u + b * v + c - X[k], d * u + e * v + f - Y[k]));
+  }
+  return {T: [a, b, c, d, e, f], maxErr};
+}
+
+const fmt = v => v.toFixed(12);
+function tfwText(v) { return v.map(fmt).join("\r\n") + "\r\n"; }
+
+/* ---------- Resampling (bicubic) to a north-up grid ---------- */
+
+async function warp(img, T, outW, outH, X0, Ytop, ps, onProgress) {
+  const W = img.width, H = img.height, ch = img.ch, src = img.data;
+  const [a, b, c, d, e, f] = T;
+  const det = a * e - b * d;
+  const i00 = e / det, i01 = -b / det, i10 = -d / det, i11 = a / det;
+  const out = new Uint8Array(outW * outH * ch);
+  const A = -0.5;
+  const cub = x => { x = Math.abs(x); return x <= 1 ? ((A + 2) * x - (A + 3)) * x * x + 1 : (x < 2 ? A * (((x - 5) * x + 8) * x - 4) : 0); };
+  const wx = new Float64Array(4), wy = new Float64Array(4), xi = new Int32Array(4), yo = new Int32Array(4);
+  const fill = [255, 255, 255, 0];
+  let o = 0, lastYield = 0;
+  for (let y = 0; y < outH; y++) {
+    const Y = Ytop - (y + 0.5) * ps;
+    for (let x = 0; x < outW; x++) {
+      const dx = X0 + (x + 0.5) * ps - c, dy = Y - f;
+      const u = i00 * dx + i01 * dy, v = i10 * dx + i11 * dy;
+      if (u < 0 || v < 0 || u >= W || v >= H) {
+        for (let k = 0; k < ch; k++) out[o++] = fill[k];
+        continue;
+      }
+      const fu = u - 0.5, fv = v - 0.5;
+      const x0 = Math.floor(fu), y0 = Math.floor(fv), tx = fu - x0, ty = fv - y0;
+      for (let k = 0; k < 4; k++) {
+        wx[k] = cub(tx - (k - 1)); wy[k] = cub(ty - (k - 1));
+        const xx = x0 + k - 1, yy = y0 + k - 1;
+        xi[k] = (xx < 0 ? 0 : xx >= W ? W - 1 : xx) * ch;
+        yo[k] = (yy < 0 ? 0 : yy >= H ? H - 1 : yy) * W * ch;
+      }
+      for (let k = 0; k < ch; k++) {
+        let acc = 0;
+        for (let j = 0; j < 4; j++) {
+          const base = yo[j] + k;
+          acc += wy[j] * (wx[0] * src[base + xi[0]] + wx[1] * src[base + xi[1]] + wx[2] * src[base + xi[2]] + wx[3] * src[base + xi[3]]);
+        }
+        out[o++] = acc < 0 ? 0 : acc > 255 ? 255 : (acc + 0.5) | 0;
+      }
+    }
+    if (onProgress && y - lastYield >= 40) {
+      lastYield = y;
+      onProgress(y / outH);
+      await new Promise(r => setTimeout(r));
+    }
+  }
+  return out;
+}
+
+/* ---------- Main conversion (no DOM) ---------- */
+
+async function convertImage(imgBuf, tfwStr, dir, mode, onProgress) {
+  const [from, to] = dir.split(">");
+  const {width: W, height: H} = imageSize(imgBuf);
+  let S = null, sourceInfo = "";
+  const geoTiff = await GeoTIFF.fromArrayBuffer(imgBuf);
+  const geoImage = await geoTiff.getImage();
+  const embedded = embeddedGeoTfw(geoImage);
+  if (embedded) {
+    if (embedded.zone && embedded.zone !== from) {
+      throw new Error("The TIFF is embedded as " + embedded.zone + " (EPSG:" + embedded.epsg + "), but the selected conversion starts from " + from + ".");
+    }
+    S = embedded.tfw;
+    sourceInfo = embedded.source + (embedded.epsg ? " (EPSG:" + embedded.epsg + ")" : "");
+  }
+  if (!S && tfwStr) {
+    S = parseTfw(tfwStr);
+    sourceInfo = "External TFW";
+  }
+  if (!S) throw new Error("No embedded GeoTIFF georeferencing or TFW was found.");
+  const fit = fitAffine(S, W, H, from, to);
+  const [a, b, c, d, e, f] = fit.T;
+  const rot = Math.atan2(d, a) * 180 / Math.PI;
+  const scale = Math.hypot(a, d);
+  const info = {width: W, height: H, maxErr: fit.maxErr, rotation: rot, pixelSize: scale, sourceInfo};
+  if (mode === "geotiff") {
+    const img = await decodeTiff(imgBuf);
+    const vals = [
+      a,
+      d,
+      b,
+      e,
+      a * 0.5 + b * 0.5 + c,
+      d * 0.5 + e * 0.5 + f
+    ];
+    const epsg = to === "NJ" ? 3424 : (to === "NYLI" ? 2263 : 2260);
+    const tif = encodeTiff(img.data, img.width, img.height, img.ch, {
+      epsg,
+      matrix: [
+        a, b, 0, vals[4],
+        d, e, 0, vals[5],
+        0, 0, 1, 0,
+        0, 0, 0, 1
+      ]
+    });
+    return {...info, tfw: tfwText(vals), tfwValues: vals, tif, outW: img.width, outH: img.height, geoEpsg: epsg};
+  }
+  if (mode === "rot") {
+    /*
+       IMPORTANT FOR GLOBAL MAPPER:
+       Never return the original TIFF here.  A Global Mapper TIFF can contain
+       embedded GeoTIFF georeferencing for the OLD coordinate system.  If the
+       original bytes are downloaded, that embedded NYLI georeferencing can
+       override/conflict with the new TFW.
+
+       Decode the pixels and write a completely NEW plain TIFF.  The new TIFF
+       therefore contains no old GeoTIFF georeferencing tags, and the matching
+       TFW supplies the new NJ 2900 position.
+    */
+    const img = await decodeTiff(imgBuf);
+    const vals = [
+      a,
+      d,
+      b,
+      e,
+      a * 0.5 + b * 0.5 + c,
+      d * 0.5 + e * 0.5 + f
+    ];
+    const tif = encodeTiff(img.data, img.width, img.height, img.ch);
+    return {...info, tfw: tfwText(vals), tfwValues: vals, tif, outW: img.width, outH: img.height};
+  }
+  /* north-up */
+  const img = await decodeTiff(imgBuf);
+  const sig3 = Number(Math.sqrt(Math.abs(a * e - b * d)).toPrecision(3));
+  const ps = sig3 > 0 ? sig3 : 1;
+  const corners = [[0, 0], [W, 0], [0, H], [W, H]].map(p => [a * p[0] + b * p[1] + c, d * p[0] + e * p[1] + f]);
+  const xs = corners.map(p => p[0]), ys = corners.map(p => p[1]);
+  const X0 = Math.floor(Math.min(...xs) / ps) * ps, Ytop = Math.ceil(Math.max(...ys) / ps) * ps;
+  const outW = Math.ceil((Math.max(...xs) - X0) / ps - 1e-9), outH = Math.ceil((Ytop - Math.min(...ys)) / ps - 1e-9);
+  if (outW * outH * img.ch > 800e6) throw new Error("The output image would be too large for the browser.");
+  const px = await warp(img, fit.T, outW, outH, X0, Ytop, ps, onProgress);
+  const tif = encodeTiff(px, outW, outH, img.ch);
+  const vals = [ps, 0, 0, -ps, X0 + ps / 2, Ytop - ps / 2];
+  return {...info, tfw: tfwText(vals), tfwValues: vals, tif, outW, outH, ps};
+}
+
+window.ImgCore = {parseIFD, imageSize, decodeTiff, encodeTiff, fitAffine, convertImage, lzwDecode, packBitsDecode};
+
+/* ---------- UI ---------- */
+
+if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) {
+  const $ = id => document.getElementById(id);
+  let imgFile = null, tfwFile = null, outTfw = null, outTif = null, outGeo = null, outBase = "";
+
+  function resetOutput() {
+    outTfw = outTif = outGeo = null;
+    $("ciDlTfw").style.display = "none"; $("ciDlTif").style.display = "none"; $("ciDlGeo").style.display = "none";
+    $("ciStatus").innerHTML = ""; $("ciResult").textContent = ""; $("ciProgress").style.display = "none";
+  }
+  function ready() { $("ciConvertBtn").disabled = !imgFile; }
+
+  $("ciImg").addEventListener("change", e => { imgFile = e.target.files[0] || null; resetOutput(); ready(); });
+  $("ciTfw").addEventListener("change", e => { tfwFile = e.target.files[0] || null; resetOutput(); ready(); });
+  $("ciDir").addEventListener("change", resetOutput);
+  $("ciMode").addEventListener("change", resetOutput);
+
+  function outName(name, from, to) {
+    const base = name.replace(/\.[^.]+$/, "");
+    const re = new RegExp("(^|[^A-Za-z0-9])" + from + "([^A-Za-z0-9]|$)", "i");
+    return re.test(base) ? base.replace(re, (m, p1, p2) => p1 + to + p2) : base + "_" + to;
+  }
+
+  $("ciConvertBtn").addEventListener("click", async () => {
+    resetOutput();
+    const dir = $("ciDir").value, mode = $("ciMode").value;
+    const [from, to] = dir.split(">");
+    $("ciConvertBtn").disabled = true;
+    const bar = $("ciProgress");
+    try {
+      if (mode === "north") { bar.value = 0; bar.style.display = "block"; }
+      $("ciStatus").innerHTML = '<div class="info">Working...</div>';
+      await new Promise(r => setTimeout(r));
+      const imgBuf = await imgFile.arrayBuffer();
+      const tfwStr = tfwFile ? await tfwFile.text() : null;
+      const res = await convertImage(imgBuf, tfwStr, dir, mode, p => { bar.value = Math.round(p * 100); });
+      outBase = outName(imgFile.name, from, to) + (mode === "north" ? "_northup" : (mode === "geotiff" ? "_GeoTiff" : ""));
+      outTfw = new Blob([res.tfw], {type: "text/plain"});
+      /* res.tif is ALWAYS a newly encoded TIFF.  Do not fall back to the
+         original bytes because Global Mapper TIFFs may contain old embedded
+         GeoTIFF georeferencing. */
+      outTif = new Blob([res.tif], {type: "image/tiff"});
+      outGeo = mode === "geotiff" ? outTif : null;
+      $("ciDlTfw").style.display = mode === "geotiff" ? "none" : "inline-block";
+      $("ciDlTif").style.display = mode === "geotiff" ? "none" : "inline-block";
+      $("ciDlGeo").style.display = mode === "geotiff" ? "inline-block" : "none";
+      $("ciStatus").innerHTML = '<div class="success">Done. ' + res.width + ' x ' + res.height + ' px' +
+        (mode === "north" ? ' resampled to ' + res.outW + ' x ' + res.outH + ' px (' + res.ps + ' ft pixels)' :
+         mode === "geotiff" ? ' NEW GeoTIFF with embedded EPSG:' + res.geoEpsg + ' georeferencing (no TFW required)' :
+         ' NEW TIFF written without the original embedded georeferencing') +
+        '. Fit error ' + res.maxErr.toFixed(3) + ' ft.</div>';
+      $("ciResult").textContent = res.tfw.replace(/\r\n/g, "\n").trim();
+    } catch (err) {
+      resetOutput();
+      $("ciStatus").innerHTML = '<div class="error">' + String(err.message || err).replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c])) + '</div>';
+    }
+    bar.style.display = "none";
+    ready();
+  });
+
+  function save(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+  $("ciDlTfw").addEventListener("click", () => outTfw && save(outTfw, outBase + ".tfw"));
+  $("ciDlTif").addEventListener("click", () => outTif && save(outTif, outBase + ".tif"));
+  $("ciDlGeo").addEventListener("click", () => outGeo && save(outGeo, outBase + ".tif"));
+
+  const clr = $("clearAllBtn");
+  if (clr) clr.addEventListener("click", () => {
+    $("ciImg").value = ""; $("ciTfw").value = ""; imgFile = tfwFile = null;
+    $("ciDir").selectedIndex = 0; $("ciMode").selectedIndex = 0;
+    resetOutput(); ready();
+  });
+}
+
+})();
+
+</script>
+
+<script>
+/* Removes any stray text accidentally pasted above or between the page elements */
+(function () {
+  Array.from(document.body.childNodes).forEach(function (n) {
+    if (n.nodeType === 3 && n.nodeValue.trim()) n.parentNode.removeChild(n);
+  });
+})();
+</script>
+
+
+<script>
+/* Save As buttons for every output/download control.
+   Keep the selected file handle active long enough to catch both synchronous
+   and asynchronous output generation, then write the exact generated Blob. */
+(function () {
+  if (window.__hydroCadSaveAsInstalled) return;
+  window.__hydroCadSaveAsInstalled = true;
+
+  const blobByUrl = new Map();
+  const originalCreateObjectURL = URL.createObjectURL.bind(URL);
+  URL.createObjectURL = function (object) {
+    const url = originalCreateObjectURL(object);
+    if (object instanceof Blob) blobByUrl.set(url, object);
+    return url;
+  };
+
+  let pendingSave = null;
+  function showMessage(message) {
+    let box = document.getElementById('hydroCadSaveAsMessage');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'hydroCadSaveAsMessage';
+      box.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:99999;max-width:420px;padding:12px 16px;background:#17324d;color:#fff;border-radius:8px;box-shadow:0 4px 18px #0003;font:14px/1.45 Arial,sans-serif';
+      document.body.appendChild(box);
+    }
+    box.textContent = message;
+    box.style.display = 'block';
+    clearTimeout(box._hideTimer);
+    box._hideTimer = setTimeout(() => { box.style.display = 'none'; }, 9000);
+  }
+
+  document.addEventListener('click', function (event) {
+    const link = event.target && event.target.closest ? event.target.closest('a[download]') : null;
+    if (!link || !pendingSave) return;
+    let blob = blobByUrl.get(link.href);
+    if (!blob && link.href && link.href.startsWith('data:')) {
+      try {
+        const parts = link.href.split(',');
+        const meta = parts[0];
+        const mime = (meta.match(/^data:([^;]+)/) || [,'application/octet-stream'])[1];
+        const bytes = meta.includes(';base64') ? atob(parts[1]) : decodeURIComponent(parts[1]);
+        const arr = new Uint8Array(bytes.length);
+        for (let i=0; i<bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        blob = new Blob([arr], {type:mime});
+      } catch (_) {}
+    }
+    if (!blob) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const job = pendingSave;
+    pendingSave = null;
+    clearTimeout(job.timeout);
+    (async function () {
+      try {
+        const writable = await job.handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        showMessage('Saved successfully: ' + (job.name || 'output file'));
+      } catch (err) {
+        console.error('Save As failed:', err);
+        showMessage('Could not save the file. ' + (err && err.message ? err.message : 'Please try again.'));
+      }
+    })();
+  }, true);
+
+  function suggestedName(target) {
+    const id = target.id || '';
+    try {
+      if (id === 'vdatumDownloadButton' && typeof outputFileName !== 'undefined' && outputFileName) return outputFileName;
+      if (id === 'zDownloadBtn' && typeof zOriginalFileName !== 'undefined' && zOriginalFileName) return zOriginalFileName.replace(/\.[^/.]+$/, '') + '_Z_ADJUSTED.xyz';
+      if (id === 'extractDownloadBtn' && typeof extractOriginalFileName !== 'undefined' && extractOriginalFileName) {
+        const type = document.getElementById('extractType').value;
+        const base = extractOriginalFileName.replace(/\.[^/.]+$/, '');
+        const suffix = type === 'mtx' ? '_four_corners.xyz' : type === 'contourDxf' ? '_contour_points.xyz' : type === 'soundingDxf' ? '_sounding_points.xyz' : '_nodes.xyz';
+        return base + suffix;
+      }
+      if (id === 'combineDownloadBtn') return document.getElementById('combineRemoveOverlap').checked ? 'combined_XYZ_overlap_removed.xyz' : 'combined_XYZ.xyz';
+      if (id === 'cvDownloadBtn') return 'Converted_Grid.zip';
+      if (id === 'rawDownloadBtn') return 'Converted_RAW.zip';
+      if (id === 'hsxDownloadBtn') return 'Converted_HSX.zip';
+      if (id === 'ciDlTfw') return ((document.getElementById('ciImg').files[0] || {}).name || 'Converted_Image').replace(/\.[^/.]+$/, '') + '.tfw';
+      if (id === 'ciDlTif' || id === 'ciDlGeo') return ((document.getElementById('ciImg').files[0] || {}).name || 'Converted_Image').replace(/\.[^/.]+$/, '') + '.tif';
+    } catch (_) {}
+    const label = (target.textContent || 'output').trim().toLowerCase();
+    const ext = /zip/i.test(label) ? '.zip' : /tfw/i.test(label) ? '.tfw' : /tif|geotiff/i.test(label) ? '.tif' : '.xyz';
+    return 'Hydro_CAD_Output' + ext;
+  }
+
+  function addSaveAs(target) {
+    if (!target || target.dataset.saveAsAdded === '1') return;
+    target.dataset.saveAsAdded = '1';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'saveAsBtn';
+    button.textContent = 'Save As';
+    button.style.cssText = 'background:#0a6b43;color:#fff;margin-left:6px';
+    button.setAttribute('aria-label', 'Save output to a chosen location');
+    target.insertAdjacentElement('afterend', button);
+
+    const syncVisibility = function () {
+      if (target.id === 'vdatumDownloadButton') return;
+      button.style.display = getComputedStyle(target).display === 'none' ? 'none' : 'inline-block';
+    };
+    syncVisibility();
+    new MutationObserver(syncVisibility).observe(target, { attributes: true, attributeFilter: ['style', 'class'] });
+
+    button.addEventListener('click', async function () {
+      /* File System Access save pickers are blocked inside cross-origin iframes
+         (for example, an embedded preview). In that case, fall back to the
+         normal browser download so the Save As button still produces the file. */
+      const fallbackToBrowserDownload = function (reason) {
+        showMessage((reason ? reason + ' ' : '') + 'This page is embedded, so the location picker is blocked. Starting a normal download instead. To choose a folder, enable “Ask where to save each file” in your browser download settings.');
+        try { target.click(); }
+        catch (err) { showMessage('Could not start the download. Please use the Download button.'); }
+      };
+
+      if (window.self !== window.top) {
+        fallbackToBrowserDownload('');
+        return;
+      }
+      if (typeof window.showSaveFilePicker !== 'function') {
+        fallbackToBrowserDownload('The Save As location picker is not available in this browser context.');
+        return;
+      }
+      if (pendingSave) {
+        showMessage('A Save As operation is already waiting for its output. Please wait a moment.');
+        return;
+      }
+      const name = suggestedName(target);
+      let handle;
+      try {
+        handle = await window.showSaveFilePicker({ suggestedName: name });
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        const detail = err && err.message ? err.message : 'Please try again.';
+        if (err && (err.name === 'SecurityError' || /cross origin|sub frames|iframe/i.test(detail))) {
+          fallbackToBrowserDownload('The browser blocked the save dialog because this page is embedded.');
+        } else {
+          showMessage('Could not open the Save As dialog. ' + detail);
+        }
+        return;
+      }
+
+      const job = {handle, name, timeout:null};
+      pendingSave = job;
+      job.timeout = setTimeout(function () {
+        if (pendingSave === job) {
+          pendingSave = null;
+          showMessage('No output file was captured. Run Process/Convert first, then click Save As beside the output button.');
+        }
+      }, 30000);
+      try {
+        target.click();
+      } catch (err) {
+        if (pendingSave === job) pendingSave = null;
+        clearTimeout(job.timeout);
+        showMessage('Could not generate the output. ' + (err && err.message ? err.message : 'Please run Process/Convert again.'));
+      }
+    });
+  }
+
+  function installButtons() {
+    const targets = Array.from(document.querySelectorAll('button.downloadBtn'));
+    const vdatum = document.getElementById('vdatumDownloadButton');
+    if (vdatum) targets.push(vdatum);
+    targets.forEach(addSaveAs);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installButtons);
+  else installButtons();
+})();
+</script>
+
+</body>
 </html>
-```
