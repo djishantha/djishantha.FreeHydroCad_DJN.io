@@ -139,9 +139,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label for="vdatumFile">VDATUM MLLW XYZ file in Elevation</label>
     <input type="file" id="vdatumFile" accept=".xyz,.txt">
     <div id="vdatumName" class="file-name">No VDATUM file selected</div>
-    <label for="surveyFile">Survey XYZ file in Depth</label>
-    <input type="file" id="surveyFile" accept=".xyz,.txt">
-    <div id="surveyName" class="file-name">No survey file selected</div>
+    <label for="surveyFile">Survey XYZ files in Depth</label>
+    <input type="file" id="surveyFile" class="file-picker-input" accept=".xyz,.txt" multiple>
+    <label for="surveyFile" class="file-picker-label">Choose Files</label>
+    <div id="surveyName" class="file-name">No survey files selected</div>
     <label class="check"><input type="checkbox" id="vdatumRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
     <div class="formula">New Z = Survey Z + VDATUM Z</div>
     <div class="actionRow">
@@ -156,7 +157,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <div id="vdatumDownloadSection">
       <h3>Output ready</h3>
       <div id="vdatumOutputFileName" class="file-name"></div>
-      <button id="vdatumDownloadButton">Download XYZ</button>
+      <button id="vdatumDownloadButton">Download ZIP</button>
     </div>
   </div>
 </div>
@@ -165,8 +166,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
   <div class="section">
     <h2>Z Adjust / Invert</h2>
     <p class="description">Shift, invert and round Z values.</p>
-    <label for="zAdjustFile">XYZ/TXT file in Depth</label>
-    <input type="file" id="zAdjustFile" accept=".txt,.xyz">
+    <label for="zAdjustFile">XYZ/TXT files in Depth</label>
+    <input type="file" id="zAdjustFile" class="file-picker-input" accept=".txt,.xyz" multiple>
+    <label for="zAdjustFile" class="file-picker-label">Choose Files</label>
+    <p id="zAdjustFileNames" class="file-name">No files selected</p>
     <label for="zAdjustment">Z adjustment</label>
     <input type="number" id="zAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
     <p class="hint">Positive adds, negative subtracts.</p>
@@ -174,7 +177,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label class="check"><input type="checkbox" id="zRound" checked> Round X Y to 2 decimals, Z to 1 decimal</label>
     <div class="actionRow">
       <button id="zProcessBtn" class="processBtn">Process</button>
-      <button id="zDownloadBtn" class="downloadBtn">Download XYZ</button>
+      <button id="zDownloadBtn" class="downloadBtn">Download ZIP</button>
     </div>
     <div id="zStatus"></div>
     <div id="zResult" class="result"></div>
@@ -184,7 +187,13 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 <div id="combineXYZTab" class="tab-content">
   <div class="section">
     <h2>Combine XYZ</h2>
-    <p class="description">Choose up to 6 XYZ files. They are combined in order File 1 &rarr; File 6.</p>
+    <p class="description">Choose files using the six individual slots or use Choose Files to select many XYZ files at once. Files are combined in selection order.</p>
+
+    <div class="actionRow" style="margin-top:14px">
+      <input type="file" id="combineManyFiles" class="file-picker-input" accept=".xyz,.txt,.csv,.pts,.dat" multiple>
+      <label for="combineManyFiles" class="file-picker-label">Choose Files</label>
+    </div>
+    <p id="combineManyFileNames" class="file-name">No additional files selected</p>
 
     <div class="combine-file-row">
       <div class="combine-file-item">
@@ -220,7 +229,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     </div>
 
     <label class="check"><input type="checkbox" id="combineRemoveOverlap"> Remove overlap points</label>
-    <p class="hint">When selected, overlapping points are removed from the later file. File 2 is checked against File 1, File 3 against File 2, etc. Overlap: XY within 3 ft and Z within 0.15 ft.</p>
+    <p class="hint">When selected, points in each later file are removed if they are within 3 ft horizontally (XY) of a point in the previous file. Z/elevation is ignored.</p>
 
     <label for="combineZAdjustment">Z adjustment</label>
     <input type="number" id="combineZAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
@@ -403,6 +412,11 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
 <script>
+
+// Accept XYZ rows separated by spaces, tabs, or commas; all generated XYZ rows use spaces.
+function splitXYZColumns(line) {
+    return String(line).trim().split(/[\s,]+/).filter(Boolean);
+}
 
 function roundHalfUp(v, d) {
     const f = Math.pow(10, d);
@@ -1323,9 +1337,7 @@ function setCombineStatus(message, type) {
 /*
    Large-file-safe XYZ overlap removal.
    A spatial hash is used instead of comparing every point with every point.
-   Default overlap tolerance:
-      XY distance <= 3.0 ft
-      Z difference <= 0.15 ft
+   Option A: XY distance <= 3.0 ft; Z/elevation is ignored.
 */
 function parseXYZForOverlap(text) {
     const points = [];
@@ -1335,7 +1347,7 @@ function parseXYZForOverlap(text) {
         const line = lines[i].trim();
         if (!line) continue;
 
-        const parts = line.split(/\s+/);
+        const parts = splitXYZColumns(line);
         if (parts.length < 3) continue;
 
         const x = Number(parts[0]);
@@ -1369,7 +1381,7 @@ function makeSpatialHash(points, cellSize) {
     return map;
 }
 
-function hasOverlap(point, spatialHash, cellSize, xyTolerance, zTolerance) {
+function hasOverlap(point, spatialHash, cellSize, xyTolerance) {
     const ix = Math.floor(point.x / cellSize);
     const iy = Math.floor(point.y / cellSize);
     const tol2 = xyTolerance * xyTolerance;
@@ -1384,8 +1396,8 @@ function hasOverlap(point, spatialHash, cellSize, xyTolerance, zTolerance) {
                 const ddx = point.x - q.x;
                 const ddy = point.y - q.y;
 
-                if ((ddx * ddx + ddy * ddy) <= tol2 &&
-                    Math.abs(point.z - q.z) <= zTolerance) {
+                // Option A: remove by horizontal XY distance only; ignore Z.
+                if ((ddx * ddx + ddy * ddy) <= tol2) {
                     return true;
                 }
             }
@@ -1414,7 +1426,7 @@ function applyCombineZOptions(text) {
             continue;
         }
 
-        const parts = line.split(/\s+/);
+        const parts = splitXYZColumns(line);
         if (parts.length < 3) {
             output.push(originalLine);
             continue;
@@ -1466,7 +1478,7 @@ function removeOverlapFromLaterFile(previousText, laterText) {
             continue;
         }
 
-        const parts = line.split(/\s+/);
+        const parts = splitXYZColumns(line);
         if (parts.length < 3) {
             output.push(originalLine);
             continue;
@@ -1483,7 +1495,7 @@ function removeOverlapFromLaterFile(previousText, laterText) {
 
         valid++;
 
-        if (hasOverlap({x:x, y:y, z:z}, spatialHash, 3.0, 3.0, 0.15)) {
+        if (hasOverlap({x:x, y:y, z:z}, spatialHash, 3.0, 3.0)) {
             removed++;
         } else {
             output.push(originalLine);
@@ -1498,15 +1510,34 @@ function removeOverlapFromLaterFile(previousText, laterText) {
     };
 }
 
+const combineManyFiles = document.getElementById("combineManyFiles");
+const combineManyFileNames = document.getElementById("combineManyFileNames");
+
+combineManyFiles.addEventListener("change", function () {
+    const selected = Array.from(this.files || []);
+    combineManyFileNames.textContent = selected.length
+        ? selected.length + " file(s) selected: " + selected.map(f => f.name).join(", ")
+        : "No additional files selected";
+    combineDownloadBtn.style.display = "none";
+    combineOutputReady = false;
+    combineParts = [];
+});
+
 combineProcessBtn.addEventListener("click", async function () {
     const files = [];
 
+    // Preserve the existing six individual file slots.
     for (let i = 1; i <= 6; i++) {
         const input = document.getElementById("combineFile" + i);
         if (input.files.length) {
             files.push({ number: i, file: input.files[0] });
         }
     }
+
+    // Append every file selected through the new Choose Files button.
+    Array.from(combineManyFiles.files || []).forEach(function (file, index) {
+        files.push({ number: "Additional " + (index + 1), file: file });
+    });
 
     combineParts = [];
     combineOutputReady = false;
@@ -1636,6 +1667,8 @@ combineClearBtn.addEventListener("click", function () {
     for (let i = 1; i <= 6; i++) {
         document.getElementById("combineFile" + i).value = "";
     }
+    combineManyFiles.value = "";
+    combineManyFileNames.textContent = "No additional files selected";
 
     combineParts = [];
     combineOutputReady = false;
@@ -1673,7 +1706,7 @@ document
     document.getElementById("vdatumFile").value = "";
     document.getElementById("surveyFile").value = "";
     document.getElementById("vdatumName").textContent = "No VDATUM file selected";
-    document.getElementById("surveyName").textContent = "No survey file selected";
+    document.getElementById("surveyName").textContent = "No survey files selected";
     document.getElementById("vdatumStatus").textContent = "Select both files to begin.";
     document.getElementById("vdatumDownloadSection").style.display = "none";
     document.getElementById("vdatumOutputFileName").textContent = "";
@@ -1685,8 +1718,22 @@ document
     outputBlob = null;
     outputFileName = "";
 
+    /* Combine XYZ */
+    for (let i = 1; i <= 6; i++) {
+        document.getElementById("combineFile" + i).value = "";
+    }
+    document.getElementById("combineManyFiles").value = "";
+    document.getElementById("combineManyFileNames").textContent = "No additional files selected";
+    combineParts = [];
+    combineOutputReady = false;
+    combineDownloadBtn.style.display = "none";
+    combineStatus.className = "";
+    combineStatus.textContent = "";
+
     /* Z adjustment */
     document.getElementById("zAdjustFile").value = "";
+    document.getElementById("zAdjustFileNames").textContent = "No files selected";
+    zOutputFiles = [];
     document.getElementById("zAdjustment").value = "0";
     document.getElementById("invertZAdjust").checked = false;
     document.getElementById("zStatus").innerHTML = "";
@@ -1770,7 +1817,8 @@ document
             document
             .getElementById("surveyName")
             .textContent =
-                this.files[0].name;
+                this.files.length + " survey file(s): " +
+                Array.from(this.files).map(function(file) { return file.name; }).join(", ");
 
         }
 
@@ -1779,7 +1827,7 @@ document
             document
             .getElementById("surveyName")
             .textContent =
-                "No survey file selected";
+                "No survey files selected";
 
         }
 
@@ -1819,7 +1867,7 @@ function parseXYZ(text) {
 
 
         const parts =
-            line.split(/\s+/);
+            splitXYZColumns(line);
 
 
         if (
@@ -2189,668 +2237,112 @@ function setStatus(
    PROCESS BUTTON
    ===================================================== */
 
-document
-.getElementById("vdatumProcessButton")
-.addEventListener(
-    "click",
-    async function () {
-
-        const vdatumRoundOn =
-            document.getElementById("vdatumRound").checked;
-
-
-        /* ---------------------------------------------
-           GET FILES
-           --------------------------------------------- */
-
-        const vdatumFile =
-            document
-            .getElementById(
-                "vdatumFile"
-            )
-            .files[0];
-
-
-        const surveyFile =
-            document
-            .getElementById(
-                "surveyFile"
-            )
-            .files[0];
-
-
-
-        /* ---------------------------------------------
-           CHECK FILES
-           --------------------------------------------- */
-
-        if (!vdatumFile) {
-
-            alert(
-                "Please select the VDATUM XYZ file."
-            );
-
-            return;
-
-        }
-
-
-        if (!surveyFile) {
-
-            alert(
-                "Please select the survey / second XYZ file."
-            );
-
-            return;
-
-        }
-
-
-
-        /* ---------------------------------------------
-           PROCESS BUTTON
-           --------------------------------------------- */
-
-        const processButton =
-            document
-            .getElementById(
-                "vdatumProcessButton"
-            );
-
-
-        processButton.disabled =
-            true;
-
-
-        processButton.textContent =
-            "Processing...";
-
-
-
-        /* ---------------------------------------------
-           PROGRESS
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumProgressContainer"
-        )
-        .style.display =
-            "block";
-
-
-        document
-        .getElementById(
-            "vdatumProgressBar"
-        )
-        .value =
-            0;
-
-
-        document
-        .getElementById(
-            "vdatumProgressText"
-        )
-        .textContent =
-            "0%";
-
-
-
-        /* ---------------------------------------------
-           HIDE OLD DOWNLOAD
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumDownloadSection"
-        )
-        .style.display =
-            "none";
-
-
-        outputBlob =
-            null;
-
-
-        outputFileName =
-            "";
-
-
-
-        try {
-
-
-            /* =========================================
-               READ VDATUM FILE
-               ========================================= */
-
-            setStatus(
-                "Reading VDATUM file..."
-            );
-
-
-            const vdatumText =
-                await vdatumFile.text();
-
-
-            vdatumPoints =
-                parseXYZ(
-                    vdatumText
-                );
-
-
-            if (
-                vdatumPoints.length === 0
-            ) {
-
-                throw new Error(
-                    "No valid XYZ points were found in the VDATUM file."
-                );
-
-            }
-
-
-            setStatus(
-
-                "VDATUM file loaded.\n\n" +
-
-                "VDATUM points: " +
-
-                vdatumPoints
-                .length
-                .toLocaleString() +
-
-                "\n\nBuilding closest-point search tree..."
-
-            );
-
-
-            await new Promise(
-                function(resolve) {
-
-                    setTimeout(
-                        resolve,
-                        50
-                    );
-
+const vdatumSurveyInput = document.getElementById("surveyFile");
+const vdatumSurveyName = document.getElementById("surveyName");
+vdatumSurveyInput.addEventListener("change", function () {
+    const files = Array.from(this.files || []);
+    vdatumSurveyName.textContent = files.length
+        ? files.length + " survey file(s): " + files.map(f => f.name).join(", ")
+        : "No survey files selected";
+    document.getElementById("vdatumDownloadSection").style.display = "none";
+    outputBlob = null;
+    outputFileName = "";
+});
+
+document.getElementById("vdatumProcessButton").addEventListener("click", async function () {
+    const vdatumFile = document.getElementById("vdatumFile").files[0];
+    const surveyFiles = Array.from(vdatumSurveyInput.files || []);
+    const roundOn = document.getElementById("vdatumRound").checked;
+    const processButton = document.getElementById("vdatumProcessButton");
+    const progress = document.getElementById("vdatumProgressBar");
+    const progressText = document.getElementById("vdatumProgressText");
+    const progressContainer = document.getElementById("vdatumProgressContainer");
+
+    if (!vdatumFile) { alert("Please select the VDATUM MLLW XYZ file."); return; }
+    if (!surveyFiles.length) { alert("Please select one or more survey XYZ files."); return; }
+    if (typeof JSZip === "undefined") { alert("ZIP library did not load. Check your internet connection and try again."); return; }
+
+    processButton.disabled = true;
+    processButton.textContent = "Processing...";
+    progressContainer.style.display = "block";
+    progress.value = 0;
+    progressText.textContent = "0%";
+    document.getElementById("vdatumDownloadSection").style.display = "none";
+    outputBlob = null;
+    outputFileName = "";
+
+    try {
+        setStatus("Reading the VDATUM MLLW file...");
+        const vdatumText = await vdatumFile.text();
+        vdatumPoints = parseXYZ(vdatumText);
+        if (!vdatumPoints.length) throw new Error("No valid XYZ points were found in the VDATUM file.");
+        setStatus("VDATUM points loaded: " + vdatumPoints.length.toLocaleString() + "\nBuilding closest-point search tree...");
+        await new Promise(resolve => setTimeout(resolve, 20));
+        kdTree = buildKDTree(vdatumPoints);
+
+        const zip = new JSZip();
+        let totalValid = 0;
+        let totalUnchanged = 0;
+        let totalLines = 0;
+
+        for (let fileIndex = 0; fileIndex < surveyFiles.length; fileIndex++) {
+            const surveyFile = surveyFiles[fileIndex];
+            setStatus("Processing file " + (fileIndex + 1) + " of " + surveyFiles.length + ":\n" + surveyFile.name);
+            const surveyLines = (await surveyFile.text()).split(/\r?\n/);
+            const outputLines = [];
+            let validPoints = 0;
+            let unchangedLines = 0;
+
+            for (let i = 0; i < surveyLines.length; i++) {
+                const originalLine = surveyLines[i];
+                const line = originalLine.trim();
+                if (!line) { outputLines.push(originalLine); unchangedLines++; continue; }
+                const parts = splitXYZColumns(line);
+                if (parts.length < 3) { outputLines.push(originalLine); unchangedLines++; continue; }
+                const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
+                if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) {
+                    outputLines.push(originalLine); unchangedLines++; continue;
                 }
-            );
-
-
-
-            /* =========================================
-               BUILD KD TREE
-               ========================================= */
-
-            kdTree =
-                buildKDTree(
-                    vdatumPoints
-                );
-
-
-
-            /* =========================================
-               READ SURVEY FILE
-               ========================================= */
-
-            setStatus(
-                "Reading survey XYZ file..."
-            );
-
-
-            const surveyText =
-                await surveyFile.text();
-
-
-            const surveyLines =
-                surveyText.split(
-                    /\r?\n/
-                );
-
-
-            const outputLines =
-                [];
-
-
-            let validPoints =
-                0;
-
-
-            let unchangedLines =
-                0;
-
-
-
-            /* =========================================
-               PROCESS SURVEY POINTS
-               ========================================= */
-
-            for (
-                let i = 0;
-                i < surveyLines.length;
-                i++
-            ) {
-
-
-                const originalLine =
-                    surveyLines[i];
-
-
-                const line =
-                    originalLine.trim();
-
-
-
-                /* -------------------------------------
-                   BLANK LINE
-                   ------------------------------------- */
-
-                if (!line) {
-
-                    outputLines.push(
-                        originalLine
-                    );
-
-                    unchangedLines++;
-
-                    continue;
-
-                }
-
-
-
-                /* -------------------------------------
-                   SPLIT XYZ
-                   ------------------------------------- */
-
-                const parts =
-                    line.split(
-                        /\s+/
-                    );
-
-
-                if (
-                    parts.length < 3
-                ) {
-
-                    outputLines.push(
-                        originalLine
-                    );
-
-                    unchangedLines++;
-
-                    continue;
-
-                }
-
-
-
-                /* -------------------------------------
-                   READ XYZ
-                   ------------------------------------- */
-
-                const x =
-                    Number(
-                        parts[0]
-                    );
-
-
-                const y =
-                    Number(
-                        parts[1]
-                    );
-
-
-                const z =
-                    Number(
-                        parts[2]
-                    );
-
-
-
-                /* -------------------------------------
-                   INVALID LINE
-                   ------------------------------------- */
-
-                if (
-
-                    !Number.isFinite(x) ||
-
-                    !Number.isFinite(y) ||
-
-                    !Number.isFinite(z)
-
-                ) {
-
-                    outputLines.push(
-                        originalLine
-                    );
-
-                    unchangedLines++;
-
-                    continue;
-
-                }
-
-
-
-                /* -------------------------------------
-                   FIND CLOSEST VDATUM POINT
-                   ------------------------------------- */
-
-                const nearest =
-                    nearestPoint(
-
-                        kdTree,
-
-                        {
-                            x: x,
-                            y: y
-                        }
-
-                    );
-
-
-                const vdatumPoint =
-                    nearest.point;
-
-
-
-                /* -------------------------------------
-                   CALCULATE NEW Z
-                   ------------------------------------- */
-
-                const newZ =
-                    z +
-                    vdatumPoint.z;
-
-
-
-                /* -------------------------------------
-                   OUTPUT FORMAT
-
-                   X = 2 decimals
-                   Y = 2 decimals
-                   Z = 2 decimals
-                   ------------------------------------- */
-
-                const outputLine =
-
-                    x.toFixed(2) +
-                    " " +
-
-                    y.toFixed(2) +
-                    " " +
-
-                    roundHalfUp(newZ, vdatumRoundOn ? 1 : 2);
-
-
-
-                outputLines.push(
-                    outputLine
-                );
-
-
+                const nearest = nearestPoint(kdTree, {x:x, y:y});
+                if (!nearest || !nearest.point) throw new Error("Could not find a nearest VDATUM point for " + surveyFile.name + ".");
+                const newZ = z + nearest.point.z;
+                outputLines.push(x.toFixed(2) + " " + y.toFixed(2) + " " + roundHalfUp(newZ, roundOn ? 1 : 2));
                 validPoints++;
-
-
-
-                /* -------------------------------------
-                   UPDATE PROGRESS
-                   ------------------------------------- */
-
-                if (
-                    i % 5000 === 0
-                ) {
-
-
-                    const percent =
-
-                        (
-                            i /
-                            surveyLines.length
-                        ) * 100;
-
-
-                    document
-                    .getElementById(
-                        "vdatumProgressBar"
-                    )
-                    .value =
-                        percent;
-
-
-                    document
-                    .getElementById(
-                        "vdatumProgressText"
-                    )
-                    .textContent =
-
-                        Math.round(
-                            percent
-                        ) +
-                        "%";
-
-
-                    setStatus(
-
-                        "Processing survey points...\n\n" +
-
-                        "Points processed: " +
-
-                        validPoints
-                        .toLocaleString() +
-
-                        "\n\nProgress: " +
-
-                        Math.round(
-                            percent
-                        ) +
-
-                        "%"
-
-                    );
-
-
-                    await new Promise(
-                        function(resolve) {
-
-                            setTimeout(
-                                resolve,
-                                0
-                            );
-
-                        }
-                    );
-
+                if (i % 5000 === 0) {
+                    const overall = ((fileIndex + (i / Math.max(1, surveyLines.length))) / surveyFiles.length) * 100;
+                    progress.value = overall;
+                    progressText.textContent = Math.round(overall) + "%";
+                    await new Promise(resolve => setTimeout(resolve, 0));
                 }
-
             }
-
-
-
-            /* =========================================
-               COMPLETE
-               ========================================= */
-
-            document
-            .getElementById(
-                "vdatumProgressBar"
-            )
-            .value =
-                100;
-
-
-            document
-            .getElementById(
-                "vdatumProgressText"
-            )
-            .textContent =
-                "100%";
-
-
-
-            /* =========================================
-               CREATE OUTPUT TEXT
-               ========================================= */
-
-            const outputText =
-                outputLines.join(
-                    "\n"
-                );
-
-
-
-            /* =========================================
-               CREATE OUTPUT BLOB
-               ========================================= */
-
-            outputBlob =
-                new Blob(
-
-                    [outputText],
-
-                    {
-                        type:
-                            "text/plain;charset=utf-8"
-                    }
-
-                );
-
-
-
-            /* =========================================
-               CREATE OUTPUT FILE NAME
-               ========================================= */
-
-            const originalName =
-                surveyFile.name;
-
-
-            const baseName =
-                originalName.replace(
-                    /\.(xyz|txt)$/i,
-                    ""
-                );
-
-
-            outputFileName =
-                baseName +
-                "_VDATUM_ADJUSTED.xyz";
-
-
-
-            /* =========================================
-               SHOW DOWNLOAD SECTION
-               
-               IMPORTANT:
-               NO AUTOMATIC DOWNLOAD
-               ========================================= */
-
-            document
-            .getElementById(
-                "vdatumDownloadSection"
-            )
-            .style.display =
-                "block";
-
-
-            document
-            .getElementById(
-                "vdatumOutputFileName"
-            )
-            .textContent =
-                outputFileName;
-
-
-
-            /* =========================================
-               FINAL STATUS
-               ========================================= */
-
-            setStatus(
-
-                "PROCESSING COMPLETE\n\n" +
-
-                "VDATUM points: " +
-
-                vdatumPoints
-                .length
-                .toLocaleString() +
-
-                "\n\n" +
-
-                "Survey points processed: " +
-
-                validPoints
-                .toLocaleString() +
-
-                "\n\n" +
-
-                "Unchanged/non-XYZ lines: " +
-
-                unchangedLines
-                .toLocaleString() +
-
-                "\n\n" +
-
-                "Calculation:\n" +
-
-                "New Z = Survey Z + VDATUM Z" +
-
-                "\n\n" +
-
-                "Output file is ready.\n" +
-
-                "Click the green Download XYZ File button."
-
-            );
-
-
+            const baseName = surveyFile.name.replace(/\.[^/.]+$/, "");
+            zip.file(baseName + "_VDATUM_ADJUSTED.xyz", outputLines.join("\n"));
+            totalValid += validPoints;
+            totalUnchanged += unchangedLines;
+            totalLines += surveyLines.length;
         }
 
-
-        catch (error) {
-
-
-            console.error(
-                error
-            );
-
-
-            setStatus(
-
-                "ERROR\n\n" +
-                error.message
-
-            );
-
-
-            alert(
-
-                "An error occurred:\n\n" +
-                error.message
-
-            );
-
-        }
-
-
-        finally {
-
-
-            processButton.disabled =
-                false;
-
-
-            processButton.textContent =
-                "Process XYZ File";
-
-        }
-
+        setStatus("Creating ZIP archive...");
+        outputBlob = await zip.generateAsync({type:"blob"});
+        outputFileName = "VDATUM_ADJUSTED_FILES.zip";
+        progress.value = 100;
+        progressText.textContent = "100%";
+        document.getElementById("vdatumDownloadSection").style.display = "block";
+        document.getElementById("vdatumOutputFileName").textContent = outputFileName + " (" + surveyFiles.length + " survey file(s))";
+        setStatus("PROCESSING COMPLETE\n\nVDATUM points: " + vdatumPoints.length.toLocaleString() +
+            "\nSurvey files processed: " + surveyFiles.length +
+            "\nValid survey points processed: " + totalValid.toLocaleString() +
+            "\nUnchanged/non-XYZ lines: " + totalUnchanged.toLocaleString() +
+            "\n\nCalculation: New Z = Survey Z + nearest VDATUM Z\n\nDownload the ZIP archive to get all adjusted XYZ files.");
+    } catch (error) {
+        console.error(error);
+        setStatus("ERROR\n\n" + (error.message || String(error)));
+        alert("An error occurred:\n\n" + (error.message || String(error)));
+    } finally {
+        processButton.disabled = false;
+        processButton.textContent = "Process Files";
     }
-);
-
+});
 
 
 /* =====================================================
@@ -2983,7 +2475,7 @@ document
             "surveyName"
         )
         .textContent =
-            "No survey file selected";
+            "No survey files selected";
 
 
 
@@ -3074,7 +2566,7 @@ document
 
 
         processButton.textContent =
-            "Process XYZ File";
+            "Process Files";
 
 
 
@@ -3110,317 +2602,102 @@ document
 
 let zOutputText = "";
 let zOriginalFileName = "";
-
-
-document.getElementById("zProcessBtn").addEventListener("click", function () {
-
-    const zRoundOn = document.getElementById("zRound").checked;
-
-    const zAdjustFile =
-        document.getElementById("zAdjustFile");
-
-    const adjustmentInput =
-        document.getElementById("zAdjustment");
-
-    const invertZInput =
-        document.getElementById("invertZAdjust");
-
-    const zStatus =
-        document.getElementById("zStatus");
-
-    const zResult =
-        document.getElementById("zResult");
-
-    const zDownloadBtn =
-        document.getElementById("zDownloadBtn");
-
-
-    if (!zAdjustFile.files.length) {
-
-        alert("Please select an XYZ or TXT file.");
-
-        return;
-    }
-
-
-    const zAdjustment =
-        Number(adjustmentInput.value);
-
-
-    if (!Number.isFinite(zAdjustment)) {
-
-        alert("Please enter a valid zAdjustment value.");
-
-        return;
-    }
-
-
-    const invertZAdjust =
-        invertZInput.checked;
-
-
-    const file =
-        zAdjustFile.files[0];
-
-
-    zOriginalFileName =
-        file.name;
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload = function (event) {
-
-        const text =
-            event.target.result;
-
-
-        const lines =
-            text.split(/\r?\n/);
-
-
-        let processedLines = [];
-
-        let validPoints = 0;
-
-        let unchangedLines = 0;
-
-
-        for (let line of lines) {
-
-
-            // Keep blank lines unchanged
-
-            if (line.trim() === "") {
-
-                processedLines.push(line);
-
-                continue;
-            }
-
-
-            /*
-             * Split the line by whitespace.
-             *
-             * Expected:
-             * X Y Z
-             */
-
-            const parts =
-                line.trim().split(/\s+/);
-
-
-            if (parts.length >= 3) {
-
-                const x =
-                    Number(parts[0]);
-
-                const y =
-                    Number(parts[1]);
-
-                const z =
-                    Number(parts[2]);
-
-
-                if (
-                    Number.isFinite(x) &&
-                    Number.isFinite(y) &&
-                    Number.isFinite(z)
-                ) {
-
-
-                    /*
-                     * Apply Z zAdjustment
-                     */
-
-                    let newZ =
-                        z + zAdjustment;
-
-
-                    /*
-                     * Invert Z if selected
-                     */
-
-                    if (invertZAdjust) {
-
-                        newZ =
-                            -newZ;
-                    }
-
-
-                    /*
-                     * Format output:
-                     *
-                     * X = 2 decimals
-                     * Y = 2 decimals
-                     * Z = 1 decimal
-                     */
-
-                    processedLines.push(
-
-                        x.toFixed(zRoundOn ? 2 : 3) + " " +
-                        y.toFixed(zRoundOn ? 2 : 3) + " " +
-                        roundHalfUp(newZ, zRoundOn ? 1 : 3)
-
-                    );
-
-
-                    validPoints++;
-
-
-                } else {
-
-                    processedLines.push(line);
-
-                    unchangedLines++;
-                }
-
-
-            } else {
-
-                /*
-                 * Keep lines that don't contain
-                 * at least X Y Z unchanged.
-                 */
-
-                processedLines.push(line);
-
-                unchangedLines++;
-            }
-
-        }
-
-
-        /*
-         * Create final output
-         */
-
-        zOutputText =
-            processedLines.join("\n");
-
-
-        /*
-         * Display processing information
-         */
-
-        zStatus.innerHTML =
-
-            "<div class='info'>" +
-
-            "<strong>Processing complete.</strong><br>" +
-
-            "Points processed: " +
-            validPoints.toLocaleString() +
-            "<br>" +
-
-            "Lines unchanged: " +
-            unchangedLines.toLocaleString() +
-            "<br>" +
-
-            "Z zAdjustment: " +
-            zAdjustment.toFixed(2) +
-            "<br>" +
-
-            "Invert Z: " +
-            (invertZAdjust ? "YES" : "NO") +
-            "<br>" +
-
-            (zRoundOn ? "Output: X Y 2 decimals, Z 1 decimal" : "Output: X Y Z 3 decimals") +
-
-            "</div>";
-
-
-        /*
-         * Show first 10 processed lines
-         */
-
-        zResult.textContent =
-            processedLines
-                .slice(0, 10)
-                .join("\n");
-
-
-        /*
-         * Show download button
-         */
-
-        zDownloadBtn.style.display =
-            "inline-block";
-
-    };
-
-
-    reader.readAsText(file);
-
+let zOutputFiles = [];
+
+const zAdjustFileInput = document.getElementById("zAdjustFile");
+const zAdjustFileNames = document.getElementById("zAdjustFileNames");
+zAdjustFileInput.addEventListener("change", function () {
+    const files = Array.from(this.files || []);
+    zAdjustFileNames.textContent = files.length
+        ? files.length + " file(s) selected: " + files.map(f => f.name).join(", ")
+        : "No files selected";
+    zOutputFiles = [];
+    zOutputText = "";
+    document.getElementById("zDownloadBtn").style.display = "none";
+    document.getElementById("zStatus").innerHTML = "";
+    document.getElementById("zResult").textContent = "";
 });
 
+function processZAdjustText(text, zAdjustment, invertZAdjust, zRoundOn) {
+    const lines = text.split(/\r?\n/);
+    const processedLines = [];
+    let validPoints = 0;
+    let unchangedLines = 0;
+    for (const line of lines) {
+        if (line.trim() === "") { processedLines.push(line); continue; }
+        const parts = splitXYZColumns(line);
+        if (parts.length >= 3) {
+            const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
+            if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
+                let newZ = z + zAdjustment;
+                if (invertZAdjust) newZ = -newZ;
+                processedLines.push(x.toFixed(zRoundOn ? 2 : 3) + " " +
+                    y.toFixed(zRoundOn ? 2 : 3) + " " + roundHalfUp(newZ, zRoundOn ? 1 : 3));
+                validPoints++;
+            } else { processedLines.push(line); unchangedLines++; }
+        } else { processedLines.push(line); unchangedLines++; }
+    }
+    return { text: processedLines.join("\n"), validPoints, unchangedLines, preview: processedLines.slice(0, 10).join("\n") };
+}
 
-/*
- * Download corrected file
- */
+document.getElementById("zProcessBtn").addEventListener("click", async function () {
+    const zRoundOn = document.getElementById("zRound").checked;
+    const adjustmentInput = document.getElementById("zAdjustment");
+    const zStatus = document.getElementById("zStatus");
+    const zResult = document.getElementById("zResult");
+    const zDownloadBtn = document.getElementById("zDownloadBtn");
+    const files = Array.from(zAdjustFileInput.files || []);
+    if (!files.length) { alert("Please select one or more XYZ or TXT files."); return; }
+    const zAdjustment = Number(adjustmentInput.value);
+    if (!Number.isFinite(zAdjustment)) { alert("Please enter a valid Z adjustment value."); return; }
+    const invertZAdjust = document.getElementById("invertZAdjust").checked;
+    zOutputFiles = [];
+    zOutputText = "";
+    zOriginalFileName = files[0].name;
+    zDownloadBtn.style.display = "none";
+    zStatus.innerHTML = "<div class='info'>Processing " + files.length + " file(s)...</div>";
+    try {
+        let totalPoints = 0, totalUnchanged = 0;
+        for (const file of files) {
+            const result = processZAdjustText(await file.text(), zAdjustment, invertZAdjust, zRoundOn);
+            const baseName = file.name.replace(/\.[^/.]+$/, "");
+            zOutputFiles.push({ name: baseName + "_Z_ADJUSTED.xyz", text: result.text });
+            totalPoints += result.validPoints;
+            totalUnchanged += result.unchangedLines;
+        }
+        zOutputText = zOutputFiles[0] ? zOutputFiles[0].text : "";
+        zStatus.innerHTML = "<div class='success'><strong>Processing complete.</strong><br>Files processed: " +
+            zOutputFiles.length.toLocaleString() + "<br>Points processed: " + totalPoints.toLocaleString() +
+            "<br>Lines unchanged: " + totalUnchanged.toLocaleString() + "<br>Z adjustment: " + zAdjustment.toFixed(2) +
+            "<br>Invert Z: " + (invertZAdjust ? "YES" : "NO") + "<br>" +
+            (zRoundOn ? "Output: X Y 2 decimals, Z 1 decimal" : "Output: X Y Z 3 decimals") +
+            "<br>Click Download ZIP to download each processed file.</div>";
+        zResult.textContent = "Preview — " + zOutputFiles[0].name + "\n" +
+            processZAdjustText(await files[0].text(), zAdjustment, invertZAdjust, zRoundOn).preview;
+        zDownloadBtn.style.display = "inline-block";
+    } catch (err) {
+        console.error(err);
+        zStatus.innerHTML = "<div class='error'>Could not process files: " + String(err.message || err) + "</div>";
+    }
+});
 
-document.getElementById("zDownloadBtn").addEventListener("click", function () {
-
-    if (!zOutputText) {
-
-        alert("Please process a file first.");
-
+document.getElementById("zDownloadBtn").addEventListener("click", async function () {
+    if (!zOutputFiles.length) { alert("Please process files first."); return; }
+    if (typeof JSZip === "undefined") {
+        alert("ZIP support could not load. Please check your internet connection and reload this page.");
         return;
     }
-
-
-    /*
-     * Create downloadable text file
-     */
-
-    const blob =
-        new Blob(
-            [zOutputText],
-            {
-                type:
-                    "text/plain;charset=utf-8"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(blob);
-
-
-    const link =
-        document.createElement("a");
-
-
-    link.href =
-        url;
-
-
-    /*
-     * Create output filename
-     */
-
-    const baseName =
-        zOriginalFileName
-            .replace(/\.[^/.]+$/, "");
-
-
-    link.download =
-        baseName + "_Z_ADJUSTED.xyz";
-
-
+    const zip = new JSZip();
+    zOutputFiles.forEach(file => zip.file(file.name, file.text));
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Z_ADJUSTED_FILES.zip";
     document.body.appendChild(link);
-
-
     link.click();
-
-
     document.body.removeChild(link);
-
-
-    URL.revokeObjectURL(url);
-
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
 
@@ -3481,7 +2758,7 @@ document
 
     if (document.getElementById("surveyName"))
         document.getElementById("surveyName").textContent =
-            "No survey file selected";
+            "No survey files selected";
 
     if (typeof vdatumPoints !== "undefined") vdatumPoints = [];
     if (typeof kdTree !== "undefined") kdTree = null;
@@ -3528,6 +2805,7 @@ document
 
     if (typeof zOutputText !== "undefined") zOutputText = "";
     if (typeof zOriginalFileName !== "undefined") zOriginalFileName = "";
+    if (typeof zOutputFiles !== "undefined") zOutputFiles = [];
 });
 
 </script>
@@ -3639,9 +2917,7 @@ function detectIdx(p) {
 function cvConvertText(text, dir, round) {
   const [from, to] = dir.split(">");
   const lines = text.split(/\r?\n/);
-  const first = lines.find(l => l.trim()) || "";
-  const sep = first.includes("\t") ? "\t" : first.includes(",") ? "," : " ";
-  const split = line => sep === " " ? line.trim().split(/\s+/) : line.split(sep).map(s => s.trim());
+  const split = line => splitXYZColumns(line);
   let idx = -1;
   for (const l of lines) { if (!l.trim()) continue; const d = detectIdx(split(l)); if (d !== -1) { idx = d; break; } }
   let ok = 0; const bad = []; const rows = []; const out = [];
@@ -3657,7 +2933,7 @@ function cvConvertText(text, dir, round) {
     parts[idx] = nx.toFixed(2); parts[idx + 1] = ny.toFixed(2);
     if (z !== undefined) parts[idx + 2] = z;
     ok++;
-    out.push(parts.join(sep === " " ? " " : sep));
+    out.push(parts.join(" "));
   });
   return {text: out.join("\n"), ok, bad, rows, hasId: idx === 1};
 }
