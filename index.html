@@ -47,7 +47,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .processBtn{background:var(--sea);color:#fff}
 .processBtn:hover:not(:disabled){background:var(--sea-d)}
 .downloadBtn{display:none;background:var(--ink);color:#fff}
-.downloadBtn:hover{opacity:.88}
+.downloadBtn:hover,.zipDownloadBtn:hover{opacity:.88}
+.zipDownloadBtn{display:none;background:var(--ink);color:#fff}
 .clearBtn{background:transparent;color:var(--mut);border-color:var(--line)}
 .clearBtn:hover{color:var(--ink);border-color:var(--mut)}
 .info,.success,.error{margin-top:16px;padding:12px 14px;border-radius:8px}
@@ -62,7 +63,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 #vdatumProgressText{margin-top:4px;text-align:center;font-weight:600;font-size:.9rem}
 #vdatumDownloadSection{display:none;margin-top:16px;padding:16px;border-radius:8px;background:var(--tint)}
 #vdatumDownloadSection h3{margin:0 0 4px;font-size:1rem}
-#vdatumDownloadButton{margin-top:12px;background:var(--ink);color:#fff}
+#vdatumDownloadButton{margin-top:0;background:var(--ink);color:#fff}
+#vdatumSaveAsButton{display:none;margin-top:0;background:var(--ink);color:#fff}
+#vdatumZipDownloadButton{margin-top:0}
 #cvPreview{overflow-x:auto}
 #cvPreview h3{margin:18px 0 6px;font-size:.95rem;color:var(--ink)}
 #cvPreview table{width:100%;border-collapse:collapse;font-size:13px}
@@ -139,7 +142,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label for="vdatumFile">VDATUM MLLW XYZ file in Elevation</label>
     <input type="file" id="vdatumFile" accept=".xyz,.txt">
     <div id="vdatumName" class="file-name">No VDATUM file selected</div>
-    <label for="surveyFile">Survey XYZ files in Depth</label>
+    <label for="surveyFile">Survey NAVD88 XYZ files in Depth</label>
     <input type="file" id="surveyFile" class="file-picker-input" accept=".xyz,.txt" multiple>
     <label for="surveyFile" class="file-picker-label">Choose Files</label>
     <div id="surveyName" class="file-name">No survey files selected</div>
@@ -147,6 +150,9 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <div class="formula">New Z = Survey Z + VDATUM Z</div>
     <div class="actionRow">
       <button id="vdatumProcessButton" class="processBtn">Process</button>
+      <button id="vdatumDownloadButton" class="downloadBtn">Download</button>
+      <button id="vdatumSaveAsButton" class="downloadBtn">Save As</button>
+      <button id="vdatumZipDownloadButton" class="zipDownloadBtn">Download ZIP</button>
       <button id="vdatumRefreshButton" class="clearBtn">Clear</button>
     </div>
     <div id="vdatumProgressContainer">
@@ -155,9 +161,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     </div>
     <div id="vdatumStatus" class="result"></div>
     <div id="vdatumDownloadSection">
-      <h3>Output ready</h3>
       <div id="vdatumOutputFileName" class="file-name"></div>
-      <button id="vdatumDownloadButton">Download ZIP</button>
     </div>
   </div>
 </div>
@@ -177,7 +181,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label class="check"><input type="checkbox" id="zRound" checked> Round X Y to 2 decimals, Z to 1 decimal</label>
     <div class="actionRow">
       <button id="zProcessBtn" class="processBtn">Process</button>
-      <button id="zDownloadBtn" class="downloadBtn">Download ZIP</button>
+      <button id="zDownloadBtn" class="downloadBtn">Download</button>
+      <button id="zDownloadZipBtn" class="zipDownloadBtn">Download ZIP</button>
     </div>
     <div id="zStatus"></div>
     <div id="zResult" class="result"></div>
@@ -245,7 +250,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <div class="actionRow">
       <button id="combineProcessBtn" class="processBtn">Process</button>
       <button id="combineDownloadBtn" class="downloadBtn">Download XYZ</button>
-      <button id="combineClearBtn" class="clearBtn">Clear</button>
     </div>
 
     <div id="combineStatus"></div>
@@ -280,7 +284,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <p class="hint">Columns are detected automatically. Projection only; no datum shift applied.</p>
     <div class="actionRow">
       <button id="cvConvertBtn" class="processBtn" disabled>Convert All</button>
-      <button id="cvDownloadBtn" class="downloadBtn">Download ZIP</button>
+      <button id="cvDownloadBtn" class="downloadBtn">Download</button>
+      <button id="cvDownloadZipBtn" class="zipDownloadBtn">Download ZIP</button>
     </div>
     <div id="cvStatus"></div>
     <div id="cvPreview"></div>
@@ -307,7 +312,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label class="check"><input type="checkbox" id="rawRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
     <div class="actionRow">
       <button id="rawConvertBtn" class="processBtn" disabled>Convert All RAW</button>
-      <button id="rawDownloadBtn" class="downloadBtn">Download ZIP</button>
+      <button id="rawDownloadBtn" class="downloadBtn">Download</button>
+      <button id="rawDownloadZipBtn" class="zipDownloadBtn">Download ZIP</button>
     </div>
     <div id="rawStatus"></div>
   </div>
@@ -333,7 +339,8 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label class="check"><input type="checkbox" id="hsxRound"> Round X Y to 2 decimals, Z to 1 decimal</label>
     <div class="actionRow">
       <button id="hsxConvertBtn" class="processBtn" disabled>Convert All HSX</button>
-      <button id="hsxDownloadBtn" class="downloadBtn">Download ZIP</button>
+      <button id="hsxDownloadBtn" class="downloadBtn">Download</button>
+      <button id="hsxDownloadZipBtn" class="zipDownloadBtn">Download ZIP</button>
     </div>
     <div id="hsxStatus"></div>
   </div>
@@ -1327,7 +1334,6 @@ let combineOutputReady = false;
 
 const combineProcessBtn = document.getElementById("combineProcessBtn");
 const combineDownloadBtn = document.getElementById("combineDownloadBtn");
-const combineClearBtn = document.getElementById("combineClearBtn");
 const combineStatus = document.getElementById("combineStatus");
 const combineRemoveOverlap = document.getElementById("combineRemoveOverlap");
 const combineOverlapMethods = document.getElementById("combineOverlapMethods");
@@ -1717,27 +1723,7 @@ combineDownloadBtn.addEventListener("click", function () {
     }, 2000);
 });
 
-combineClearBtn.addEventListener("click", function () {
-    for (let i = 1; i <= 6; i++) {
-        document.getElementById("combineFile" + i).value = "";
-    }
-    combineManyFiles.value = "";
-    combineManyFileNames.textContent = "No additional files selected";
 
-    combineParts = [];
-    combineOutputReady = false;
-    combineDownloadBtn.style.display = "none";
-    combineRemoveOverlap.checked = false;
-    combineOverlapMinimum.checked = true;
-    combineOverlapAverage.checked = false;
-    combineOverlapSecond.checked = false;
-    combineOverlapMethods.style.opacity = "1";
-    combineZAdjustment.value = "0";
-    combineInvertZ.checked = false;
-    combineRound.checked = true;
-    combineStatus.className = "";
-    combineStatus.textContent = "";
-});
 
 /* ============================================================
    CLEAR ALL
@@ -1767,7 +1753,9 @@ document
     document.getElementById("surveyName").textContent = "No survey files selected";
     document.getElementById("vdatumStatus").textContent = "Select both files to begin.";
     document.getElementById("vdatumDownloadSection").style.display = "none";
+    if (typeof hideOutputButtons === "function") hideOutputButtons();
     document.getElementById("vdatumOutputFileName").textContent = "";
+    document.getElementById("vdatumRound").checked = false;
     document.getElementById("vdatumProgressContainer").style.display = "none";
     document.getElementById("vdatumProgressBar").value = 0;
     document.getElementById("vdatumProgressText").textContent = "0%";
@@ -1797,6 +1785,7 @@ document
     document.getElementById("zStatus").innerHTML = "";
     document.getElementById("zResult").textContent = "";
     document.getElementById("zDownloadBtn").style.display = "none";
+    document.getElementById("zDownloadZipBtn").style.display = "none";
     zOutputText = "";
     zOriginalFileName = "";
 
@@ -2297,14 +2286,35 @@ function setStatus(
 
 const vdatumSurveyInput = document.getElementById("surveyFile");
 const vdatumSurveyName = document.getElementById("surveyName");
+const downloadButton = document.getElementById("vdatumDownloadButton");
+const saveAsButton = document.getElementById("vdatumSaveAsButton");
+const zipDownloadButton = document.getElementById("vdatumZipDownloadButton");
+
+function hideOutputButtons() {
+    downloadButton.style.display = "none";
+    saveAsButton.style.display = "none";
+    zipDownloadButton.style.display = "none";
+    document.getElementById("vdatumDownloadSection").style.display = "none";
+}
+
+function resetVdatumOutput() {
+    hideOutputButtons();
+    outputBlob = null;
+    outputFileName = "";
+    document.getElementById("vdatumOutputFileName").textContent = "";
+}
+
+document.getElementById("vdatumFile").addEventListener("change", function () {
+    document.getElementById("vdatumName").textContent = this.files.length ? this.files[0].name : "No VDATUM file selected";
+    resetVdatumOutput();
+});
+
 vdatumSurveyInput.addEventListener("change", function () {
     const files = Array.from(this.files || []);
     vdatumSurveyName.textContent = files.length
-        ? files.length + " survey file(s): " + files.map(f => f.name).join(", ")
+        ? files.length + " survey file(s): " + files.map(file => file.name).join(", ")
         : "No survey files selected";
-    document.getElementById("vdatumDownloadSection").style.display = "none";
-    outputBlob = null;
-    outputFileName = "";
+    resetVdatumOutput();
 });
 
 document.getElementById("vdatumProcessButton").addEventListener("click", async function () {
@@ -2318,16 +2328,16 @@ document.getElementById("vdatumProcessButton").addEventListener("click", async f
 
     if (!vdatumFile) { alert("Please select the VDATUM MLLW XYZ file."); return; }
     if (!surveyFiles.length) { alert("Please select one or more survey XYZ files."); return; }
-    if (typeof JSZip === "undefined") { alert("ZIP library did not load. Check your internet connection and try again."); return; }
+    if (surveyFiles.length > 1 && typeof JSZip === "undefined") {
+        alert("ZIP library did not load. Check your internet connection and try again."); return;
+    }
 
     processButton.disabled = true;
     processButton.textContent = "Processing...";
     progressContainer.style.display = "block";
     progress.value = 0;
     progressText.textContent = "0%";
-    document.getElementById("vdatumDownloadSection").style.display = "none";
-    outputBlob = null;
-    outputFileName = "";
+    resetVdatumOutput();
 
     try {
         setStatus("Reading the VDATUM MLLW file...");
@@ -2338,10 +2348,10 @@ document.getElementById("vdatumProcessButton").addEventListener("click", async f
         await new Promise(resolve => setTimeout(resolve, 20));
         kdTree = buildKDTree(vdatumPoints);
 
-        const zip = new JSZip();
+        const zip = surveyFiles.length > 1 ? new JSZip() : null;
+        let singleOutputText = "";
         let totalValid = 0;
         let totalUnchanged = 0;
-        let totalLines = 0;
 
         for (let fileIndex = 0; fileIndex < surveyFiles.length; fileIndex++) {
             const surveyFile = surveyFiles[fileIndex];
@@ -2374,390 +2384,174 @@ document.getElementById("vdatumProcessButton").addEventListener("click", async f
                 }
             }
             const baseName = surveyFile.name.replace(/\.[^/.]+$/, "");
-            zip.file(baseName + "_VDATUM_ADJUSTED.xyz", outputLines.join("\n"));
+            const outName = baseName + "_VDATUM_ADJUSTED.xyz";
+            const outputText = outputLines.join("\n");
+            if (zip) zip.file(outName, outputText);
+            else {
+                singleOutputText = outputText;
+                outputFileName = outName;
+            }
             totalValid += validPoints;
             totalUnchanged += unchangedLines;
-            totalLines += surveyLines.length;
         }
 
-        setStatus("Creating ZIP archive...");
-        outputBlob = await zip.generateAsync({type:"blob"});
-        outputFileName = "VDATUM_ADJUSTED_FILES.zip";
+        if (zip) {
+            setStatus("Creating ZIP archive...");
+            outputBlob = await zip.generateAsync({type:"blob"});
+            outputFileName = "VDATUM_ADJUSTED_FILES.zip";
+        } else {
+            outputBlob = new Blob([singleOutputText], {type:"text/plain;charset=utf-8"});
+        }
+
         progress.value = 100;
         progressText.textContent = "100%";
         document.getElementById("vdatumDownloadSection").style.display = "block";
-        document.getElementById("vdatumOutputFileName").textContent = outputFileName + " (" + surveyFiles.length + " survey file(s))";
+        document.getElementById("vdatumOutputFileName").textContent = "Output ready: " + outputFileName + " (" + surveyFiles.length + " survey file(s))";
+        if (surveyFiles.length === 1) {
+            downloadButton.style.display = "inline-block";
+            saveAsButton.style.display = "inline-block";
+        } else {
+            zipDownloadButton.style.display = "inline-block";
+        }
         setStatus("PROCESSING COMPLETE\n\nVDATUM points: " + vdatumPoints.length.toLocaleString() +
             "\nSurvey files processed: " + surveyFiles.length +
             "\nValid survey points processed: " + totalValid.toLocaleString() +
             "\nUnchanged/non-XYZ lines: " + totalUnchanged.toLocaleString() +
-            "\n\nCalculation: New Z = Survey Z + nearest VDATUM Z\n\nDownload the ZIP archive to get all adjusted XYZ files.");
+            "\n\nCalculation: New Z = Survey Z + nearest VDATUM Z" +
+            (surveyFiles.length === 1 ? "\n\nUse Download or Save As to save the adjusted XYZ file." : "\n\nUse Download ZIP to save all adjusted XYZ files."));
     } catch (error) {
         console.error(error);
         setStatus("ERROR\n\n" + (error.message || String(error)));
         alert("An error occurred:\n\n" + (error.message || String(error)));
     } finally {
         processButton.disabled = false;
-        processButton.textContent = "Process Files";
+        processButton.textContent = "Process";
     }
 });
 
-
-/* =====================================================
-   DOWNLOAD BUTTON
-
-   THIS IS THE ONLY DOWNLOAD ACTION.
-   ===================================================== */
-
-document
-.getElementById(
-    "vdatumDownloadButton"
-)
-.addEventListener(
-    "click",
-    function () {
-
-
-        if (!outputBlob) {
-
-            alert(
-                "Please process the XYZ file first."
-            );
-
-            return;
-
-        }
-
-
-        const url =
-            URL.createObjectURL(
-                outputBlob
-            );
-
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            outputFileName;
-
-
-        document
-        .body
-        .appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        document
-        .body
-        .removeChild(
-            link
-        );
-
-
-        setTimeout(
-            function () {
-
-                URL.revokeObjectURL(
-                    url
-                );
-
-            },
-            1000
-        );
-
-    }
-);
-
-
-
-/* =====================================================
-   REFRESH / CLEAR ALL BUTTON
-   ===================================================== */
-
-document
-.getElementById(
-    "vdatumRefreshButton"
-)
-.addEventListener(
-    "click",
-    function () {
-
-
-        /* ---------------------------------------------
-           CLEAR FILE INPUTS
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumFile"
-        )
-        .value =
-            "";
-
-
-        document
-        .getElementById(
-            "surveyFile"
-        )
-        .value =
-            "";
-
-
-
-        /* ---------------------------------------------
-           CLEAR FILE NAMES
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumName"
-        )
-        .textContent =
-            "No VDATUM file selected";
-
-
-        document
-        .getElementById(
-            "surveyName"
-        )
-        .textContent =
-            "No survey files selected";
-
-
-
-        /* ---------------------------------------------
-           CLEAR DATA
-           --------------------------------------------- */
-
-        vdatumPoints =
-            [];
-
-
-        kdTree =
-            null;
-
-
-        outputBlob =
-            null;
-
-
-        outputFileName =
-            "";
-
-
-
-        /* ---------------------------------------------
-           HIDE DOWNLOAD
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumDownloadSection"
-        )
-        .style.display =
-            "none";
-
-
-        document
-        .getElementById(
-            "vdatumOutputFileName"
-        )
-        .textContent =
-            "";
-
-
-
-        /* ---------------------------------------------
-           RESET PROGRESS
-           --------------------------------------------- */
-
-        document
-        .getElementById(
-            "vdatumProgressContainer"
-        )
-        .style.display =
-            "none";
-
-
-        document
-        .getElementById(
-            "vdatumProgressBar"
-        )
-        .value =
-            0;
-
-
-        document
-        .getElementById(
-            "vdatumProgressText"
-        )
-        .textContent =
-            "0%";
-
-
-
-        /* ---------------------------------------------
-           RESET PROCESS BUTTON
-           --------------------------------------------- */
-
-        const processButton =
-            document
-            .getElementById(
-                "vdatumProcessButton"
-            );
-
-
-        processButton.disabled =
-            false;
-
-
-        processButton.textContent =
-            "Process Files";
-
-
-
-        /* ---------------------------------------------
-           RESET STATUS
-           --------------------------------------------- */
-
-        setStatus(
-            "Select both files to begin."
-        );
-
-
-
-        /* ---------------------------------------------
-           SCROLL TO TOP
-           --------------------------------------------- */
-
-        window.scrollTo(
-            {
-                top: 0,
-                behavior: "smooth"
-            }
-        );
-
-    }
-);
-
-
-
-
-/* ================= Z ADJUST TOOL ================= */
-
-
-let zOutputText = "";
-let zOriginalFileName = "";
-let zOutputFiles = [];
-
-const zAdjustFileInput = document.getElementById("zAdjustFile");
-const zAdjustFileNames = document.getElementById("zAdjustFileNames");
-zAdjustFileInput.addEventListener("change", function () {
-    const files = Array.from(this.files || []);
-    zAdjustFileNames.textContent = files.length
-        ? files.length + " file(s) selected: " + files.map(f => f.name).join(", ")
-        : "No files selected";
-    zOutputFiles = [];
-    zOutputText = "";
-    document.getElementById("zDownloadBtn").style.display = "none";
-    document.getElementById("zStatus").innerHTML = "";
-    document.getElementById("zResult").textContent = "";
-});
-
-function processZAdjustText(text, zAdjustment, invertZAdjust, zRoundOn) {
-    const lines = text.split(/\r?\n/);
-    const processedLines = [];
-    let validPoints = 0;
-    let unchangedLines = 0;
-    for (const line of lines) {
-        if (line.trim() === "") { processedLines.push(line); continue; }
-        const parts = splitXYZColumns(line);
-        if (parts.length >= 3) {
-            const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
-            if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
-                let newZ = z + zAdjustment;
-                if (invertZAdjust) newZ = -newZ;
-                processedLines.push(x.toFixed(zRoundOn ? 2 : 3) + " " +
-                    y.toFixed(zRoundOn ? 2 : 3) + " " + roundHalfUp(newZ, zRoundOn ? 1 : 3));
-                validPoints++;
-            } else { processedLines.push(line); unchangedLines++; }
-        } else { processedLines.push(line); unchangedLines++; }
-    }
-    return { text: processedLines.join("\n"), validPoints, unchangedLines, preview: processedLines.slice(0, 10).join("\n") };
-}
-
-document.getElementById("zProcessBtn").addEventListener("click", async function () {
-    const zRoundOn = document.getElementById("zRound").checked;
-    const adjustmentInput = document.getElementById("zAdjustment");
-    const zStatus = document.getElementById("zStatus");
-    const zResult = document.getElementById("zResult");
-    const zDownloadBtn = document.getElementById("zDownloadBtn");
-    const files = Array.from(zAdjustFileInput.files || []);
-    if (!files.length) { alert("Please select one or more XYZ or TXT files."); return; }
-    const zAdjustment = Number(adjustmentInput.value);
-    if (!Number.isFinite(zAdjustment)) { alert("Please enter a valid Z adjustment value."); return; }
-    const invertZAdjust = document.getElementById("invertZAdjust").checked;
-    zOutputFiles = [];
-    zOutputText = "";
-    zOriginalFileName = files[0].name;
-    zDownloadBtn.style.display = "none";
-    zStatus.innerHTML = "<div class='info'>Processing " + files.length + " file(s)...</div>";
-    try {
-        let totalPoints = 0, totalUnchanged = 0;
-        for (const file of files) {
-            const result = processZAdjustText(await file.text(), zAdjustment, invertZAdjust, zRoundOn);
-            const baseName = file.name.replace(/\.[^/.]+$/, "");
-            zOutputFiles.push({ name: baseName + "_Z_ADJUSTED.xyz", text: result.text });
-            totalPoints += result.validPoints;
-            totalUnchanged += result.unchangedLines;
-        }
-        zOutputText = zOutputFiles[0] ? zOutputFiles[0].text : "";
-        zStatus.innerHTML = "<div class='success'><strong>Processing complete.</strong><br>Files processed: " +
-            zOutputFiles.length.toLocaleString() + "<br>Points processed: " + totalPoints.toLocaleString() +
-            "<br>Lines unchanged: " + totalUnchanged.toLocaleString() + "<br>Z adjustment: " + zAdjustment.toFixed(2) +
-            "<br>Invert Z: " + (invertZAdjust ? "YES" : "NO") + "<br>" +
-            (zRoundOn ? "Output: X Y 2 decimals, Z 1 decimal" : "Output: X Y Z 3 decimals") +
-            "<br>Click Download ZIP to download each processed file.</div>";
-        zResult.textContent = "Preview — " + zOutputFiles[0].name + "\n" +
-            processZAdjustText(await files[0].text(), zAdjustment, invertZAdjust, zRoundOn).preview;
-        zDownloadBtn.style.display = "inline-block";
-    } catch (err) {
-        console.error(err);
-        zStatus.innerHTML = "<div class='error'>Could not process files: " + String(err.message || err) + "</div>";
-    }
-});
-
-document.getElementById("zDownloadBtn").addEventListener("click", async function () {
-    if (!zOutputFiles.length) { alert("Please process files first."); return; }
-    if (typeof JSZip === "undefined") {
-        alert("ZIP support could not load. Please check your internet connection and reload this page.");
-        return;
-    }
-    const zip = new JSZip();
-    zOutputFiles.forEach(file => zip.file(file.name, file.text));
-    const blob = await zip.generateAsync({ type: "blob" });
-    const url = URL.createObjectURL(blob);
+function downloadVdatumOutput() {
+    if (!outputBlob) { alert("Please process the XYZ file first."); return; }
+    const url = URL.createObjectURL(outputBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "Z_ADJUSTED_FILES.zip";
+    link.download = outputFileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+downloadButton.addEventListener("click", downloadVdatumOutput);
+zipDownloadButton.addEventListener("click", downloadVdatumOutput);
+saveAsButton.addEventListener("click", async function () {
+    if (!outputBlob) { alert("Please process the XYZ file first."); return; }
+    if (window.showSaveFilePicker) {
+        try {
+            const handle = await window.showSaveFilePicker({
+                suggestedName: outputFileName,
+                types: [{ description: "XYZ text file", accept: {"text/plain": [".xyz"]} }]
+            });
+            const writable = await handle.createWritable();
+            await writable.write(outputBlob);
+            await writable.close();
+        } catch (error) {
+            if (error.name !== "AbortError") alert("Could not save the file: " + (error.message || String(error)));
+        }
+    } else {
+        downloadVdatumOutput();
+    }
 });
 
+document.getElementById("vdatumRefreshButton").addEventListener("click", function () {
+    document.getElementById("vdatumFile").value = "";
+    vdatumSurveyInput.value = "";
+    document.getElementById("vdatumName").textContent = "No VDATUM file selected";
+    vdatumSurveyName.textContent = "No survey files selected";
+    document.getElementById("vdatumRound").checked = false;
+    vdatumPoints = [];
+    kdTree = null;
+    outputBlob = null;
+    outputFileName = "";
+    hideOutputButtons();
+    document.getElementById("vdatumOutputFileName").textContent = "";
+    document.getElementById("vdatumProgressContainer").style.display = "none";
+    document.getElementById("vdatumProgressBar").value = 0;
+    document.getElementById("vdatumProgressText").textContent = "0%";
+    document.getElementById("vdatumProcessButton").disabled = false;
+    document.getElementById("vdatumProcessButton").textContent = "Process";
+    setStatus("Select both files to begin.");
+});
+
+
+/* ================= Z ADJUST TOOL ================= */
+let zOutputText = "";
+let zOriginalFileName = "";
+let zOutputFiles = [];
+let zMode = "multi";
+const zAdjustFileInput = document.getElementById("zAdjustFile");
+const zAdjustFileNames = document.getElementById("zAdjustFileNames");
+const zDownloadBtn = document.getElementById("zDownloadBtn");
+const zDownloadZipBtn = document.getElementById("zDownloadZipBtn");
+function resetZAdjustOutput() {
+  zOutputFiles = []; zOutputText = "";
+  zDownloadBtn.style.display = "none"; zDownloadZipBtn.style.display = "none";
+  document.getElementById("zStatus").innerHTML = "";
+  document.getElementById("zResult").textContent = "";
+}
+function selectZAdjustFiles(files) {
+  zMode = files.length === 1 ? "single" : "multi"; resetZAdjustOutput();
+  zAdjustFileNames.textContent = files.length ? files.length + " file(s) selected: " + files.map(f => f.name).join(", ") : "No files selected";
+}
+zAdjustFileInput.addEventListener("change", function () { selectZAdjustFiles(Array.from(this.files || [])); });
+function processZAdjustText(text, zAdjustment, invertZAdjust, zRoundOn) {
+  const lines = text.split(/\r?\n/), processedLines = []; let validPoints = 0, unchangedLines = 0;
+  for (const line of lines) {
+    if (line.trim() === "") { processedLines.push(line); continue; }
+    const parts = splitXYZColumns(line);
+    if (parts.length >= 3) {
+      const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
+      if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
+        let newZ = z + zAdjustment; if (invertZAdjust) newZ = -newZ;
+        processedLines.push(x.toFixed(zRoundOn ? 2 : 3) + " " + y.toFixed(zRoundOn ? 2 : 3) + " " + roundHalfUp(newZ, zRoundOn ? 1 : 3)); validPoints++;
+      } else { processedLines.push(line); unchangedLines++; }
+    } else { processedLines.push(line); unchangedLines++; }
+  }
+  return { text: processedLines.join("\n"), validPoints, unchangedLines, preview: processedLines.slice(0, 10).join("\n") };
+}
+document.getElementById("zProcessBtn").addEventListener("click", async function () {
+  const files = Array.from(zAdjustFileInput.files || []);
+  zMode = files.length === 1 ? "single" : "multi";
+  if (!files.length) { alert("Please select a file using Choose Files."); return; }
+  const zAdjustment = Number(document.getElementById("zAdjustment").value);
+  if (!Number.isFinite(zAdjustment)) { alert("Please enter a valid Z adjustment value."); return; }
+  const invert = document.getElementById("invertZAdjust").checked, round = document.getElementById("zRound").checked;
+  resetZAdjustOutput(); zOriginalFileName = files[0].name;
+  document.getElementById("zStatus").innerHTML = "<div class='info'>Processing " + files.length + " file(s)...</div>";
+  try {
+    let totalPoints = 0, totalUnchanged = 0;
+    for (const file of files) {
+      const res = processZAdjustText(await file.text(), zAdjustment, invert, round);
+      zOutputFiles.push({name:file.name.replace(/\.[^/.]+$/, "") + "_Z_ADJUSTED.xyz", text:res.text});
+      totalPoints += res.validPoints; totalUnchanged += res.unchangedLines;
+    }
+    zOutputText = zOutputFiles[0].text;
+    document.getElementById("zStatus").innerHTML = "<div class='success'><strong>Processing complete.</strong><br>Files processed: " + zOutputFiles.length + "<br>Points processed: " + totalPoints.toLocaleString() + "<br>Lines unchanged: " + totalUnchanged.toLocaleString() + "<br>Z adjustment: " + zAdjustment.toFixed(2) + "<br>Invert Z: " + (invert ? "YES" : "NO") + "<br>Output: " + (round ? "X Y 2 decimals, Z 1 decimal" : "X Y Z 3 decimals") + "</div>";
+    document.getElementById("zResult").textContent = "Preview — " + zOutputFiles[0].name + "\n" + processZAdjustText(await files[0].text(), zAdjustment, invert, round).preview;
+    if (zMode === "single") zDownloadBtn.style.display = "inline-block"; else zDownloadZipBtn.style.display = "inline-block";
+  } catch (err) { console.error(err); document.getElementById("zStatus").innerHTML = "<div class='error'>Could not process files: " + String(err.message || err) + "</div>"; }
+});
+zDownloadBtn.addEventListener("click", function () {
+  if (!zOutputFiles.length) { alert("Please process the file first."); return; }
+  const blob = new Blob([zOutputText], {type:"text/plain;charset=utf-8"}), url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = zOutputFiles[0].name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+});
+zDownloadZipBtn.addEventListener("click", async function () {
+  if (!zOutputFiles.length) { alert("Please process files first."); return; }
+  if (typeof JSZip === "undefined") { alert("ZIP support could not load. Please check your internet connection and reload this page."); return; }
+  const zip = new JSZip(); zOutputFiles.forEach(file => zip.file(file.name, file.text));
+  const blob = await zip.generateAsync({type:"blob"}), url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = "Z_ADJUSTED_FILES.zip"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+});
 
 
 /* ============================================================
@@ -2998,125 +2792,45 @@ function cvConvertText(text, dir, round) {
 
 if (typeof document !== "undefined") {
   const $ = id => document.getElementById(id);
-  const esc = t => String(t).replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
-  let cvFiles = [];
-  let cvZipBlob = null;
-
-  function resetOutput() {
-    cvZipBlob = null;
-    $("cvDownloadBtn").style.display = "none";
-    $("cvPreview").innerHTML = "";
-    $("cvStatus").innerHTML = "";
+  const esc = t => String(t).replace(/[&<>]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;"}[c]));
+  let cvFiles = [], cvMode = "multi", cvZipBlob = null, cvSingleBlob = null, cvSingleName = "";
+  function resetOutput() { cvZipBlob = null; cvSingleBlob = null; $("cvDownloadBtn").style.display="none"; $("cvDownloadZipBtn").style.display="none"; $("cvPreview").innerHTML=""; $("cvStatus").innerHTML=""; }
+  function setCvFiles(files) {
+    cvFiles=files; cvMode=files.length === 1 ? "single" : "multi"; resetOutput();
+    $("cvConvertBtn").disabled=!cvFiles.length; $("cvConvertBtn").textContent=cvMode === "single" ? "Convert File" : "Convert All";
+    $("cvFileNames").textContent=cvFiles.length ? cvFiles.length+" file(s) selected: "+cvFiles.map(f=>f.name).join(", ") : "No files selected";
+    $("cvStatus").innerHTML=cvFiles.length ? '<div class="info">Ready to convert '+cvFiles.length+' file(s).</div>' : "";
   }
-  function note() {
-    const d = $("cvDir").value;
-    $("cvNote").style.display = (d === "NJ>NYE" || d === "NYE>NJ") ? "block" : "none";
-  }
-
-  $("cvFile").addEventListener("change", e => {
-    cvFiles = Array.from(e.target.files || []);
-    resetOutput();
-    $("cvConvertBtn").disabled = !cvFiles.length;
-    $("cvFileNames").textContent = cvFiles.length
-      ? cvFiles.length + " file(s) selected: " + cvFiles.map(f => f.name).join(", ")
-      : "No files selected";
-    $("cvStatus").innerHTML = cvFiles.length
-      ? '<div class="info">Ready to convert ' + cvFiles.length + ' file(s).</div>'
-      : "";
-  });
-  $("cvDir").addEventListener("change", () => { resetOutput(); note(); });
-  $("cvRound").addEventListener("change", resetOutput);
-  note();
-
-  $("cvConvertBtn").addEventListener("click", async () => {
-    if (!cvFiles.length) return;
-    if (typeof JSZip === "undefined") {
-      $("cvStatus").innerHTML = '<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';
-      return;
-    }
-
-    const btn = $("cvConvertBtn");
-    btn.disabled = true;
-    btn.textContent = "Converting...";
-    resetOutput();
-
-    const zip = new JSZip();
-    let totalPoints = 0;
-    const failures = [];
-    let firstPreview = null;
-    const dir = $("cvDir").value;
-    const to = dir.split(">")[1];
-    const tag = ZONES[to].tag;
-
-    try {
-      for (let i = 0; i < cvFiles.length; i++) {
-        const file = cvFiles[i];
-        $("cvStatus").innerHTML = '<div class="info">Converting ' + (i + 1) + ' of ' + cvFiles.length + ': ' + esc(file.name) + '</div>';
-        try {
-          const source = await file.text();
-          const res = cvConvertText(source, dir, $("cvRound").checked);
-          if (!res.ok) throw new Error("No valid coordinate rows found.");
-          const output = res.text.replace(/\n*$/, "\n");
-          const base = file.name.replace(/\.[^/.]+$/, "");
-          const outName = base + "_" + tag + ".xyz";
-          zip.file(outName, output);
-          totalPoints += res.ok;
-          if (!firstPreview) firstPreview = {res, fileName:file.name};
-        } catch (e) {
-          failures.push(file.name + ": " + (e.message || e));
-        }
-        await new Promise(resolve => setTimeout(resolve, 0));
+  $("cvFile").addEventListener("change",e=>setCvFiles(Array.from(e.target.files||[])));
+  function note(){const d=$("cvDir").value;$("cvNote").style.display=(d==="NJ>NYE"||d==="NYE>NJ")?"block":"none";}
+  $("cvDir").addEventListener("change",()=>{resetOutput();note();}); $("cvRound").addEventListener("change",resetOutput); note();
+  $("cvConvertBtn").addEventListener("click",async()=>{
+    if(!cvFiles.length)return;
+    const btn=$("cvConvertBtn");
+    if(cvMode==="multi" && typeof JSZip==="undefined"){$("cvStatus").innerHTML='<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';return;}
+    btn.disabled=true;btn.textContent="Converting...";resetOutput();
+    let totalPoints=0,failures=[],firstPreview=null;const dir=$("cvDir").value,to=dir.split(">")[1],tag=ZONES[to].tag;const zip=cvMode==="multi"?new JSZip():null;
+    try{
+      for(let i=0;i<cvFiles.length;i++){
+        const file=cvFiles[i];$("cvStatus").innerHTML='<div class="info">Converting '+(i+1)+' of '+cvFiles.length+': '+esc(file.name)+'</div>';
+        try{const source=await file.text(),res=cvConvertText(source,dir,$("cvRound").checked);if(!res.ok)throw new Error("No valid coordinate rows found.");const output=res.text.replace(/\n*$/, "\n"),base=file.name.replace(/\.[^/.]+$/, ""),outName=base+"_"+tag+".xyz";
+          if(cvMode==="single"){cvSingleBlob=new Blob([output],{type:"text/plain;charset=utf-8"});cvSingleName=outName;$("cvDownloadBtn").dataset.outputName=outName;}else zip.file(outName,output);
+          totalPoints+=res.ok;if(!firstPreview)firstPreview={res,fileName:file.name};
+        }catch(e){failures.push(file.name+": "+(e.message||e));}await new Promise(resolve=>setTimeout(resolve,0));
       }
-
-      if (!Object.keys(zip.files).length) {
-        throw new Error("No files could be converted. " + failures.join(" | "));
-      }
-
-      cvZipBlob = await zip.generateAsync({type:"blob"});
-      $("cvDownloadBtn").style.display = "inline-block";
-
-      let msg = "Converted " + Object.keys(zip.files).length + " of " + cvFiles.length +
-        " file(s) to " + ZONES[to].label + ". Total points converted: " + totalPoints.toLocaleString() + ".";
-      if (failures.length) msg += " Files not converted: " + failures.join(" | ");
-      msg += " Download ZIP to save the converted files.";
-      $("cvStatus").innerHTML = '<div class="success">' + esc(msg) + '</div>';
-
-      if (firstPreview) {
-        const res = firstPreview.res;
-        let h = "<h3>Preview: " + esc(firstPreview.fileName) + " — first " + res.rows.length + " converted points</h3><table><tr>" +
-          (res.hasId ? "<th>ID</th>" : "") + "<th>Input X</th><th>Input Y</th><th>Z</th><th>Output X</th><th>Output Y</th></tr>";
-        res.rows.forEach(r => {
-          h += "<tr>" + (res.hasId ? "<td>" + esc(r.id) + "</td>" : "") + "<td>" + r.x.toFixed(2) + "</td><td>" + r.y.toFixed(2) +
-            "</td><td>" + esc(r.z) + "</td><td>" + r.nx.toFixed(2) + "</td><td>" + r.ny.toFixed(2) + "</td></tr>";
-        });
-        $("cvPreview").innerHTML = h + "</table>";
-      }
-    } catch (e) {
-      $("cvStatus").innerHTML = '<div class="error">' + esc(e.message || e) + '</div>';
-    } finally {
-      btn.disabled = !cvFiles.length;
-      btn.textContent = "Convert All";
-    }
+      const converted=cvMode==="single"?(cvSingleBlob?1:0):Object.keys(zip.files).length;if(!converted)throw new Error("No files could be converted. "+failures.join(" | "));
+      if(cvMode==="single")$("cvDownloadBtn").style.display="inline-block";else{cvZipBlob=await zip.generateAsync({type:"blob"});$("cvDownloadZipBtn").style.display="inline-block";}
+      let msg="Converted "+converted+" of "+cvFiles.length+" file(s) to "+ZONES[to].label+". Total points converted: "+totalPoints.toLocaleString()+".";if(failures.length)msg+=" Files not converted: "+failures.join(" | ");msg+=cvMode==="single"?" Click Download or Save As to save the converted file.":" Download ZIP to save the converted files.";$("cvStatus").innerHTML='<div class="success">'+esc(msg)+'</div>';
+      if(firstPreview){const res=firstPreview.res;let h="<h3>Preview: "+esc(firstPreview.fileName)+" — first "+res.rows.length+" converted points</h3><table><tr>"+(res.hasId?"<th>ID</th>":"")+"<th>Input X</th><th>Input Y</th><th>Z</th><th>Output X</th><th>Output Y</th></tr>";res.rows.forEach(r=>{h+="<tr>"+(res.hasId?"<td>"+esc(r.id)+"</td>":"")+"<td>"+r.x.toFixed(2)+"</td><td>"+r.y.toFixed(2)+"</td><td>"+esc(r.z)+"</td><td>"+r.nx.toFixed(2)+"</td><td>"+r.ny.toFixed(2)+"</td></tr>";});$("cvPreview").innerHTML=h+"</table>";}
+    }catch(e){$("cvStatus").innerHTML='<div class="error">'+esc(e.message||e)+'</div>';}finally{btn.disabled=!cvFiles.length;btn.textContent=cvMode==="single"?"Convert File":"Convert All";}
   });
-
-  $("cvDownloadBtn").addEventListener("click", () => {
-    if (!cvZipBlob) return;
-    const tag = ZONES[$("cvDir").value.split(">")[1]].tag;
-    const url = URL.createObjectURL(cvZipBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Converted_Grid_" + tag + ".zip";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
-  });
-
+  $("cvDownloadBtn").addEventListener("click",()=>{if(!cvSingleBlob)return;const url=URL.createObjectURL(cvSingleBlob),a=document.createElement("a");a.href=url;a.download=cvSingleName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
+  $("cvDownloadZipBtn").addEventListener("click",()=>{if(!cvZipBlob)return;const tag=ZONES[$("cvDir").value.split(">")[1]].tag,url=URL.createObjectURL(cvZipBlob),a=document.createElement("a");a.href=url;a.download="Converted_Grid_"+tag+".zip";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
   /* Clear All button */
   const clr = $("clearAllBtn");
   if (clr) clr.addEventListener("click", () => {
     $("cvFile").value = "";
-    cvFiles = [];
+    cvFiles = []; cvMode = "multi";
     $("cvFileNames").textContent = "No files selected";
     $("cvConvertBtn").disabled = true;
     $("cvConvertBtn").textContent = "Convert All";
@@ -3174,56 +2888,22 @@ if (typeof document !== "undefined") {
     return {text:updated.join('\r\n'),converted,posCount,fixCount};
   }
   function wire(kind){
-    const cap=kind.toUpperCase(), fileEl=document.getElementById(kind+'File'), dirEl=document.getElementById(kind+'Dir'), roundEl=document.getElementById(kind+'Round'), convertBtn=document.getElementById(kind+'ConvertBtn'), downloadBtn=document.getElementById(kind+'DownloadBtn'), status=document.getElementById(kind+'Status'), namesEl=document.getElementById(kind+'FileNames');
-    let selectedFiles=[], zipBlob=null;
-    fileEl.addEventListener('change',()=>{
-      selectedFiles=Array.from(fileEl.files||[]); zipBlob=null; downloadBtn.style.display='none'; status.innerHTML='';
-      convertBtn.disabled=!selectedFiles.length;
-      namesEl.textContent=selectedFiles.length ? selectedFiles.length+' file(s) selected: '+selectedFiles.map(f=>f.name).join(', ') : 'No files selected';
-      if(selectedFiles.length) status.innerHTML='<div class="info">Ready to convert '+selectedFiles.length+' '+cap+' file(s).</div>';
-    });
+    const cap=kind.toUpperCase(),fileEl=document.getElementById(kind+'File'),dirEl=document.getElementById(kind+'Dir'),roundEl=document.getElementById(kind+'Round'),convertBtn=document.getElementById(kind+'ConvertBtn'),downloadBtn=document.getElementById(kind+'DownloadBtn'),zipBtn=document.getElementById(kind+'DownloadZipBtn'),status=document.getElementById(kind+'Status'),namesEl=document.getElementById(kind+'FileNames');
+    let selectedFiles=[],mode='multi',zipBlob=null,singleBlob=null,singleName='';
+    function reset(){zipBlob=null;singleBlob=null;downloadBtn.style.display='none';zipBtn.style.display='none';status.innerHTML='';}
+    function choose(files){mode=files.length===1?'single':'multi';selectedFiles=files;reset();convertBtn.disabled=!files.length;convertBtn.textContent=mode==='single'?'Convert File':'Convert All '+cap;namesEl.textContent=files.length?files.length+' file(s) selected: '+files.map(f=>f.name).join(', '):'No files selected';if(files.length)status.innerHTML='<div class="info">Ready to convert '+files.length+' '+cap+' file(s).</div>';}
+    fileEl.addEventListener('change',()=>choose(Array.from(fileEl.files||[])));
     convertBtn.addEventListener('click',async()=>{
-      if(!selectedFiles.length) return;
-      if(typeof JSZip==='undefined'){
-        status.innerHTML='<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';
-        return;
-      }
-      convertBtn.disabled=true; convertBtn.textContent='Converting...'; downloadBtn.style.display='none'; zipBlob=null;
-      const zip=new JSZip(); let totalConverted=0, totalPos=0, totalFix=0, failed=[];
-      try{
-        const [from,to]=dirEl.value.split('>');
-        for(let i=0;i<selectedFiles.length;i++){
-          const file=selectedFiles[i];
-          status.innerHTML='<div class="info">Converting '+(i+1)+' of '+selectedFiles.length+': '+file.name+'</div>';
-          try{
-            const source=await file.text();
-            const res=convertHypackText(source,dirEl.value,kind,roundEl.checked);
-            const ext=kind==='raw'?'.RAW':'.HSX';
-            const tag=ZONES[to].tag;
-            const outName=file.name.replace(/\.[^/.]+$/,'')+'_'+tag+ext;
-            zip.file(outName,res.text);
-            totalConverted+=res.converted; totalPos+=res.posCount; totalFix+=res.fixCount;
-          }catch(e){failed.push(file.name+': '+(e.message||e));}
-          await new Promise(resolve=>setTimeout(resolve,0));
-        }
-        if(!Object.keys(zip.files).length) throw new Error('No files could be converted. '+failed.join(' | '));
-        zipBlob=await zip.generateAsync({type:'blob'});
-        downloadBtn.style.display='inline-block';
-        let msg='Converted '+Object.keys(zip.files).length+' of '+selectedFiles.length+' '+cap+' file(s). Total navigation records converted: '+totalConverted.toLocaleString()+'.';
-        if(kind==='raw') msg+=' POS records: '+totalPos.toLocaleString()+'; FIX records: '+totalFix.toLocaleString()+'.';
-        if(failed.length) msg+=' Failed files: '+failed.join(' | ');
-        status.innerHTML='<div class="success">'+msg+' Download ZIP to save all converted files together.</div>';
-      }catch(e){status.innerHTML='<div class="error">'+String(e.message||e).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</div>';}
-      finally{convertBtn.disabled=!selectedFiles.length;convertBtn.textContent='Convert All '+cap;}
+      if(!selectedFiles.length)return;if(mode==='multi' && typeof JSZip==='undefined'){status.innerHTML='<div class="error">ZIP support could not load. Check your internet connection and reload this page.</div>';return;}convertBtn.disabled=true;convertBtn.textContent='Converting...';reset();const zip=mode==='multi'?new JSZip():null;let totalConverted=0,totalPos=0,totalFix=0,failed=[];
+      try{const [from,to]=dirEl.value.split('>');for(let i=0;i<selectedFiles.length;i++){const file=selectedFiles[i];status.innerHTML='<div class="info">Converting '+(i+1)+' of '+selectedFiles.length+': '+file.name+'</div>';try{const res=convertHypackText(await file.text(),dirEl.value,kind,roundEl.checked),ext=kind==='raw'?'.RAW':'.HSX',tag=ZONES[to].tag,outName=file.name.replace(/\.[^/.]+$/,'')+'_'+tag+ext;if(mode==='single'){singleBlob=new Blob([res.text],{type:'text/plain;charset=utf-8'});singleName=outName;downloadBtn.dataset.outputName=outName;}else zip.file(outName,res.text);totalConverted+=res.converted;totalPos+=res.posCount;totalFix+=res.fixCount;}catch(e){failed.push(file.name+': '+(e.message||e));}await new Promise(resolve=>setTimeout(resolve,0));}
+        const converted=mode==='single'?(singleBlob?1:0):Object.keys(zip.files).length;if(!converted)throw new Error('No files could be converted. '+failed.join(' | '));if(mode==='single')downloadBtn.style.display='inline-block';else{zipBlob=await zip.generateAsync({type:'blob'});zipBtn.style.display='inline-block';}
+        let msg='Converted '+converted+' of '+selectedFiles.length+' '+cap+' file(s). Total navigation records converted: '+totalConverted.toLocaleString()+'.';if(kind==='raw')msg+=' POS records: '+totalPos.toLocaleString()+'; FIX records: '+totalFix.toLocaleString()+'.';if(failed.length)msg+=' Failed files: '+failed.join(' | ');msg+=mode==='single'?' Click Download or Save As to save the converted file.':' Download ZIP to save all converted files together.';status.innerHTML='<div class="success">'+msg+'</div>';
+      }catch(e){status.innerHTML='<div class="error">'+String(e.message||e).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</div>';}finally{convertBtn.disabled=!selectedFiles.length;convertBtn.textContent=mode==='single'?'Convert File':'Convert All '+cap;}
     });
-    downloadBtn.addEventListener('click',()=>{
-      if(!zipBlob)return;
-      const tag=ZONES[dirEl.value.split('>')[1]].tag;
-      const url=URL.createObjectURL(zipBlob); const a=document.createElement('a');
-      a.href=url; a.download='Converted_'+cap+'_'+tag+'.zip'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
-    });
-    dirEl.addEventListener('change',()=>{zipBlob=null;downloadBtn.style.display='none';status.innerHTML='';});
-    roundEl.addEventListener('change',()=>{zipBlob=null;downloadBtn.style.display='none';status.innerHTML='';});
+    downloadBtn.addEventListener('click',()=>{if(!singleBlob)return;const url=URL.createObjectURL(singleBlob),a=document.createElement('a');a.href=url;a.download=singleName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
+    zipBtn.addEventListener('click',()=>{if(!zipBlob)return;const tag=ZONES[dirEl.value.split('>')[1]].tag,url=URL.createObjectURL(zipBlob),a=document.createElement('a');a.href=url;a.download='Converted_'+cap+'_'+tag+'.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
+    dirEl.addEventListener('change',reset);roundEl.addEventListener('change',reset);
+    const clearAll=document.getElementById('clearAllBtn');if(clearAll)clearAll.addEventListener('click',()=>{fileEl.value='';dirEl.selectedIndex=0;roundEl.checked=false;choose([]);convertBtn.textContent='Convert All '+cap;});
   }
   wire('raw'); wire('hsx');
 })();
@@ -3914,6 +3594,7 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
   function suggestedName(target) {
     const id = target.id || '';
     try {
+      if (target.dataset.outputName) return target.dataset.outputName;
       if (id === 'vdatumDownloadButton' && typeof outputFileName !== 'undefined' && outputFileName) return outputFileName;
       if (id === 'zDownloadBtn' && typeof zOriginalFileName !== 'undefined' && zOriginalFileName) return zOriginalFileName.replace(/\.[^/.]+$/, '') + '_Z_ADJUSTED.xyz';
       if (id === 'extractDownloadBtn' && typeof extractOriginalFileName !== 'undefined' && extractOriginalFileName) {
@@ -3923,9 +3604,9 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
         return base + suffix;
       }
       if (id === 'combineDownloadBtn') return document.getElementById('combineRemoveOverlap').checked ? 'combined_XYZ_overlap_removed.xyz' : 'combined_XYZ.xyz';
-      if (id === 'cvDownloadBtn') return 'Converted_Grid.zip';
-      if (id === 'rawDownloadBtn') return 'Converted_RAW.zip';
-      if (id === 'hsxDownloadBtn') return 'Converted_HSX.zip';
+      if (id === 'cvDownloadBtn') return (typeof cvSingleName !== 'undefined' && cvSingleName) ? cvSingleName : 'Converted_Grid.xyz';
+      if (id === 'rawDownloadBtn') return 'Converted_RAW.RAW';
+      if (id === 'hsxDownloadBtn') return 'Converted_HSX.HSX';
       if (id === 'ciDlTfw') return ((document.getElementById('ciImg').files[0] || {}).name || 'Converted_Image').replace(/\.[^/.]+$/, '') + '.tfw';
       if (id === 'ciDlTif' || id === 'ciDlGeo') return ((document.getElementById('ciImg').files[0] || {}).name || 'Converted_Image').replace(/\.[^/.]+$/, '') + '.tif';
     } catch (_) {}
@@ -3946,11 +3627,16 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
     target.insertAdjacentElement('afterend', button);
 
     const syncVisibility = function () {
-      if (target.id === 'vdatumDownloadButton') return;
+      const isZipButton = /zip/i.test(target.textContent || '') || /zip/i.test(target.id || '');
+      if (target.id === 'vdatumDownloadButton') {
+        button.style.display = target.dataset.mode !== 'single' || getComputedStyle(target).display === 'none' ? 'none' : 'inline-block';
+        return;
+      }
+      if (isZipButton) { button.style.display = 'none'; return; }
       button.style.display = getComputedStyle(target).display === 'none' ? 'none' : 'inline-block';
     };
     syncVisibility();
-    new MutationObserver(syncVisibility).observe(target, { attributes: true, attributeFilter: ['style', 'class'] });
+    new MutationObserver(syncVisibility).observe(target, { attributes: true, attributeFilter: ['style', 'class', 'data-mode'] });
 
     button.addEventListener('click', async function () {
       /* File System Access save pickers are blocked inside cross-origin iframes
@@ -4008,9 +3694,7 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
   }
 
   function installButtons() {
-    const targets = Array.from(document.querySelectorAll('button.downloadBtn'));
-    const vdatum = document.getElementById('vdatumDownloadButton');
-    if (vdatum) targets.push(vdatum);
+    const targets = Array.from(document.querySelectorAll('button.downloadBtn:not(#vdatumDownloadButton):not(#vdatumSaveAsButton)'));
     targets.forEach(addSaveAs);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installButtons);
