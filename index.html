@@ -229,7 +229,12 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     </div>
 
     <label class="check"><input type="checkbox" id="combineRemoveOverlap"> Remove overlap points</label>
-    <p class="hint">When selected, points in each later file are removed if they are within 3 ft horizontally (XY) of a point in the previous file. Z/elevation is ignored.</p>
+    <div id="combineOverlapMethods" style="margin:10px 0 0 28px;padding:12px 14px;background:#eef6fb;border:1px solid #cfe1ec;border-radius:8px">
+      <label class="check" style="margin-top:0"><input type="radio" name="combineOverlapMethod" id="combineOverlapMinimum" value="minimum" checked> 1. Remove overlap points - Z minimum (shallowest, closest to zero)</label>
+      <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapAverage" value="average"> 2. Remove overlap points - Z average</label>
+      <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapSecond" value="second"> 3. Remove overlap points - Z second file</label>
+    </div>
+    <p class="hint">Overlapping points are within 3 ft horizontally (XY), regardless of Z. For every overlap, keep the XY coordinates exactly as written in the first file and change Z only. Z minimum keeps the Z closest to zero; Z average averages Z values; Z second file uses the overlapping point's Z from File 2. XY coordinates are not averaged or rounded when overlap removal is enabled.</p>
 
     <label for="combineZAdjustment">Z adjustment</label>
     <input type="number" id="combineZAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
@@ -1325,9 +1330,17 @@ const combineDownloadBtn = document.getElementById("combineDownloadBtn");
 const combineClearBtn = document.getElementById("combineClearBtn");
 const combineStatus = document.getElementById("combineStatus");
 const combineRemoveOverlap = document.getElementById("combineRemoveOverlap");
+const combineOverlapMethods = document.getElementById("combineOverlapMethods");
+const combineOverlapMinimum = document.getElementById("combineOverlapMinimum");
+const combineOverlapAverage = document.getElementById("combineOverlapAverage");
+const combineOverlapSecond = document.getElementById("combineOverlapSecond");
 const combineZAdjustment = document.getElementById("combineZAdjustment");
 const combineInvertZ = document.getElementById("combineInvertZ");
 const combineRound = document.getElementById("combineRound");
+combineOverlapMethods.style.opacity = combineRemoveOverlap.checked ? "1" : "0.55";
+combineRemoveOverlap.addEventListener("change", function () {
+    combineOverlapMethods.style.opacity = this.checked ? "1" : "0.55";
+});
 
 function setCombineStatus(message, type) {
     combineStatus.className = type || "";
@@ -1335,76 +1348,116 @@ function setCombineStatus(message, type) {
 }
 
 /*
-   Large-file-safe XYZ overlap removal.
-   A spatial hash is used instead of comparing every point with every point.
-   Option A: XY distance <= 3.0 ft; Z/elevation is ignored.
+   Combine overlapping survey points for safe navigation.
+   Points within 3 ft horizontally are overlapping. Keep the point whose
+   Z has the smallest absolute value (closest to zero), preserving its X/Y.
+   This selects 10.1 over 10.2 and -10.1 over -10.2.
 */
 function parseXYZForOverlap(text) {
     const points = [];
     const lines = text.split(/\r?\n/);
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-
-        const parts = splitXYZColumns(line);
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        const parts = splitXYZColumns(trimmed);
         if (parts.length < 3) continue;
-
-        const x = Number(parts[0]);
-        const y = Number(parts[1]);
-        const z = Number(parts[2]);
-
+        const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
         if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
-            points.push({x:x, y:y, z:z});
+            points.push({x, y, z, line: trimmed, active: true});
         }
     }
     return points;
 }
 
-function makeSpatialHash(points, cellSize) {
-    const map = new Map();
+function mergeOverlappingPoints(existingText, laterText, method, useIncomingZ) {
+    const cellSize = 3.0, xyTolerance = 3.0, tol2 = xyTolerance * xyTolerance;
+    const records = [];
+    const buckets = new Map();
+    let removed = 0;
 
-    for (let i = 0; i < points.length; i++) {
-        const p = points[i];
-        const ix = Math.floor(p.x / cellSize);
-        const iy = Math.floor(p.y / cellSize);
-        const key = ix + "," + iy;
-
-        let bucket = map.get(key);
-        if (!bucket) {
-            bucket = [];
-            map.set(key, bucket);
-        }
-        bucket.push(p);
+    function keyFor(p) {
+        return Math.floor(p.x / cellSize) + "," + Math.floor(p.y / cellSize);
     }
+    function addRecord(p) {
+        p.active = true;
+        if (!Number.isFinite(p.zSum)) p.zSum = p.z;
+        if (!Number.isFinite(p.zCount)) p.zCount = 1;
+        records.push(p);
+        const key = keyFor(p);
+        if (!buckets.has(key)) buckets.set(key, []);
+        buckets.get(key).push(p);
+    }
+    function parseLines(text, isLater) {
+        for (const rawLine of text.split(/\r?\n/)) {
+            const line = rawLine.trim();
+            if (!line) continue;
+            const parts = splitXYZColumns(line);
+            if (parts.length < 3) {
+                records.push({line: rawLine, active: true, nonPoint: true});
+                continue;
+            }
+            const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
+            if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) {
+                records.push({line: rawLine, active: true, nonPoint: true});
+                continue;
+            }
+            const point = {x, y, z, xText: parts[0], yText: parts[1], line, active: true, zSum:z, zCount:1};
+            if (!isLater) {
+                addRecord(point);
+                continue;
+            }
 
-    return map;
-}
-
-function hasOverlap(point, spatialHash, cellSize, xyTolerance) {
-    const ix = Math.floor(point.x / cellSize);
-    const iy = Math.floor(point.y / cellSize);
-    const tol2 = xyTolerance * xyTolerance;
-
-    for (let dx = -1; dx <= 1; dx++) {
-        for (let dy = -1; dy <= 1; dy++) {
-            const bucket = spatialHash.get((ix + dx) + "," + (iy + dy));
-            if (!bucket) continue;
-
-            for (let j = 0; j < bucket.length; j++) {
-                const q = bucket[j];
-                const ddx = point.x - q.x;
-                const ddy = point.y - q.y;
-
-                // Option A: remove by horizontal XY distance only; ignore Z.
-                if ((ddx * ddx + ddy * ddy) <= tol2) {
-                    return true;
+            const ix = Math.floor(x / cellSize), iy = Math.floor(y / cellSize);
+            let best = null, bestDistance2 = Infinity;
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    const bucket = buckets.get((ix + dx) + "," + (iy + dy));
+                    if (!bucket) continue;
+                    for (const old of bucket) {
+                        if (!old.active || old.nonPoint) continue;
+                        const ddx = x - old.x, ddy = y - old.y;
+                        const distance2 = ddx * ddx + ddy * ddy;
+                        if (distance2 <= tol2 && distance2 < bestDistance2) {
+                            best = old;
+                            bestDistance2 = distance2;
+                        }
+                    }
                 }
             }
+
+            if (!best) {
+                addRecord(point);
+                continue;
+            }
+
+            // Keep the existing (earlier/first-file) XY exactly; only Z may change.
+            removed++;
+            if (method === "average") {
+                best.zSum = (Number.isFinite(best.zSum) ? best.zSum : best.z) + z;
+                best.zCount = (Number.isFinite(best.zCount) ? best.zCount : 1) + 1;
+                best.z = Number((best.zSum / best.zCount).toFixed(10));
+            } else if (method === "minimum") {
+                if (Math.abs(z) < Math.abs(best.z) - 1e-9) {
+                    best.z = z;
+                    best.zSum = z;
+                    best.zCount = 1;
+                }
+            } else if (method === "second" && useIncomingZ) {
+                best.z = z;
+                best.zSum = z;
+                best.zCount = 1;
+            }
+            best.line = best.xText + " " + best.yText + " " + best.z;
         }
     }
 
-    return false;
+    parseLines(existingText || "", false);
+    parseLines(laterText || "", true);
+    const output = records.filter(p => p.active).map(p => {
+        if (p.nonPoint) return p.line;
+        return p.xText + " " + p.yText + " " + p.z;
+    }).join("\n");
+    return {text: output, removed, pointCount: records.filter(p => p.active && !p.nonPoint).length};
 }
 
 function applyCombineZOptions(text) {
@@ -1445,12 +1498,16 @@ function applyCombineZOptions(text) {
         if (combineInvertZ.checked) newZ = -newZ;
 
         if (combineRound.checked) {
-            parts[0] = x.toFixed(2);
-            parts[1] = y.toFixed(2);
+            if (!combineRemoveOverlap.checked) {
+                parts[0] = x.toFixed(2);
+                parts[1] = y.toFixed(2);
+            }
             parts[2] = roundHalfUp(newZ, 1);
         } else {
-            parts[0] = String(x);
-            parts[1] = String(y);
+            if (!combineRemoveOverlap.checked) {
+                parts[0] = String(x);
+                parts[1] = String(y);
+            }
             parts[2] = String(newZ);
         }
 
@@ -1554,11 +1611,10 @@ combineProcessBtn.addEventListener("click", async function () {
 
         let totalBytes = 0;
         let totalRemoved = 0;
-        let previousText = null;
+        let combinedRawText = "";
 
         for (let n = 0; n < files.length; n++) {
             const item = files[n];
-
             setCombineStatus(
                 "Reading File " + item.number + ": " + item.file.name +
                 "\n\nFiles processed: " + n + " of " + files.length,
@@ -1566,45 +1622,42 @@ combineProcessBtn.addEventListener("click", async function () {
             );
 
             let text = await item.file.text();
-            text = text.replace(/^\uFEFF/, "").replace(/\s+$/, "");
-
+            text = text.replace(/^\uFEFF/, "").trim();
             if (!text.length) {
-                previousText = text;
+                totalBytes += item.file.size;
                 continue;
             }
 
-            if (combineRemoveOverlap.checked && n > 0 && previousText !== null) {
+            if (!combinedRawText) {
+                combinedRawText = text;
+            } else if (combineRemoveOverlap.checked) {
                 setCombineStatus(
-                    "Checking File " + item.number + " for overlap...\n\n" +
-                    "File " + files[n - 1].number + " → File " + item.number,
+                    "Checking File " + item.number + " for overlapping points...\n\n" +
+                    (combineOverlapAverage.checked ? "Averaging Z within 3 ft XY; keeping earlier XY." : combineOverlapSecond.checked ? "Using File 2 Z for overlaps; keeping File 1 XY." : "Selecting the shallowest Z within 3 ft XY; keeping earlier XY."),
                     "info"
                 );
-
-                const cleaned = removeOverlapFromLaterFile(previousText, text);
-                text = cleaned.text;
-                totalRemoved += cleaned.removed;
-
+                const overlapMethod = combineOverlapAverage.checked ? "average" : combineOverlapSecond.checked ? "second" : "minimum";
+                const merged = mergeOverlappingPoints(combinedRawText, text, overlapMethod, n === 1);
+                combinedRawText = merged.text;
+                totalRemoved += merged.removed;
                 setCombineStatus(
                     "File " + item.number + " complete.\n\n" +
-                    "Overlap points removed: " + cleaned.removed.toLocaleString() +
-                    "\nReference points in File " + files[n - 1].number + ": " +
-                    cleaned.referencePoints.toLocaleString(),
+                    "Overlapping points removed/merged: " + merged.removed.toLocaleString() +
+                    (combineOverlapAverage.checked ? "\nAverage Z retained; XY kept from first occurrence." : combineOverlapSecond.checked ? "\nFile 2 Z used for overlaps; XY kept from File 1." : "\nShallowest Z retained (closest to zero); XY kept from first occurrence."),
                     "info"
                 );
+            } else {
+                combinedRawText += "\n" + text;
             }
 
-            if (text.length) {
-                const adjusted = applyCombineZOptions(text);
-                text = adjusted.text;
-                combineParts.push(text);
-            }
-
-            previousText = text;
             totalBytes += item.file.size;
+            await new Promise(function(resolve) { setTimeout(resolve, 0); });
+        }
 
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 0);
-            });
+        if (combinedRawText.trim()) {
+            // Apply adjustment/inversion/rounding only after choosing the shallowest original Z.
+            const adjusted = applyCombineZOptions(combinedRawText);
+            combineParts = [adjusted.text];
         }
 
         if (!combineParts.length) {
@@ -1621,7 +1674,8 @@ combineProcessBtn.addEventListener("click", async function () {
             (totalBytes / 1024 / 1024).toFixed(2) + " MB";
 
         if (combineRemoveOverlap.checked) {
-            message += "\nOverlap points removed: " + totalRemoved.toLocaleString();
+            message += "\nOverlap points removed/merged: " + totalRemoved.toLocaleString() +
+                (combineOverlapAverage.checked ? "\nRule: average Z for points within 3 ft XY; retain first occurrence's exact XY." : combineOverlapSecond.checked ? "\nRule: use File 2 Z for overlaps within 3 ft XY; retain File 1's exact XY." : "\nRule: keep the shallowest Z (smallest absolute Z) within 3 ft XY; retain first occurrence's exact XY.");
         }
 
         message += "\n\nReady to download.";
@@ -1674,6 +1728,10 @@ combineClearBtn.addEventListener("click", function () {
     combineOutputReady = false;
     combineDownloadBtn.style.display = "none";
     combineRemoveOverlap.checked = false;
+    combineOverlapMinimum.checked = true;
+    combineOverlapAverage.checked = false;
+    combineOverlapSecond.checked = false;
+    combineOverlapMethods.style.opacity = "1";
     combineZAdjustment.value = "0";
     combineInvertZ.checked = false;
     combineRound.checked = true;
