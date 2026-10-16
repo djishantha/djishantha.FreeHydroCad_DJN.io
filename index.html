@@ -269,6 +269,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <label for="cvDir">Conversion</label>
     <select id="cvDir">
       <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
+      <option value="SAME">No Selection — Keep Same Coordinates</option>
       <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
       <option value="NJ>NYE">NJ 2900 &rarr; NY East 3101</option>
       <option value="NYE>NJ">NY East 3101 &rarr; NJ 2900</option>
@@ -353,6 +354,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <p class="description">Re-georeference a TIFF using embedded GeoTIFF georeferencing or an optional TFW. NAD83, US survey feet.</p>
     <label for="ciDir">Conversion</label>
     <select id="ciDir">
+      <option value="SAME" selected>No Selection — Keep Same Coordinates</option>
       <option value="NYLI>NJ">NY Long Island 3104 &rarr; NJ 2900</option>
       <option value="NJ>NYLI">NJ 2900 &rarr; NY Long Island 3104</option>
       <option value="NYLI>NYE">NY Long Island 3104 &rarr; NY East 3101</option>
@@ -3345,14 +3347,15 @@ async function warp(img, T, outW, outH, X0, Ytop, ps, onProgress) {
 /* ---------- Main conversion (no DOM) ---------- */
 
 async function convertImage(imgBuf, tfwStr, dir, mode, onProgress) {
-  const [from, to] = dir.split(">");
+  const sameCoordinates = dir === "SAME";
+  const [from, to] = sameCoordinates ? [null, null] : dir.split(">");
   const {width: W, height: H} = imageSize(imgBuf);
   let S = null, sourceInfo = "";
   const geoTiff = await GeoTIFF.fromArrayBuffer(imgBuf);
   const geoImage = await geoTiff.getImage();
   const embedded = embeddedGeoTfw(geoImage);
   if (embedded) {
-    if (embedded.zone && embedded.zone !== from) {
+    if (!sameCoordinates && embedded.zone && embedded.zone !== from) {
       throw new Error("The TIFF is embedded as " + embedded.zone + " (EPSG:" + embedded.epsg + "), but the selected conversion starts from " + from + ".");
     }
     S = embedded.tfw;
@@ -3363,7 +3366,12 @@ async function convertImage(imgBuf, tfwStr, dir, mode, onProgress) {
     sourceInfo = "External TFW";
   }
   if (!S) throw new Error("No embedded GeoTIFF georeferencing or TFW was found.");
-  const fit = fitAffine(S, W, H, from, to);
+  if (sameCoordinates && (!embedded || !embedded.epsg)) {
+    throw new Error("No Selection keeps the original coordinates, but the TIFF must contain an identifiable embedded GeoTIFF CRS. A TFW file alone does not identify its coordinate system.");
+  }
+  const fit = sameCoordinates
+    ? {T: [S[0], S[2], S[4] - 0.5*S[0] - 0.5*S[2], S[1], S[3], S[5] - 0.5*S[1] - 0.5*S[3]], maxErr: 0}
+    : fitAffine(S, W, H, from, to);
   const [a, b, c, d, e, f] = fit.T;
   const rot = Math.atan2(d, a) * 180 / Math.PI;
   const scale = Math.hypot(a, d);
@@ -3378,7 +3386,7 @@ async function convertImage(imgBuf, tfwStr, dir, mode, onProgress) {
       a * 0.5 + b * 0.5 + c,
       d * 0.5 + e * 0.5 + f
     ];
-    const epsg = to === "NJ" ? 3424 : (to === "NYLI" ? 2263 : 2260);
+    const epsg = sameCoordinates ? embedded.epsg : (to === "NJ" ? 3424 : (to === "NYLI" ? 2263 : 2260));
     const tif = encodeTiff(img.data, img.width, img.height, img.ch, {
       epsg,
       matrix: [
@@ -3458,7 +3466,7 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
   $("ciConvertBtn").addEventListener("click", async () => {
     resetOutput();
     const dir = $("ciDir").value, mode = $("ciMode").value;
-    const [from, to] = dir.split(">");
+    const [from, to] = dir === "SAME" ? ["SAME", "SAME"] : dir.split(">");
     $("ciConvertBtn").disabled = true;
     const bar = $("ciProgress");
     try {
@@ -3468,7 +3476,7 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
       const imgBuf = await imgFile.arrayBuffer();
       const tfwStr = tfwFile ? await tfwFile.text() : null;
       const res = await convertImage(imgBuf, tfwStr, dir, mode, p => { bar.value = Math.round(p * 100); });
-      outBase = outName(imgFile.name, from, to) + (mode === "north" ? "_northup" : (mode === "geotiff" ? "_GeoTiff" : ""));
+      outBase = (dir === "SAME" ? imgFile.name.replace(/\.[^.]+$/, "") + "_SameCoordinates" : outName(imgFile.name, from, to)) + (mode === "north" ? "_northup" : (mode === "geotiff" ? "_GeoTiff" : ""));
       outTfw = new Blob([res.tfw], {type: "text/plain"});
       /* res.tif is ALWAYS a newly encoded TIFF.  Do not fall back to the
          original bytes because Global Mapper TIFFs may contain old embedded
