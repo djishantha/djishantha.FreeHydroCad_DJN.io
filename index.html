@@ -388,13 +388,14 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 <div id="mtxChnTab" class="tab-content">
   <div class="section">
     <h2>Extract XYZ</h2>
-    <p class="description">Choose an extraction type: MTX corners, CHN nodes, channel DXF nodes, contour DXF vertices, or HYPACK sounding DXF points.</p>
+    <p class="description">Choose an extraction type: MTX corners, CHN nodes, channel DXF nodes, Google KML/KMZ line nodes converted to NYLI feet, contour DXF vertices, or HYPACK sounding DXF points.</p>
 
     <label for="extractType">Extraction</label>
     <select id="extractType">
       <option value="mtx">MTX &rarr; Four Corner XYZ</option>
       <option value="chn">CHN &rarr; XYZ Nodes</option>
       <option value="dxf">DXF chn---&gt;XYZ nodes</option>
+      <option value="googleLines">Google Lines ----&gt; XYZ nodes (NYLI)</option>
       <option value="contourDxf">Contour DXF ---&gt;XYZ Points</option>
       <option value="soundingDxf">Sounding DXF ---&gt;XYZ Points</option>
     </select>
@@ -425,6 +426,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js"></script>
 <script>
 
 // Accept XYZ rows separated by spaces, tabs, or commas; all generated XYZ rows use spaces.
@@ -517,6 +519,9 @@ function updateExtractFileType(){
     } else if(type === "chn") {
         extractFile.accept = ".chn,.txt";
         mtxZRow.style.display = "none";
+    } else if(type === "googleLines") {
+        extractFile.accept = ".kml,.xml,.kmz";
+        mtxZRow.style.display = "none";
     } else {
         extractFile.accept = ".dxf";
         mtxZRow.style.display = "none";
@@ -606,6 +611,32 @@ extractProcessBtn.addEventListener("click", async function(){
             }).join("\n") + (nodes.length>20 ? "\n\n... "+(nodes.length-20).toLocaleString()+" more points ..." : "");
             extractStatus.innerHTML = "<div class='success'><strong>DXF channel-node processing complete.</strong><br><br>Final unique channel nodes: "+nodes.length.toLocaleString()+"</div>";
         }
+        else if(type === "googleLines") {
+            let text;
+            if (/\.kmz$/i.test(file.name)) {
+                if (typeof JSZip === "undefined") throw new Error("KMZ support could not load. Check your internet connection and reload this page.");
+                const zip = await JSZip.loadAsync(await file.arrayBuffer());
+                const kmlEntries = Object.keys(zip.files).filter(function(name) {
+                    return !zip.files[name].dir && /\.kml$/i.test(name);
+                });
+                if (!kmlEntries.length) throw new Error("No KML file was found inside this KMZ archive.");
+                const preferred = kmlEntries.find(function(name) { return /(^|\/)doc\.kml$/i.test(name); }) || kmlEntries[0];
+                text = await zip.file(preferred).async("text");
+            } else {
+                text = await file.text();
+            }
+            const nodes = processGoogleLinesKML(text);
+            if(!nodes.length) throw new Error("No Google line nodes were found. Please select a KML, XML, or KMZ file containing one or more LineString geometries.");
+
+            extractOutputText = nodes.map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n")+"\n";
+
+            extractResult.textContent = nodes.slice(0,20).map(function(p){
+                return p.x.toFixed(3)+" "+p.y.toFixed(3)+" "+p.z.toFixed(3);
+            }).join("\n") + (nodes.length>20 ? "\n\n... "+(nodes.length-20).toLocaleString()+" more nodes ..." : "");
+            extractStatus.innerHTML = "<div class='success'><strong>Google Lines to NYLI XYZ processing complete.</strong><br><br>Unique nodes extracted: "+nodes.length.toLocaleString()+"<br>Output coordinate system: NAD83 / New York Long Island (EPSG:2263), US survey feet.</div>";
+        }
         else if(type === "contourDxf") {
             const text = await file.text();
             const nodes = processContourDXFText(text);
@@ -651,6 +682,7 @@ extractDownloadBtn.addEventListener("click", function(){
     const type = extractType.value;
     const base = extractOriginalFileName.replace(/\.[^/.]+$/, "");
     const suffix = type === "mtx" ? "_four_corners.xyz"
+        : type === "googleLines" ? "_NYLI_nodes.xyz"
         : type === "contourDxf" ? "_contour_points.xyz"
         : type === "soundingDxf" ? "_sounding_points.xyz"
         : "_nodes.xyz";
@@ -1209,68 +1241,174 @@ function processSoundingDXFText(text){
 }
 
 /* ============================================================
+   GOOGLE KML LINE -> NYLI (EPSG:2263, US SURVEY FEET)
+============================================================ */
+function processGoogleLinesKML(text){
+    if(typeof proj4 === "undefined") throw new Error("Coordinate conversion library did not load. Connect to the internet and reload the page.");
+    // NAD83 / New York Long Island, US survey feet (EPSG:2263).
+    const nyli = "+proj=lcc +lat_1=41.03333333333333 +lat_2=40.66666666666666 +lat_0=40.16666666666666 +lon_0=-74 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs";
+    const xml = new DOMParser().parseFromString(text, "application/xml");
+    if(xml.querySelector("parsererror")) throw new Error("The selected file is not valid KML/XML.");
+    const lineStrings = Array.from(xml.getElementsByTagNameNS("*", "LineString"));
+    const raw = [];
+    lineStrings.forEach(function(line){
+        const coordinateNodes = Array.from(line.getElementsByTagNameNS("*", "coordinates"));
+        coordinateNodes.forEach(function(coordNode){
+            (coordNode.textContent || "").trim().split(/\s+/).forEach(function(token){
+                if(!token) return;
+                const parts = token.split(",");
+                if(parts.length < 2) return;
+                const lon = Number(parts[0]);
+                const lat = Number(parts[1]);
+                const z = parts.length > 2 && parts[2] !== "" ? Number(parts[2]) : 0;
+                if(!Number.isFinite(lon) || !Number.isFinite(lat) || !Number.isFinite(z)) return;
+                const xy = proj4("EPSG:4326", nyli, [lon, lat]);
+                raw.push({x:xy[0], y:xy[1], z:z});
+            });
+        });
+    });
+    // Remove duplicate vertices while retaining the original line/node order.
+    const seen = new Set();
+    return raw.filter(function(p){
+        const key = p.x.toFixed(4)+"|"+p.y.toFixed(4)+"|"+p.z.toFixed(3);
+        if(seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
+
+/* ============================================================
    DXF PARSER USED BY UNIFIED EXTRACT XYZ TOOL
 ============================================================ */
 
 function processDXFText(text){
+    /*
+      Extract channel-like DXF geometry, then discard unrelated drawing
+      geometry by selecting the strongest spatial cluster. No fixed State
+      Plane coordinate threshold is used.
+    */
     const pairs = makePairs(text);
     const entities = splitEntities(pairs);
-    const endpoints = [];
+    const candidates = [];
 
-    for(const entity of entities){
-        const type = getEntityType(entity);
-
-        if(type === "LINE"){
-            let p1={x:null,y:null,z:0};
-            let p2={x:null,y:null,z:0};
-            for(const p of entity){
-                if(p.code===10) p1.x=Number(p.value);
-                else if(p.code===20) p1.y=Number(p.value);
-                else if(p.code===30) p1.z=Number(p.value);
-                else if(p.code===11) p2.x=Number(p.value);
-                else if(p.code===21) p2.y=Number(p.value);
-                else if(p.code===31) p2.z=Number(p.value);
-            }
-            if(Number.isFinite(p1.x)&&Number.isFinite(p1.y)&&Number.isFinite(p2.x)&&Number.isFinite(p2.y)){
-                endpoints.push(p1,p2);
-            }
-        }
-        else if(type === "LWPOLYLINE"){
-            const vertices=parseLWPolyline(entity);
-            if(vertices.length===2) endpoints.push(vertices[0],vertices[1]);
-        }
+    function value(entity, code, fallback=null){
+        const item = entity.find(p => p.code === code);
+        if(!item) return fallback;
+        const n = Number(item.value);
+        return Number.isFinite(n) ? n : fallback;
+    }
+    function addCandidate(entity, points){
+        points = points.filter(p =>
+            p && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.z)
+        );
+        if(points.length < 2) return;
+        const layer = (entity.find(p => p.code === 8) || {value:""}).value.toUpperCase();
+        const nonZeroZ = points.filter(p => Math.abs(p.z) > 1e-7).length;
+        const zRange = Math.max(...points.map(p=>p.z)) - Math.min(...points.map(p=>p.z));
+        candidates.push({
+            points, layer,
+            cx: points.reduce((s,p)=>s+p.x,0)/points.length,
+            cy: points.reduce((s,p)=>s+p.y,0)/points.length,
+            nonZeroZ,
+            zRange,
+            channelLayer: /CHAN|CHANNEL|TOE|SLOPE|BANK|DREDG|THALWEG|BOTTOM/.test(layer)
+        });
     }
 
     for(let i=0;i<entities.length;i++){
-        if(getEntityType(entities[i])!=="POLYLINE") continue;
-        let flags=0;
-        for(const p of entities[i]){
-            if(p.code===70){flags=Number(p.value);break;}
-        }
-        if((flags & 8)===0) continue;
+        const entity = entities[i];
+        const type = getEntityType(entity);
 
-        const vertices=[];
-        let j=i+1;
-        for(;j<entities.length;j++){
-            const t=getEntityType(entities[j]);
-            if(t==="VERTEX"){
-                let x=null,y=null,z=0;
-                for(const p of entities[j]){
-                    if(p.code===10)x=Number(p.value);
-                    else if(p.code===20)y=Number(p.value);
-                    else if(p.code===30)z=Number(p.value);
+        if(type === "LINE"){
+            const p1 = {x:value(entity,10), y:value(entity,20), z:value(entity,30,0)};
+            const p2 = {x:value(entity,11), y:value(entity,21), z:value(entity,31,0)};
+            addCandidate(entity,[p1,p2]);
+        } else if(type === "LWPOLYLINE"){
+            const elevation = value(entity,38,0);
+            const vertices = [];
+            let x=null, y=null;
+            for(const p of entity){
+                if(p.code===10){
+                    x=Number(p.value); y=null;
+                } else if(p.code===20 && x!==null){
+                    y=Number(p.value);
+                    if(Number.isFinite(x) && Number.isFinite(y)) vertices.push({x,y,z:elevation});
+                    x=null; y=null;
                 }
-                if(Number.isFinite(x)&&Number.isFinite(y)) vertices.push({x,y,z});
-            } else if(t==="SEQEND") break;
-            else break;
+            }
+            addCandidate(entity,vertices);
+        } else if(type === "POLYLINE"){
+            let flags = value(entity,70,0);
+            const vertices=[];
+            let j=i+1;
+            for(;j<entities.length;j++){
+                const t=getEntityType(entities[j]);
+                if(t==="VERTEX"){
+                    const v=entities[j];
+                    const x=value(v,10), y=value(v,20), z=value(v,30,0);
+                    if(x!==null && y!==null) vertices.push({x,y,z});
+                } else if(t==="SEQEND") break;
+                else break;
+            }
+            // Extract vertices from both 2D and 3D POLYLINE entities.
+            addCandidate(entity,vertices);
+            i=j;
         }
-        if(vertices.length>=2) endpoints.push(vertices[0],vertices[vertices.length-1]);
-        i=j;
     }
 
-    return removeDuplicates(endpoints);
-}
+    if(!candidates.length) return [];
 
+    // Build a scale-relative spatial clustering threshold. This separates
+    // paper-space/title-block geometry from model-space channel geometry
+    // even when the drawing uses a different coordinate reference system.
+    const allPoints = candidates.flatMap(c=>c.points);
+    const minX=Math.min(...allPoints.map(p=>p.x)), maxX=Math.max(...allPoints.map(p=>p.x));
+    const minY=Math.min(...allPoints.map(p=>p.y)), maxY=Math.max(...allPoints.map(p=>p.y));
+    const diagonal=Math.hypot(maxX-minX,maxY-minY);
+    const threshold=Math.max(10, diagonal*0.10);
+
+    const visited=new Set();
+    const clusters=[];
+    for(let i=0;i<candidates.length;i++){
+        if(visited.has(i)) continue;
+        const stack=[i], cluster=[];
+        visited.add(i);
+        while(stack.length){
+            const k=stack.pop(), c=candidates[k];
+            cluster.push(c);
+            for(let j=0;j<candidates.length;j++){
+                if(visited.has(j)) continue;
+                const other=candidates[j];
+                if(Math.hypot(c.cx-other.cx,c.cy-other.cy)<=threshold){
+                    visited.add(j);
+                    stack.push(j);
+                }
+            }
+        }
+        clusters.push(cluster);
+    }
+
+    function clusterScore(cluster){
+        let score=0;
+        for(const c of cluster){
+            score += 1;
+            if(c.nonZeroZ) score += 5 + Math.min(c.nonZeroZ,5);
+            if(c.zRange > 1e-6) score += 3;
+            if(c.channelLayer) score += 8;
+        }
+        return score;
+    }
+
+    // Prefer the cluster most likely to represent channel/model geometry.
+    // Non-zero elevations and channel-related layer names are strong clues;
+    // if none exist, the largest connected geometry cluster wins.
+    clusters.sort((a,b)=>clusterScore(b)-clusterScore(a));
+    const selected=clusters[0];
+
+    const points=[];
+    for(const c of selected) points.push(...c.points);
+    return removeDuplicates(points);
+}
 function makePairs(text){
     const lines=text.replace(/\r/g,"").split("\n"), pairs=[];
     for(let i=0;i+1<lines.length;i+=2){
