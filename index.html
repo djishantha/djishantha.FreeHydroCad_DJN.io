@@ -239,7 +239,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
       <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapAverage" value="average"> 2. Remove overlap points - Z average</label>
       <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapSecond" value="second"> 3. Remove overlap points - Z second file</label>
     </div>
-    <p class="hint">Overlapping points are within 3 ft horizontally (XY), regardless of Z. For every overlap, keep the XY coordinates exactly as written in the first file and change Z only. Z minimum keeps the Z closest to zero; Z average averages Z values; Z second file uses the overlapping point's Z from File 2. XY coordinates are not averaged or rounded when overlap removal is enabled.</p>
+    <p class="hint">Only points with exactly matching XY coordinates are considered overlaps, regardless of Z. For every overlap, keep the XY coordinates exactly as written in the first file and change Z only. Z minimum keeps the Z closest to zero; Z average averages Z values; Z second file uses the overlapping point's Z from File 2. XY coordinates are not averaged or rounded when overlap removal is enabled.</p>
 
     <label for="combineZAdjustment">Z adjustment</label>
     <input type="number" id="combineZAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
@@ -1495,7 +1495,7 @@ function setCombineStatus(message, type) {
 
 /*
    Combine overlapping survey points for safe navigation.
-   Points within 3 ft horizontally are overlapping. Keep the point whose
+   Points with exactly matching XY coordinates are overlapping. Keep the point whose
    Z has the smallest absolute value (closest to zero), preserving its X/Y.
    This selects 10.1 over 10.2 and -10.1 over -10.2.
 */
@@ -1516,7 +1516,7 @@ function parseXYZForOverlap(text) {
 }
 
 function mergeOverlappingPoints(existingText, laterText, method, useIncomingZ) {
-    const cellSize = 3.0, xyTolerance = 3.0, tol2 = xyTolerance * xyTolerance;
+    const cellSize = 1.0, xyTolerance = 0.0, tol2 = 0;
     const records = [];
     const buckets = new Map();
     let removed = 0;
@@ -1666,7 +1666,7 @@ function applyCombineZOptions(text) {
 
 function removeOverlapFromLaterFile(previousText, laterText) {
     const previousPoints = parseXYZForOverlap(previousText);
-    const spatialHash = makeSpatialHash(previousPoints, 3.0);
+    const spatialHash = makeSpatialHash(previousPoints, 1.0);
     const lines = laterText.split(/\r?\n/);
     const output = [];
     let removed = 0;
@@ -1698,7 +1698,7 @@ function removeOverlapFromLaterFile(previousText, laterText) {
 
         valid++;
 
-        if (hasOverlap({x:x, y:y, z:z}, spatialHash, 3.0, 3.0)) {
+        if (hasOverlap({x:x, y:y, z:z}, spatialHash, 0.0, 1.0)) {
             removed++;
         } else {
             output.push(originalLine);
@@ -1779,7 +1779,7 @@ combineProcessBtn.addEventListener("click", async function () {
             } else if (combineRemoveOverlap.checked) {
                 setCombineStatus(
                     "Checking File " + item.number + " for overlapping points...\n\n" +
-                    (combineOverlapAverage.checked ? "Averaging Z within 3 ft XY; keeping earlier XY." : combineOverlapSecond.checked ? "Using File 2 Z for overlaps; keeping File 1 XY." : "Selecting the shallowest Z within 3 ft XY; keeping earlier XY."),
+                    (combineOverlapAverage.checked ? "Averaging Z for exact XY matches; keeping earlier XY." : combineOverlapSecond.checked ? "Using File 2 Z for overlaps; keeping File 1 XY." : "Selecting the shallowest Z for exact XY matches; keeping earlier XY."),
                     "info"
                 );
                 const overlapMethod = combineOverlapAverage.checked ? "average" : combineOverlapSecond.checked ? "second" : "minimum";
@@ -1821,7 +1821,7 @@ combineProcessBtn.addEventListener("click", async function () {
 
         if (combineRemoveOverlap.checked) {
             message += "\nOverlap points removed/merged: " + totalRemoved.toLocaleString() +
-                (combineOverlapAverage.checked ? "\nRule: average Z for points within 3 ft XY; retain first occurrence's exact XY." : combineOverlapSecond.checked ? "\nRule: use File 2 Z for overlaps within 3 ft XY; retain File 1's exact XY." : "\nRule: keep the shallowest Z (smallest absolute Z) within 3 ft XY; retain first occurrence's exact XY.");
+                (combineOverlapAverage.checked ? "\nRule: average Z for points with exact XY matches; retain first occurrence's exact XY." : combineOverlapSecond.checked ? "\nRule: use File 2 Z for overlaps with exact XY matches; retain File 1's exact XY." : "\nRule: keep the shallowest Z (smallest absolute Z) for exact XY matches; retain first occurrence's exact XY.");
         }
 
         message += "\n\nReady to download.";
