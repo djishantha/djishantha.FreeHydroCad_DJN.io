@@ -104,6 +104,85 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
         align-items: stretch;
       }
     }
+/* ---- Water / Land Clip ---- */
+.wc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:700px){.wc-grid{grid-template-columns:1fr}}
+.wc-details{margin-top:18px;border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:#f8fbfd}
+.wc-details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.wc-details label{margin-top:12px}
+#wcTol{width:100%;accent-color:var(--sea)}
+#wcProgress{display:none;width:100%;height:14px;margin-top:16px;accent-color:var(--sea)}
+#wcTools{display:none;margin-top:16px}
+.wc-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.wc-toolbar select{width:auto;flex:0 0 auto}
+.wc-toolbar .clearBtn{padding:9px 14px}
+.wc-toolbar-label{font-weight:600;font-size:.9rem;color:#2c4252}
+.wc-seg{display:flex;flex-wrap:wrap;gap:4px;padding:4px;background:#dceef8;border:1px solid var(--line);border-radius:9px}
+.wc-tool{padding:8px 14px;background:transparent;color:var(--ink);border-radius:6px;font-size:.9rem}
+.wc-tool:hover{background:rgba(10,110,165,.10)}
+.wc-tool.active{background:var(--sea);color:#fff}
+.wc-chip{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #fff;vertical-align:-2px;margin-left:4px;background:#ccc}
+#wcWrap{border:1px solid var(--line);border-radius:8px;overflow:auto;max-height:78vh;background:#fff}
+#wcCv{display:block;margin:0 auto;cursor:crosshair;image-rendering:pixelated}
+/* ---- Extract XYZ: XYZ -> Border ---- */
+.bd-row{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.bd-row input{flex:1 1 220px;width:auto}
+.bd-row .clearBtn{flex:0 0 auto}
+#bdWrap{display:none;position:relative;margin-top:16px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+#bdCv{display:block;width:100%;height:520px;cursor:grab;touch-action:none}
+#bdLegend{position:absolute;left:10px;top:8px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.88);color:var(--mut);font-size:12.5px}
+#bdLegend i{display:inline-block;vertical-align:middle;margin:0 5px 0 10px}
+#bdLegend i:first-child{margin-left:0}
+#bdLegend i.pt{width:6px;height:6px;border-radius:3px;background:#9aa4ae}
+#bdLegend i.ln{width:18px;height:3px;background:#d62828}
+/* ---- Create Contours tab ---- */
+.ct-layout{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.ct-layout{grid-template-columns:1fr}}
+.ct-right{min-width:0}
+.ct-h3{margin:24px 0 0;padding-bottom:6px;border-bottom:1px solid var(--line);font-size:.95rem;color:var(--ink)}
+.ct-grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.ct-grid2>div{min-width:0}
+#contourTab input[type=text]{width:100%;padding:10px 12px;font:inherit;font-size:15px;color:inherit;background:#fff;border:1px solid var(--line);border-radius:8px}
+#contourTab input:disabled,#contourTab select:disabled{background:#f1f6f9;color:#8aa0ae}
+#contourTab .check{margin-top:12px;font-weight:500}
+.ct-swatch{width:100%;height:42px;padding:3px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.ct-settings .actionRow .processBtn{flex:1}
+#ct_progress{height:7px;margin-top:14px;background:#dceef8;border-radius:6px;overflow:hidden}
+#ct_bar{height:100%;width:0;background:var(--sea);transition:width .2s}
+.ct-status{margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--tint);color:var(--ink);font-size:.9rem;white-space:pre-wrap}
+.ct-status.good{background:var(--okbg);color:var(--ok)}
+.ct-status.bad{background:var(--badbg);color:var(--bad)}
+#ct_viewWrap{position:relative;margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fbfcfd}
+#ct_cv{display:block;width:100%;height:540px;cursor:grab;touch-action:none}
+#ct_viewHint{position:absolute;left:8px;top:6px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.88);color:var(--mut);font-size:12px}
+#ct_summary{margin-top:16px}
+
+/* ---- Create Contours: compact layout ---- */
+#contourTab .ct-layout{grid-template-columns:1fr;gap:10px}
+#contourTab .section{padding:12px 14px;margin-bottom:0}
+#contourTab .section h2{font-size:1rem}
+#contourTab .description{font-size:.8rem}
+#contourTab label{margin:6px 0 2px;font-size:.76rem;line-height:1.25}
+#contourTab input[type=number],#contourTab input[type=text],#contourTab select{height:28px;padding:3px 7px;font-size:13px;border-radius:5px}
+#contourTab input[type=file]{width:auto;max-width:100%;padding:3px 6px;font-size:13px;border-radius:5px}
+#contourTab input[type=file]::file-selector-button{padding:3px 10px;font-size:12px;border-radius:4px}
+#contourTab .ct-h3{margin:0 0 2px;padding-bottom:3px;font-size:.84rem}
+#contourTab .hint{margin:5px 0 0;font-size:.7rem;line-height:1.3}
+#contourTab .check{margin-top:7px;gap:6px;font-size:.8rem}
+#contourTab .check input{width:15px;height:15px}
+#contourTab .ct-grid2{gap:0 8px;align-items:end}
+#contourTab button{padding:6px 14px;font-size:13px;border-radius:6px}
+#contourTab .actionRow{margin-top:10px;gap:8px}
+#contourTab .ct-settings .actionRow .processBtn{flex:0 0 auto}
+.ct-file-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ct-groups,.ct-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}
+.ct-out{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:6px}
+.ct-group{min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#f8fbfd}
+@media(max-width:900px){.ct-groups,.ct-out{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.ct-groups,.ct-out{grid-template-columns:1fr}}
+#contourTab #ct_progress{height:5px;margin-top:8px}
+#contourTab .ct-status{margin-top:8px;padding:6px 10px;font-size:.8rem}
+#contourTab #ct_summary{margin-top:8px;padding:8px 10px;font-size:12px;max-height:150px}
 </style>
 </head>
 <body>
@@ -129,6 +208,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
       <button class="tab-button" onclick="openTab('cvTab', this)">Convert Data</button>
       <button class="tab-button" onclick="openTab('ciTab', this)">Convert Image</button>
       <button class="tab-button" onclick="openTab('mtxChnTab', this)">Extract XYZ</button>
+      <button class="tab-button" onclick="openTab('contourTab', this)">Create Contours</button>
     </nav>
   </div></div>
 </header>
@@ -238,8 +318,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
       <label class="check" style="margin-top:0"><input type="radio" name="combineOverlapMethod" id="combineOverlapMinimum" value="minimum" checked> 1. Remove overlap points - Z minimum (shallowest, closest to zero)</label>
       <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapAverage" value="average"> 2. Remove overlap points - Z average</label>
       <label class="check"><input type="radio" name="combineOverlapMethod" id="combineOverlapSecond" value="second"> 3. Remove overlap points - Z second file</label>
+      <label for="combineOverlapDistance" style="margin-top:14px">Overlap distance (ft)</label>
+      <input type="number" id="combineOverlapDistance" min="0" step="0.01" placeholder="Automatic (average point spacing of the first file)">
     </div>
-    <p class="hint">Only points with exactly matching XY coordinates are considered overlaps, regardless of Z. For every overlap, keep the XY coordinates exactly as written in the first file and change Z only. Z minimum keeps the Z closest to zero; Z average averages Z values; Z second file uses the overlapping point's Z from File 2. XY coordinates are not averaged or rounded when overlap removal is enabled.</p>
+    <p class="hint">A point of a later file is an overlap when it lies within the overlap distance of a point of the first file. By default the distance is the average spacing between neighbouring points of the first file (the average closest-point distance), so it adapts to the survey density. Overlapping points of the later file are removed, and the first file's XY coordinates are never changed. Each first-file point that has a later-file point within that distance takes: <b>1.</b> the shallower Z (closest to zero) of the two points, <b>2.</b> the average Z of the two points, or <b>3.</b> the later file's Z. Later-file points outside the overlap are kept.</p>
 
     <label for="combineZAdjustment">Z adjustment</label>
     <input type="number" id="combineZAdjustment" value="0" step="0.01" placeholder="1.5 or -2.2">
@@ -349,6 +431,11 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 </div>
 
 <div id="ciTab" class="tab-content">
+  <nav class="convert-sub-tabs" aria-label="Convert Image tools">
+    <button type="button" class="convert-sub-button active" onclick="openConvertSubTab('ciGeoPane', this)">Re-georeference</button>
+    <button type="button" class="convert-sub-button" onclick="openConvertSubTab('ciClipPane', this)">Water / Land Clip</button>
+  </nav>
+  <div id="ciGeoPane" class="convert-sub-content active">
   <div class="section">
     <h2>Convert Image</h2>
     <p class="description">Re-georeference a TIFF using embedded GeoTIFF georeferencing or an optional TFW. NAD83, US survey feet.</p>
@@ -383,12 +470,59 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
     <div id="ciStatus"></div>
     <div id="ciResult" class="result"></div>
   </div>
+  </div>
+  <div id="ciClipPane" class="convert-sub-content">
+  <div class="section">
+    <h2>Water / Land Clip</h2>
+    <p class="description">Find the water in an ortho image, check and correct it, then download a clipped TIFF and matching TFW. Runs fully in your browser.</p>
+    <div class="wc-grid">
+      <div><label for="wcTif">Image (TIF)</label><input type="file" id="wcTif" accept=".tif,.tiff"></div>
+      <div><label for="wcTfw">World file (TFW) — optional</label><input type="file" id="wcTfw" accept=".tfw,.tifw,.wld,.tiffw,.txt"></div>
+      <div><label for="wcKeep">Keep</label><select id="wcKeep"><option value="land">Land only (remove water)</option><option value="water">Water only (remove land)</option></select></div>
+      <div><label for="wcBg">Removed area</label><select id="wcBg"><option value="alpha">Transparent (RGBA)</option><option value="black">Black, marked as no-data (RGB)</option></select></div>
+      <div><label for="wcComp">TIFF compression</label><select id="wcComp"><option value="lzw">LZW (works in most programs)</option><option value="deflate">Deflate (smaller file)</option><option value="none">None (largest, most compatible)</option></select></div>
+    </div>
+    <p class="hint">If the TIFF contains embedded GeoTIFF georeferencing, no TFW is required.</p>
+    <details class="wc-details"><summary>Detection settings</summary>
+      <div class="wc-grid">
+        <div><label for="wcTol">Water colour tolerance: <span id="wcTolV">1.00</span></label><input id="wcTol" type="range" min="0.5" max="2" step="0.05" value="1"><p class="hint">Higher catches shaded or muddy water; lower avoids dark land.</p></div>
+        <div><label for="wcMinW">Ignore water patches smaller than (sq ft)</label><input id="wcMinW" type="number" min="0" step="1000" value="20000"><p class="hint">Removes dark roofs, roads or shadows that look like water.</p></div>
+        <div><label for="wcFill">Fill gaps inside water smaller than (sq ft)</label><input id="wcFill" type="number" min="0" step="100" value="500"><p class="hint">Glare, buoys and small boats. Docks and piers stay land.</p></div>
+      </div>
+    </details>
+    <div class="actionRow">
+      <button id="wcDetect" class="processBtn" disabled>Detect water</button>
+      <button id="wcDlTif" class="downloadBtn">Download TIF</button>
+      <button id="wcDlTfw" class="downloadBtn">Download TFW</button>
+    </div>
+    <progress id="wcProgress" value="0" max="100"></progress>
+    <div id="wcStatus"><div class="info">Choose a TIFF file to begin.</div></div>
+    <div id="wcTools">
+      <div class="wc-toolbar">
+        <span class="wc-toolbar-label">Click on the preview to</span>
+        <div class="wc-seg" role="group" aria-label="Correction tool">
+          <button type="button" class="wc-tool active" data-tool="remove">Remove wrong water</button>
+          <button type="button" class="wc-tool" data-tool="add">Add missed water</button>
+          <button type="button" class="wc-tool" data-tool="pick">Pick water colour <span id="wcChip" class="wc-chip"></span></button>
+        </div>
+      </div>
+      <div class="wc-toolbar">
+        <select id="wcView"><option value="overlay">Show water in blue</option><option value="result">Show clipped result</option></select>
+        <select id="wcZoom"><option value="1">Fit</option><option value="2">Zoom 2×</option><option value="4">Zoom 4×</option></select>
+        <button type="button" id="wcUndo" class="clearBtn" disabled>Undo last click</button>
+        <button type="button" id="wcClearEd" class="clearBtn" disabled>Clear corrections</button>
+      </div>
+      <div id="wcWrap"><canvas id="wcCv"></canvas></div>
+      <p class="hint">Red dots = removed patches, green = added water. Undo removes the last click.</p>
+    </div>
+  </div>
+  </div>
 </div>
 
 <div id="mtxChnTab" class="tab-content">
   <div class="section">
     <h2>Extract XYZ</h2>
-    <p class="description">Choose an extraction type: MTX corners, CHN nodes, channel DXF nodes, Google KML/KMZ line nodes converted to NYLI feet, contour DXF vertices, or HYPACK sounding DXF points.</p>
+    <p class="description">Choose an extraction type: MTX corners, CHN nodes, channel DXF nodes, Google KML/KMZ line nodes converted to NYLI feet, contour DXF vertices, HYPACK sounding DXF points, or an outer border (.brd/.dxf) traced around XYZ points.</p>
 
     <label for="extractType">Extraction</label>
     <select id="extractType">
@@ -398,8 +532,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
       <option value="googleLines">Google Lines ----&gt; XYZ nodes (NYLI)</option>
       <option value="contourDxf">Contour DXF ---&gt;XYZ Points</option>
       <option value="soundingDxf">Sounding DXF ---&gt;XYZ Points</option>
+      <option value="border">XYZ ----&gt; Border .brd/.dxf</option>
     </select>
 
+    <div id="extractStdPanel">
     <div id="mtxZRow">
       <label for="extractMtxZ">Corner Z</label>
       <input type="number" id="extractMtxZ" value="0" step="0.1">
@@ -417,6 +553,124 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 
     <div id="extractStatus"></div>
     <div id="extractResult" class="result"></div>
+    </div>
+    <div id="bdPanel" style="display:none">
+      <label for="bdFile">XYZ file</label>
+      <input type="file" id="bdFile" accept=".xyz,.txt,.csv,.pts,.dat">
+      <div id="bdFileName" class="file-name">No file selected</div>
+      <label for="bdMax">Maximum line segment length (ft)</label>
+      <div class="bd-row"><input type="number" id="bdMax" min="0.01" step="0.1" placeholder="Blank = automatic"><button type="button" id="bdUseAuto" class="clearBtn" disabled>Use automatic value</button></div>
+      <p class="hint">Blank = automatic, calculated from your point spacing (usually 1–3× the average spacing). Smaller hugs the data more tightly into bays and gaps; larger gives a smoother outline. The border only uses real survey points, never crosses itself and never cuts through narrow channels.</p>
+      <div class="actionRow">
+        <button id="bdProcessBtn" class="processBtn" disabled>Create border</button>
+        <button id="bdDlBrd" class="downloadBtn">Download BRD</button>
+        <button id="bdDlDxf" class="downloadBtn">Download DXF</button>
+        <button id="bdClearBtn" class="clearBtn">Clear</button>
+      </div>
+      <div id="bdStatus"></div>
+      <div id="bdResult" class="result"></div>
+      <div id="bdWrap"><canvas id="bdCv"></canvas><div id="bdLegend"><i class="pt"></i>survey points<i class="ln"></i>border · scroll to zoom, drag to pan, double-click to fit</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="contourTab" class="tab-content">
+  <div class="ct-layout">
+  <div class="section ct-settings">
+    <h2>Create Contours</h2>
+    <p class="description">TIN model contours from XYZ survey points, with smoothed-TIN contouring and labeled DXF output. Runs offline.</p>
+
+    <label for="ct_file">XYZ file</label>
+    <input type="file" id="ct_file" accept=".xyz,.txt,.csv,.asc,.pts,.dat">
+
+    <div class="ct-groups">
+    <div class="ct-group">
+    <h3 class="ct-h3">TIN model</h3>
+    <div class="ct-grid2">
+      <div><label for="ct_maxEdge">Max triangle side (ft)</label><input type="number" id="ct_maxEdge" min="0" step="1" placeholder="Auto"></div>
+      <div><label for="ct_trim">Remove long triangles</label><select id="ct_trim"><option value="all" selected>Everywhere (HYPACK style)</option><option value="outer">Outer edge only</option><option value="none">Keep all (convex)</option></select></div>
+    </div>
+    <p class="hint">Blank = automatic, from your point spacing. Longer triangles are removed so contours are not drawn across gaps.</p>
+
+    </div>
+    <div class="ct-group">
+    <h3 class="ct-h3">Contours</h3>
+    <div class="ct-grid2">
+      <div><label for="ct_step">Contour interval (ft)</label><input type="number" id="ct_step" min="0.01" step="0.1" value="1"></div>
+      <div><label for="ct_major">Major contour every</label><input type="number" id="ct_major" min="0" step="1" value="5"></div>
+    </div>
+    <label for="ct_exportType">Export type</label>
+    <select id="ct_exportType"><option value="3d">3D Contour (elevation on vertices)</option><option value="2d">2D Contour (flat polylines)</option></select>
+
+    </div>
+    <div class="ct-group">
+    <h3 class="ct-h3">Smoothing</h3>
+    <label for="ct_preset">Smoothing preset</label>
+    <select id="ct_preset"><option value="none">None — raw linear TIN</option><option value="light">Light</option><option value="medium" selected>Medium (recommended)</option><option value="strong">Strong</option><option value="custom">Custom</option></select>
+    <div class="ct-grid2">
+      <div><label for="ct_subdiv">TIN smoothing level</label><select id="ct_subdiv"><option value="1">0 – off (linear)</option><option value="2">1</option><option value="3">2</option><option value="4">3</option><option value="6">4</option><option value="8">5</option></select></div>
+      <div><label for="ct_noise">Noise filter radius (ft)</label><input type="number" id="ct_noise" min="0" step="0.5"></div>
+      <div><label for="ct_passes">Line smoothing passes</label><select id="ct_passes"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div><label for="ct_tol">Simplify tolerance (ft)</label><input type="number" id="ct_tol" min="0" step="0.01"></div>
+    </div>
+    <label for="ct_minLoop">Remove closed contours shorter than (ft)</label>
+    <input type="number" id="ct_minLoop" min="0" step="1" value="0">
+    <p class="hint">The noise filter slightly rounds off small shoals; check critical depths.</p>
+
+    </div>
+    <div class="ct-group">
+    <h3 class="ct-h3">Export</h3>
+    <label class="check"><input type="checkbox" id="ct_contours" checked> Export contours and labels</label>
+    <label class="check"><input type="checkbox" id="ct_boundary"> Export TIN boundary</label>
+    <label for="ct_hcf">Colour file (HYPACK .hcf)</label>
+    <input type="file" id="ct_hcf" accept=".hcf,.txt">
+    <div id="ct_hcfBar" style="display:none;height:9px;margin-top:5px;border-radius:3px;border:1px solid var(--line)"></div>
+    <p class="hint" id="ct_hcfInfo">Optional. Gives each contour layer the colour for its Z value. Without it: minor white/black, major red.</p>
+    </div>
+    </div>
+
+    <div class="actionRow">
+      <button id="ct_generate" class="processBtn" disabled>Generate contours</button>
+    </div>
+    <div id="ct_progress"><div id="ct_bar"></div></div>
+    <div id="ct_status" class="ct-status">Choose an XYZ file to begin.</div>
+  </div>
+
+  <div class="ct-right">
+  <div class="section">
+    <h2>Output options &amp; download</h2>
+    <div class="ct-out">
+    <div class="ct-group">
+      <h3 class="ct-h3">File</h3>
+      <label for="ct_outName">File name</label>
+      <input type="text" id="ct_outName" value="contours" maxlength="80">
+      <p class="hint">".dxf" is added automatically. AutoCAD R12 ASCII DXF — opens in AutoCAD, BricsCAD, HYPACK, Global Mapper, QGIS and most CAD programs.</p>
+    </div>
+    <div class="ct-group">
+      <h3 class="ct-h3">Labels</h3>
+      <div class="ct-grid2">
+        <div><label for="ct_labelSpacing">Spacing along line (ft)</label><input type="number" id="ct_labelSpacing" min="1" step="1" value="200"></div>
+        <div><label for="ct_labelHeight">Text height</label><input type="number" id="ct_labelHeight" min="0.1" step="0.1" value="3"></div>
+        <div><label for="ct_decimals">Decimals</label><select id="ct_decimals"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></div>
+        <div><label for="ct_labelGap">Gap under label (ft)</label><input type="number" id="ct_labelGap" min="0" step="0.5" value="10"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="ct_labelsOnLine" checked> Place labels on the line and break the line under the text</label>
+    </div>
+    <div class="ct-group">
+      <h3 class="ct-h3">Values</h3>
+      <div class="ct-grid2">
+        <div><label for="ct_zSign">Elevation sign</label><select id="ct_zSign"><option value="1">As in the file</option><option value="-1">Invert (depth &rarr; negative)</option></select></div>
+        <div><label for="ct_coordDecimals">Coordinate decimals</label><select id="ct_coordDecimals"><option>2</option><option selected>3</option><option>4</option></select></div>
+      </div>
+    </div>
+    </div>
+    <div class="actionRow">
+      <button id="ct_download" class="downloadBtn">Download DXF</button>
+      <button id="ct_reset" class="clearBtn" type="button">Reset options</button>
+    </div>
+    <div id="ct_summary" class="result">No file loaded.</div>
+  </div>
+  </div>
   </div>
 </div>
 
@@ -446,7 +700,7 @@ function roundHalfUp(v, d) {
 ============================================================ */
 
 function openConvertSubTab(paneId, button) {
-    const container = document.getElementById("cvTab");
+    const container = (button && button.closest(".tab-content")) || document.getElementById("cvTab");
     container.querySelectorAll(".convert-sub-content").forEach(function(pane) {
         pane.classList.remove("active");
     });
@@ -1480,6 +1734,14 @@ const combineOverlapMethods = document.getElementById("combineOverlapMethods");
 const combineOverlapMinimum = document.getElementById("combineOverlapMinimum");
 const combineOverlapAverage = document.getElementById("combineOverlapAverage");
 const combineOverlapSecond = document.getElementById("combineOverlapSecond");
+const combineOverlapDistance = document.getElementById("combineOverlapDistance");
+function overlapRuleText(method) {
+    return method === "average"
+        ? "points of the later file within the overlap distance are removed; first-file Z becomes the average of the two nearest points; first-file XY unchanged."
+        : method === "second"
+        ? "points of the later file within the overlap distance are removed; first-file Z is replaced by the later file's Z; first-file XY unchanged."
+        : "points of the later file within the overlap distance are removed; first-file Z becomes the shallower (closest to zero) of the two nearest points; first-file XY unchanged.";
+}
 const combineZAdjustment = document.getElementById("combineZAdjustment");
 const combineInvertZ = document.getElementById("combineInvertZ");
 const combineRound = document.getElementById("combineRound");
@@ -1515,95 +1777,135 @@ function parseXYZForOverlap(text) {
     return points;
 }
 
-function mergeOverlappingPoints(existingText, laterText, method, useIncomingZ) {
-    const cellSize = 1.0, xyTolerance = 0.0, tol2 = 0;
-    const records = [];
-    const buckets = new Map();
-    let removed = 0;
-
-    function keyFor(p) {
-        return Math.floor(p.x / cellSize) + "," + Math.floor(p.y / cellSize);
+/* Spatial grid helpers (numeric keys, chained indices) */
+function ovGridKey(ix, iy) { return ix * 67108864 + iy; }
+function ovBuildGrid(xs, ys, cell, minX, minY) {
+    const head = new Map(), next = new Int32Array(xs.length).fill(-1);
+    for (let i = 0; i < xs.length; i++) {
+        const k = ovGridKey(Math.floor((xs[i] - minX) / cell), Math.floor((ys[i] - minY) / cell));
+        const h = head.get(k);
+        next[i] = h === undefined ? -1 : h;
+        head.set(k, i);
     }
-    function addRecord(p) {
-        p.active = true;
-        if (!Number.isFinite(p.zSum)) p.zSum = p.z;
-        if (!Number.isFinite(p.zCount)) p.zCount = 1;
-        records.push(p);
-        const key = keyFor(p);
-        if (!buckets.has(key)) buckets.set(key, []);
-        buckets.get(key).push(p);
+    return {head, next, cell, minX, minY};
+}
+/* nearest point of the grid to (x, y) closer than maxDist (grid cell must be >= maxDist); skipZero ignores identical points */
+function ovNearest(grid, xs, ys, x, y, maxDist, skipZero) {
+    const ix = Math.floor((x - grid.minX) / grid.cell), iy = Math.floor((y - grid.minY) / grid.cell);
+    let best = -1, bestD2 = maxDist * maxDist;
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        let i = grid.head.get(ovGridKey(ix + dx, iy + dy));
+        while (i !== undefined && i !== -1) {
+            const ex = xs[i] - x, ey = ys[i] - y, d2 = ex * ex + ey * ey;
+            if (d2 <= bestD2 && !(skipZero && d2 === 0)) { bestD2 = d2; best = i; }
+            i = grid.next[i];
+        }
     }
-    function parseLines(text, isLater) {
-        for (const rawLine of text.split(/\r?\n/)) {
-            const line = rawLine.trim();
-            if (!line) continue;
-            const parts = splitXYZColumns(line);
-            if (parts.length < 3) {
-                records.push({line: rawLine, active: true, nonPoint: true});
-                continue;
-            }
-            const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
-            if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) {
-                records.push({line: rawLine, active: true, nonPoint: true});
-                continue;
-            }
-            const point = {x, y, z, xText: parts[0], yText: parts[1], line, active: true, zSum:z, zCount:1};
-            if (!isLater) {
-                addRecord(point);
-                continue;
-            }
-
-            const ix = Math.floor(x / cellSize), iy = Math.floor(y / cellSize);
-            let best = null, bestDistance2 = Infinity;
-            for (let dx = -1; dx <= 1; dx++) {
-                for (let dy = -1; dy <= 1; dy++) {
-                    const bucket = buckets.get((ix + dx) + "," + (iy + dy));
-                    if (!bucket) continue;
-                    for (const old of bucket) {
-                        if (!old.active || old.nonPoint) continue;
-                        const ddx = x - old.x, ddy = y - old.y;
-                        const distance2 = ddx * ddx + ddy * ddy;
-                        if (distance2 <= tol2 && distance2 < bestDistance2) {
-                            best = old;
-                            bestDistance2 = distance2;
-                        }
+    return best < 0 ? null : {index: best, dist: Math.sqrt(bestD2)};
+}
+/* Average distance from a point to its closest neighbour (sampled for very large files) */
+function ovAverageSpacing(xs, ys) {
+    const n = xs.length;
+    if (n < 2) return 1;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (let i = 0; i < n; i++) {
+        if (xs[i] < minX) minX = xs[i]; if (xs[i] > maxX) maxX = xs[i];
+        if (ys[i] < minY) minY = ys[i]; if (ys[i] > maxY) maxY = ys[i];
+    }
+    const extent = Math.max(maxX - minX, maxY - minY, 1e-9);
+    let cell = Math.max(Math.sqrt(((maxX - minX) * (maxY - minY)) / n), extent / 6e7, 1e-6);
+    let grid = ovBuildGrid(xs, ys, cell, minX, minY);
+    for (let k = 0; k < 8 && n / grid.head.size > 30; k++) {      /* clustered data: use smaller cells */
+        cell = Math.max(cell / 2, extent / 6e7);
+        grid = ovBuildGrid(xs, ys, cell, minX, minY);
+    }
+    const step = Math.max(1, Math.floor(n / 30000));
+    let sum = 0, count = 0;
+    for (let i = 0; i < n; i += step) {
+        const ix = Math.floor((xs[i] - minX) / cell), iy = Math.floor((ys[i] - minY) / cell);
+        let best2 = Infinity;
+        for (let r = 0; r <= 6; r++) {
+            for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) {
+                if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+                let j = grid.head.get(ovGridKey(ix + dx, iy + dy));
+                while (j !== undefined && j !== -1) {
+                    if (j !== i) {
+                        const ex = xs[j] - xs[i], ey = ys[j] - ys[i], d2 = ex * ex + ey * ey;
+                        if (d2 > 0 && d2 < best2) best2 = d2;
                     }
+                    j = grid.next[j];
                 }
             }
+            if (best2 < Infinity && Math.sqrt(best2) <= r * cell) break;
+        }
+        if (best2 < Infinity) { sum += Math.sqrt(best2); count++; }
+    }
+    return count ? sum / count : 1;
+}
 
-            if (!best) {
-                addRecord(point);
-                continue;
-            }
+function ovParseRows(text) {
+    const rows = [];
+    for (const rawLine of text.split(/\r?\n/)) {
+        const line = rawLine.trim();
+        if (!line) continue;
+        const parts = splitXYZColumns(line);
+        if (parts.length < 3) { rows.push({line: rawLine, isPoint: false}); continue; }
+        const x = Number(parts[0]), y = Number(parts[1]), z = Number(parts[2]);
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) { rows.push({line: rawLine, isPoint: false}); continue; }
+        rows.push({line, isPoint: true, x, y, z, xText: parts[0], yText: parts[1]});
+    }
+    return rows;
+}
 
-            // Keep the existing (earlier/first-file) XY exactly; only Z may change.
-            removed++;
-            if (method === "average") {
-                best.zSum = (Number.isFinite(best.zSum) ? best.zSum : best.z) + z;
-                best.zCount = (Number.isFinite(best.zCount) ? best.zCount : 1) + 1;
-                best.z = Number((best.zSum / best.zCount).toFixed(10));
-            } else if (method === "minimum") {
-                if (Math.abs(z) < Math.abs(best.z) - 1e-9) {
-                    best.z = z;
-                    best.zSum = z;
-                    best.zCount = 1;
-                }
-            } else if (method === "second" && useIncomingZ) {
-                best.z = z;
-                best.zSum = z;
-                best.zCount = 1;
-            }
-            best.line = best.xText + " " + best.yText + " " + best.z;
+/*
+   Merge a later file into the points collected so far.
+   - overlap = a later point within "distance" of any earlier point
+     (distance = user value, or the average closest-point spacing of the earlier points)
+   - overlapping later points are removed; earlier XY is never changed
+   - each earlier point that has a later point within the distance gets its Z from that nearest later point:
+       minimum : the Z with the smaller absolute value (shallowest)
+       average : the average of the two Z values
+       second  : the later file's Z
+*/
+function mergeOverlappingPoints(existingText, laterText, method, distanceOverride) {
+    const earlier = ovParseRows(existingText || ""), later = ovParseRows(laterText || "");
+    const ePts = earlier.filter(r => r.isPoint), lPts = later.filter(r => r.isPoint);
+    const ex = Float64Array.from(ePts, p => p.x), ey = Float64Array.from(ePts, p => p.y);
+    const lx = Float64Array.from(lPts, p => p.x), ly = Float64Array.from(lPts, p => p.y);
+
+    const distance = distanceOverride > 0 ? distanceOverride : ovAverageSpacing(ex, ey);
+    let removed = 0, zChanged = 0;
+
+    if (ePts.length && lPts.length && distance > 0) {
+        let minX = Infinity, minY = Infinity;
+        for (let i = 0; i < ex.length; i++) { if (ex[i] < minX) minX = ex[i]; if (ey[i] < minY) minY = ey[i]; }
+        for (let i = 0; i < lx.length; i++) { if (lx[i] < minX) minX = lx[i]; if (ly[i] < minY) minY = ly[i]; }
+        const gE = ovBuildGrid(ex, ey, distance, minX, minY), gL = ovBuildGrid(lx, ly, distance, minX, minY);
+
+        /* 1. earlier points take Z from their nearest later point (earlier XY untouched) */
+        for (let i = 0; i < ePts.length; i++) {
+            const hit = ovNearest(gL, lx, ly, ex[i], ey[i], distance, false);
+            if (!hit) continue;
+            const p = ePts[i], z1 = p.z, z2 = lPts[hit.index].z;
+            let newZ = z1;
+            if (method === "average") newZ = (z1 + z2) / 2;
+            else if (method === "second") newZ = z2;
+            else if (Math.abs(z2) < Math.abs(z1) - 1e-9) newZ = z2;
+            if (Math.abs(newZ - z1) > 1e-12) { p.newZ = newZ; zChanged++; }
+        }
+        /* 2. later points inside the overlap are removed */
+        for (let j = 0; j < lPts.length; j++) {
+            if (ovNearest(gE, ex, ey, lx[j], ly[j], distance, false)) { lPts[j].drop = true; removed++; }
         }
     }
 
-    parseLines(existingText || "", false);
-    parseLines(laterText || "", true);
-    const output = records.filter(p => p.active).map(p => {
-        if (p.nonPoint) return p.line;
-        return p.xText + " " + p.yText + " " + p.z;
-    }).join("\n");
-    return {text: output, removed, pointCount: records.filter(p => p.active && !p.nonPoint).length};
+    const out = [];
+    for (const r of earlier) {
+        if (r.isPoint && r.newZ !== undefined) out.push(r.xText + " " + r.yText + " " + String(Number(r.newZ.toFixed(6))));
+        else out.push(r.line);
+    }
+    for (const r of later) { if (!(r.isPoint && r.drop)) out.push(r.line); }
+    return {text: out.join("\n"), removed, zChanged, distance, pointCount: ePts.length + lPts.length - removed};
 }
 
 function applyCombineZOptions(text) {
@@ -1757,6 +2059,8 @@ combineProcessBtn.addEventListener("click", async function () {
 
         let totalBytes = 0;
         let totalRemoved = 0;
+        let totalZChanged = 0;
+        let lastOverlapDistance = 0;
         let combinedRawText = "";
 
         for (let n = 0; n < files.length; n++) {
@@ -1777,19 +2081,22 @@ combineProcessBtn.addEventListener("click", async function () {
             if (!combinedRawText) {
                 combinedRawText = text;
             } else if (combineRemoveOverlap.checked) {
+                const overlapMethod = combineOverlapAverage.checked ? "average" : combineOverlapSecond.checked ? "second" : "minimum";
                 setCombineStatus(
-                    "Checking File " + item.number + " for overlapping points...\n\n" +
-                    (combineOverlapAverage.checked ? "Averaging Z for exact XY matches; keeping earlier XY." : combineOverlapSecond.checked ? "Using File 2 Z for overlaps; keeping File 1 XY." : "Selecting the shallowest Z for exact XY matches; keeping earlier XY."),
+                    "Checking File " + item.number + " for overlapping points...\n\n" + overlapRuleText(overlapMethod),
                     "info"
                 );
-                const overlapMethod = combineOverlapAverage.checked ? "average" : combineOverlapSecond.checked ? "second" : "minimum";
-                const merged = mergeOverlappingPoints(combinedRawText, text, overlapMethod, n === 1);
+                await new Promise(function(resolve) { setTimeout(resolve, 0); });
+                const merged = mergeOverlappingPoints(combinedRawText, text, overlapMethod, Number(combineOverlapDistance.value));
                 combinedRawText = merged.text;
                 totalRemoved += merged.removed;
+                totalZChanged += merged.zChanged;
+                lastOverlapDistance = merged.distance;
                 setCombineStatus(
                     "File " + item.number + " complete.\n\n" +
-                    "Overlapping points removed/merged: " + merged.removed.toLocaleString() +
-                    (combineOverlapAverage.checked ? "\nAverage Z retained; XY kept from first occurrence." : combineOverlapSecond.checked ? "\nFile 2 Z used for overlaps; XY kept from File 1." : "\nShallowest Z retained (closest to zero); XY kept from first occurrence."),
+                    "Overlap distance: " + merged.distance.toFixed(3) + " ft\n" +
+                    "Overlapping points removed: " + merged.removed.toLocaleString() + "\n" +
+                    "First-file points with Z updated: " + merged.zChanged.toLocaleString(),
                     "info"
                 );
             } else {
@@ -1820,8 +2127,10 @@ combineProcessBtn.addEventListener("click", async function () {
             (totalBytes / 1024 / 1024).toFixed(2) + " MB";
 
         if (combineRemoveOverlap.checked) {
-            message += "\nOverlap points removed/merged: " + totalRemoved.toLocaleString() +
-                (combineOverlapAverage.checked ? "\nRule: average Z for points with exact XY matches; retain first occurrence's exact XY." : combineOverlapSecond.checked ? "\nRule: use File 2 Z for overlaps with exact XY matches; retain File 1's exact XY." : "\nRule: keep the shallowest Z (smallest absolute Z) for exact XY matches; retain first occurrence's exact XY.");
+            message += "\nOverlap distance: " + lastOverlapDistance.toFixed(3) + " ft" +
+                "\nOverlap points removed: " + totalRemoved.toLocaleString() +
+                "\nFirst-file points with Z updated: " + totalZChanged.toLocaleString() +
+                "\nRule: " + overlapRuleText(combineOverlapAverage.checked ? "average" : combineOverlapSecond.checked ? "second" : "minimum");
         }
 
         message += "\n\nReady to download.";
@@ -3659,6 +3968,1198 @@ if (typeof document !== "undefined" && document.getElementById("ciConvertBtn")) 
 
 })();
 
+</script>
+
+<script>
+/* ============================================================
+   CONVERT IMAGE TAB: Water / Land Clip (self-contained)
+============================================================ */
+(function(){
+"use strict";
+// ===================== TIFF reading =====================
+const TYPE_SIZE={1:1,2:1,3:2,4:4,5:8,6:1,7:1,8:2,9:4,10:8,11:4,12:8,16:8,17:8,18:8};
+function readTiffIFD(buf){
+  const dv=new DataView(buf),bo=dv.getUint16(0);
+  if(bo!==0x4949&&bo!==0x4D4D)throw Error('Not a TIFF file.');
+  const le=bo===0x4949,u16=o=>dv.getUint16(o,le),u32=o=>dv.getUint32(o,le);
+  const magic=u16(2);
+  let big=false,ifd;
+  if(magic===42)ifd=u32(4);
+  else if(magic===43){big=true;ifd=Number(dv.getBigUint64(8,le))}
+  else throw Error('Not a TIFF file.');
+  const n=big?Number(dv.getBigUint64(ifd,le)):u16(ifd);
+  const tags={};
+  for(let i=0;i<n;i++){
+    const e=big?ifd+8+i*20:ifd+2+i*12;
+    const tag=u16(e),type=u16(e+2),count=big?Number(dv.getBigUint64(e+4,le)):u32(e+4);
+    const sz=(TYPE_SIZE[type]||1)*count;
+    let off=big?(sz<=8?e+12:Number(dv.getBigUint64(e+12,le))):(sz<=4?e+8:u32(e+8));
+    const vals=[];
+    for(let k=0;k<count;k++){const o=off+k*(TYPE_SIZE[type]||1);
+      switch(type){case 1:case 7:case 2:vals.push(dv.getUint8(o));break;case 6:vals.push(dv.getInt8(o));break;
+        case 3:vals.push(u16(o));break;case 8:vals.push(dv.getInt16(o,le));break;case 4:vals.push(u32(o));break;
+        case 9:vals.push(dv.getInt32(o,le));break;case 5:vals.push(u32(o)/u32(o+4));break;case 10:vals.push(dv.getInt32(o,le)/dv.getInt32(o+4,le));break;
+        case 11:vals.push(dv.getFloat32(o,le));break;case 12:vals.push(dv.getFloat64(o,le));break;
+        case 16:case 18:vals.push(Number(dv.getBigUint64(o,le)));break;case 17:vals.push(Number(dv.getBigInt64(o,le)));break;default:vals.push(0)}}
+    tags[tag]={type,vals:type===2?String.fromCharCode(...vals.filter(c=>c!==0)):vals};
+  }
+  return{tags,le};
+}
+function lzwDecode(src,expected){
+  const out=new Uint8Array(expected);let op=0;
+  const pfx=new Int32Array(4096),suf=new Uint8Array(4096),len=new Uint16Array(4096),first=new Uint8Array(4096);
+  for(let i=0;i<256;i++){pfx[i]=-1;suf[i]=i;len[i]=1;first[i]=i}
+  let width=9,next=258,old=-1,bitPos=0;const nbits=src.length*8;
+  const write=code=>{const l=len[code];let p=op+l-1;if(p>=expected){ // truncate safely
+      const tmp=[];let c=code;while(c>=0){tmp.push(suf[c]);c=pfx[c]}tmp.reverse();for(const b of tmp){if(op<expected)out[op++]=b}return}
+    let c=code;while(c>=0){out[p--]=suf[c];c=pfx[c]}op+=l};
+  while(bitPos+width<=nbits){
+    let code=0;for(let i=0;i<width;i++){const b=bitPos+i;code=(code<<1)|((src[b>>3]>>(7-(b&7)))&1)}bitPos+=width;
+    if(code===257)break;
+    if(code===256){width=9;next=258;old=-1;continue}
+    if(old===-1){write(code);old=code;continue}
+    if(code<next){write(code);if(next<4096){pfx[next]=old;suf[next]=first[code];len[next]=len[old]+1;first[next]=first[old];next++}}
+    else{if(next<4096){pfx[next]=old;suf[next]=first[old];len[next]=len[old]+1;first[next]=first[old];next++}write(next-1)}
+    old=code;
+    if(next+1>=(1<<width)&&width<12)width++;
+    if(op>=expected)break;
+  }
+  return out;
+}
+function packbitsDecode(src,expected){const out=new Uint8Array(expected);let i=0,o=0;
+  while(i<src.length&&o<expected){const n=(src[i]<<24)>>24;i++;
+    if(n>=0){for(let k=0;k<=n&&o<expected;k++)out[o++]=src[i++]}
+    else if(n!==-128){const b=src[i++];for(let k=0;k<1-n&&o<expected;k++)out[o++]=b}}
+  return out}
+async function inflate(src){const s=new Blob([src]).stream().pipeThrough(new DecompressionStream('deflate'));return new Uint8Array(await new Response(s).arrayBuffer())}
+async function deflate(src){const s=new Blob([src]).stream().pipeThrough(new CompressionStream('deflate'));return new Uint8Array(await new Response(s).arrayBuffer())}
+async function decodeJpegChunk(tables,data){
+  let bytes=data;
+  if(tables&&tables.length>4){bytes=new Uint8Array(tables.length-2+data.length-2);bytes.set(tables.subarray(0,tables.length-2),0);bytes.set(data.subarray(2),tables.length-2)}
+  const bmp=await createImageBitmap(new Blob([bytes],{type:'image/jpeg'}));
+  const cv=new OffscreenCanvas(bmp.width,bmp.height),g=cv.getContext('2d');g.drawImage(bmp,0,0);
+  const id=g.getImageData(0,0,bmp.width,bmp.height);bmp.close();return{rgba:id.data,w:id.width,h:id.height};
+}
+// Returns {width,height,rgb:Uint8Array(w*h*3), valid:Uint8Array|null, tags}
+async function decodeTiff(buf,progress){
+  const{tags}=readTiffIFD(buf);const T=t=>tags[t]&&tags[t].vals;
+  const W=T(256)[0],H=T(257)[0];
+  const bps=T(258)||[1],spp=(T(277)||[1])[0],comp=(T(259)||[1])[0],photo=(T(262)||[2])[0],planar=(T(284)||[1])[0],pred=(T(317)||[1])[0];
+  const fmt=(T(339)||[1])[0];
+  if(bps[0]!==8&&!(photo===3&&(bps[0]===8||bps[0]===4)))throw Error('Only 8-bit images are supported (this file has '+bps[0]+'-bit samples).');
+  if(fmt!==1&&fmt!==undefined)throw Error('Only unsigned 8-bit images are supported.');
+  if(comp===6)throw Error('Old-style JPEG TIFF is not supported. Re-save the image with LZW, Deflate, JPEG or no compression.');
+  if(![1,5,7,8,32946,32773].includes(comp))throw Error('Unsupported TIFF compression code '+comp+'.');
+  const tiled=!!tags[322];
+  const cw=tiled?T(322)[0]:W,ch=tiled?T(323)[0]:(T(278)||[H])[0]>H?H:(T(278)||[H])[0];
+  const offs=tiled?T(324):T(273),cnts=tiled?T(325):T(279);
+  const across=Math.ceil(W/cw),down=Math.ceil(H/ch),perPlane=across*down;
+  const planes=planar===2?spp:1,cspp=planar===2?1:spp;
+  const rgb=new Uint8Array(W*H*3);let valid=null;
+  const extra=T(338)||[];const hasAlpha=spp>=4&&photo===2||(spp===2&&(photo===1||photo===0));
+  if(hasAlpha)valid=new Uint8Array(W*H);
+  const cmap=T(320);
+  const tablesTag=T(347);const tables=tablesTag?new Uint8Array(tablesTag):null;
+  const src=new Uint8Array(buf);
+  for(let pl=0;pl<planes;pl++)for(let ci=0;ci<perPlane;ci++){
+    const idx=pl*perPlane+ci,cx=(ci%across)*cw,cy=Math.floor(ci/across)*ch;
+    const rows=tiled?ch:Math.min(ch,H-cy),cols=tiled?cw:W;
+    const expected=rows*cols*cspp;
+    const raw=src.subarray(offs[idx],offs[idx]+cnts[idx]);
+    let d;let jpeg=null;
+    if(cnts[idx]===0){d=new Uint8Array(expected)}
+    else if(comp===1)d=raw;
+    else if(comp===5)d=lzwDecode(raw,expected);
+    else if(comp===8||comp===32946)d=await inflate(raw);
+    else if(comp===32773)d=packbitsDecode(raw,expected);
+    else if(comp===7)jpeg=await decodeJpegChunk(tables,raw);
+    if(jpeg){ // browser returns RGB(A) already converted
+      for(let r=0;r<rows;r++){const y=cy+r;if(y>=H)break;for(let c=0;c<cols;c++){const x=cx+c;if(x>=W)continue;
+        const s=(r*jpeg.w+c)*4,o=(y*W+x)*3;
+        if(photo===1||photo===0){const v=photo===0?255-jpeg.rgba[s]:jpeg.rgba[s];rgb[o]=rgb[o+1]=rgb[o+2]=v}
+        else{rgb[o]=jpeg.rgba[s];rgb[o+1]=jpeg.rgba[s+1];rgb[o+2]=jpeg.rgba[s+2]}}}
+    }else{
+      if(pred===2){for(let r=0;r<rows;r++){const b=r*cols*cspp;for(let i=cspp;i<cols*cspp;i++)d[b+i]=(d[b+i]+d[b+i-cspp])&255}}
+      if(planar===1&&photo===2&&cspp>=3){ // fast path: chunky RGB(A)
+        const cmax=Math.min(cols,W-cx);
+        for(let r=0;r<rows;r++){const y=cy+r;if(y>=H)break;let s=r*cols*cspp,o=(y*W+cx)*3,p=y*W+cx;
+          if(valid){for(let c=0;c<cmax;c++,s+=cspp,o+=3,p++){rgb[o]=d[s];rgb[o+1]=d[s+1];rgb[o+2]=d[s+2];valid[p]=d[s+3]>127?1:0}}
+          else if(cspp===3)rgb.set(d.subarray(s,s+cmax*3),o);
+          else{for(let c=0;c<cmax;c++,s+=cspp,o+=3){rgb[o]=d[s];rgb[o+1]=d[s+1];rgb[o+2]=d[s+2]}}}
+      }else
+      for(let r=0;r<rows;r++){const y=cy+r;if(y>=H)break;for(let c=0;c<cols;c++){const x=cx+c;if(x>=W)continue;
+        const s=(r*cols+c)*cspp,o=(y*W+x)*3,p=y*W+x;
+        if(planar===2){if(pl<3)rgb[o+pl]=d[s];else if(pl===3&&valid)valid[p]=d[s]>127?1:0;if(spp===1){rgb[o+1]=rgb[o+2]=rgb[o]}}
+        else if(photo===2||photo===6){rgb[o]=d[s];rgb[o+1]=d[s+1];rgb[o+2]=d[s+2];if(valid)valid[p]=d[s+3]>127?1:0}
+        else if(photo===3){const v=d[s],n=cmap.length/3;rgb[o]=cmap[v]>>8;rgb[o+1]=cmap[n+v]>>8;rgb[o+2]=cmap[2*n+v]>>8}
+        else{let v=d[s];if(photo===0)v=255-v;rgb[o]=rgb[o+1]=rgb[o+2]=v;if(valid)valid[p]=d[s+1]>127?1:0}}}
+    }
+    if(progress&&ci%64===0)await progress((pl*perPlane+ci)/(planes*perPlane));
+  }
+  if(photo===6&&comp!==7)throw Error('YCbCr TIFF without JPEG compression is not supported.');
+  if(planar===2&&spp===3){}
+  return{width:W,height:H,rgb,valid,tags};
+}
+
+// ===================== Georeferencing =====================
+function parseTfw(text){const v=text.trim().split(/\s+/).map(Number);if(v.length<6||v.slice(0,6).some(x=>!Number.isFinite(x)))throw Error('The TFW file must contain 6 numbers.');return v.slice(0,6)}
+// TFW = [A, D, B, E, C, F]; X = A*col + B*row + C (pixel centres)
+function geoFromTags(tags){
+  const T=t=>tags[t]&&tags[t].vals;
+  let pixelIsPoint=false;const gk=T(34735);
+  if(gk){for(let i=4;i+3<gk.length;i+=4)if(gk[i]===1025&&gk[i+1]===0)pixelIsPoint=gk[i+3]===2}
+  const sh=pixelIsPoint?0:0.5;
+  const mt=T(34264);
+  if(mt&&mt.length>=16){const[a,b,,c,d,e,,f]=mt;return[a,d,b,e,c+a*sh+b*sh,f+d*sh+e*sh]}
+  const sc=T(33550),tp=T(33922);
+  if(sc&&tp&&tp.length>=6){const[I,J,,X,Y]=tp,sx=sc[0],sy=sc[1];const c=X-I*sx,f=Y+J*sy;return[sx,0,0,-sy,c+sx*sh,f-sy*sh]}
+  return null;
+}
+
+// ===================== Water detection =====================
+function boxBlur(src,w,h,r){ // separable running-sum box filter, edge clamped
+  const tmp=new Float32Array(w*h),out=new Float32Array(w*h),n=2*r+1;
+  for(let y=0;y<h;y++){const o=y*w;let s=0;for(let k=-r;k<=r;k++)s+=src[o+Math.min(w-1,Math.max(0,k))];
+    for(let x=0;x<w;x++){tmp[o+x]=s/n;s+=src[o+Math.min(w-1,x+r+1)]-src[o+Math.max(0,x-r)]}}
+  for(let x=0;x<w;x++){let s=0;for(let k=-r;k<=r;k++)s+=tmp[Math.min(h-1,Math.max(0,k))*w+x];
+    for(let y=0;y<h;y++){out[y*w+x]=s/n;s+=tmp[Math.min(h-1,y+r+1)*w+x]-tmp[Math.max(0,y-r)*w+x]}}
+  return out;
+}
+function minmax1D(src,w,h,r,isMin,horizontal){const out=new Uint8Array(w*h);
+  if(horizontal){for(let y=0;y<h;y++){const o=y*w;for(let x=0;x<w;x++){let m=src[o+x];const a=Math.max(0,x-r),b=Math.min(w-1,x+r);for(let k=a;k<=b;k++){const v=src[o+k];if(isMin?v<m:v>m)m=v}out[o+x]=m}}}
+  else{for(let y=0;y<h;y++){const a=Math.max(0,y-r),b=Math.min(h-1,y+r);for(let x=0;x<w;x++){let m=src[y*w+x];for(let k=a;k<=b;k++){const v=src[k*w+x];if(isMin?v<m:v>m)m=v}out[y*w+x]=m}}}
+  return out}
+function grayOpen(ch,w,h,r){let a=minmax1D(ch,w,h,r,true,true);a=minmax1D(a,w,h,r,true,false);a=minmax1D(a,w,h,r,false,true);return minmax1D(a,w,h,r,false,false)}
+// Build the reduced working image and per-pixel features (done once per file)
+function buildFeatures(img,factor){
+  const{width:W,height:H,rgb,valid}=img,f=factor,w=Math.floor(W/f),h=Math.floor(H/f),N=w*h;
+  const R=new Uint8Array(N),G=new Uint8Array(N),B=new Uint8Array(N),nod=new Uint8Array(N);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){let r=0,g=0,b=0,cnt=0,bad=0;
+    for(let j=0;j<f;j++){const row=(y*f+j)*W;for(let i=0;i<f;i++){const p=row+x*f+i,o=p*3;const isNo=valid?!valid[p]:(rgb[o]===0&&rgb[o+1]===0&&rgb[o+2]===0);if(isNo){bad++;continue}r+=rgb[o];g+=rgb[o+1];b+=rgb[o+2];cnt++}}
+    const q=y*w+x;if(cnt){R[q]=r/cnt+.5;G[q]=g/cnt+.5;B[q]=b/cnt+.5}if(bad*2>f*f)nod[q]=1}
+  // remove sun glints / whitecaps: grayscale opening (removes small bright specks)
+  const rad=2;const oR=grayOpen(R,w,h,rad),oG=grayOpen(G,w,h,rad),oB=grayOpen(B,w,h,rad);
+  const br=new Float32Array(N);for(let i=0;i<N;i++)br[i]=(oR[i]+oG[i]+oB[i])/3;
+  const m=boxBlur(br,w,h,5),sq=new Float32Array(N);for(let i=0;i<N;i++)sq[i]=br[i]*br[i];
+  const m2=boxBlur(sq,w,h,5),sd=new Float32Array(N);for(let i=0;i<N;i++)sd[i]=Math.sqrt(Math.max(0,m2[i]-m[i]*m[i]));
+  const sR=boxBlur(Float32Array.from(oR),w,h,2),sG=boxBlur(Float32Array.from(oG),w,h,2),sB=boxBlur(Float32Array.from(oB),w,h,2);
+  return{w,h,f,R:sR,G:sG,B:sB,sd,nod,preview:{R,G,B}};
+}
+// Automatic water colour: most common colour among very smooth pixels
+function autoWaterColor(F){
+  const{R,G,B,sd,nod,w,h}=F,N=w*h,hist=new Uint32Array(32768);
+  for(let i=0;i<N;i++){if(nod[i]||sd[i]>3.5)continue;const br=(R[i]+G[i]+B[i])/3;if(br<20||br>200)continue;hist[((R[i]>>3)<<10)|((G[i]>>3)<<5)|(B[i]>>3)]++}
+  let best=0;for(let k=1;k<32768;k++)if(hist[k]>hist[best])best=k;
+  if(!hist[best])throw Error('Could not find a smooth water surface automatically. Click on the water in the preview to pick it.');
+  const br_=best>>10,bg=(best>>5)&31,bb=best&31;
+  return sampleColor(F,i=>{if(nod[i]||sd[i]>3.5)return false;const r=R[i]>>3,g=G[i]>>3,b=B[i]>>3;return Math.abs(r-br_)<=1&&Math.abs(g-bg)<=1&&Math.abs(b-bb)<=1});
+}
+function sampleColor(F,pred){const{R,G,B,w,h}=F;let n=0,s=[0,0,0],s2=[0,0,0];
+  for(let i=0;i<w*h;i++)if(pred(i)){n++;s[0]+=R[i];s[1]+=G[i];s[2]+=B[i];s2[0]+=R[i]*R[i];s2[1]+=G[i]*G[i];s2[2]+=B[i]*B[i]}
+  if(!n)throw Error('No water sample found.');
+  const mu=s.map(v=>v/n),sig=s2.map((v,k)=>Math.sqrt(Math.max(0,v/n-mu[k]*mu[k])));return{mu,sig,n}}
+function pickColorAt(F,px,py,rad=6){const{w,h}=F;const x0=Math.round(px),y0=Math.round(py);
+  return sampleColor(F,i=>{const x=i%w,y=(i/w)|0;return Math.abs(x-x0)<=rad&&Math.abs(y-y0)<=rad&&!F.nod[i]})}
+function labelComponents(mask,w,h,value,conn8){ // returns {lab:Int32Array, sizes:[], touches:[]}
+  const lab=new Int32Array(w*h).fill(-1),sizes=[],touches=[],stack=new Int32Array(w*h);
+  for(let s=0;s<w*h;s++){if(mask[s]!==value||lab[s]!==-1)continue;
+    const id=sizes.length;let sp=0,size=0,touch=false;stack[sp++]=s;lab[s]=id;
+    while(sp){const p=stack[--sp];size++;const x=p%w,y=(p-x)/w;if(x===0||y===0||x===w-1||y===h-1)touch=true;
+      for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;if(!conn8&&dx&&dy)continue;const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=w||ny>=h)continue;const q=ny*w+nx;if(mask[q]===value&&lab[q]===-1){lab[q]=id;stack[sp++]=q}}}
+    sizes.push(size);touches.push(touch)}
+  return{lab,sizes,touches}}
+function binMorph(mask,w,h,erode){const a=new Uint8Array(w*h);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){let v=erode?1:0;for(let dy=-1;dy<=1&&(erode?v:!v);dy++)for(let dx=-1;dx<=1;dx++){const nx=Math.min(w-1,Math.max(0,x+dx)),ny=Math.min(h-1,Math.max(0,y+dy));const m=mask[ny*w+nx];if(erode&&!m){v=0;break}if(!erode&&m){v=1;break}}a[y*w+x]=v}
+  return a}
+// opts: {color:{mu,sig}, tolerance (multiplier, 1 = default), smooth (sd limit), minWaterPx, fillPx}
+function classify(F,opts){
+  const{R,G,B,sd,nod,w,h}=F,N=w*h,{mu,sig}=opts.color;
+  const spread=Math.sqrt((sig[0]**2+sig[1]**2+sig[2]**2)/3);
+  const tol=Math.min(40,Math.max(opts.minTol||18,3.5*spread))*opts.tolerance,tol2=tol*tol;
+  const LW=opts.lumaWeight??1;
+  const mb=(mu[0]+mu[1]+mu[2])/3,mc=[mu[0]-mb,mu[1]-mb,mu[2]-mb];
+  const sdMax=(opts.smooth||6)*Math.max(1,opts.tolerance);
+  let m=new Uint8Array(N);
+  for(let i=0;i<N;i++){if(nod[i])continue;const b=(R[i]+G[i]+B[i])/3,dl=(b-mb)*LW,dr=R[i]-b-mc[0],dg=G[i]-b-mc[1],db=B[i]-b-mc[2];
+    // brightness differences (shade, shallow water) count half as much as colour differences
+    if(dl*dl+(dr*dr+dg*dg+db*db)*(opts.chromaWeight??3)<=tol2&&sd[i]<=sdMax)m[i]=1}
+  m=binMorph(binMorph(m,w,h,true),w,h,false);                     // opening: remove specks
+  let C=labelComponents(m,w,h,1,true);
+  for(let i=0;i<N;i++)if(m[i]&&C.sizes[C.lab[i]]<opts.minWaterPx)m[i]=0; // drop small false patches
+  C=labelComponents(m,w,h,0,false);                                // gaps inside water
+  for(let i=0;i<N;i++)if(!m[i]&&!nod[i]&&!C.touches[C.lab[i]]&&C.sizes[C.lab[i]]<opts.fillPx)m[i]=1;
+  for(let i=0;i<N;i++)if(nod[i])m[i]=0;
+  return{mask:m,tol};
+}
+// Smooth working mask -> value in [0,1] for bilinear upsampling
+function smoothMask(mask,w,h){const f=new Float32Array(w*h);for(let i=0;i<w*h;i++)f[i]=mask[i];return boxBlur(f,w,h,1)}
+
+// ===================== TIFF writing =====================
+function lzwEncode(data){
+  const out=[];let acc=0,nacc=0;
+  const put=(code,nb)=>{acc=(acc<<nb)|code;nacc+=nb;while(nacc>=8){nacc-=8;out.push((acc>>nacc)&255)}acc&=(1<<nacc)-1};
+  const HS=9973,hkey=new Int32Array(HS),hval=new Int16Array(HS);let epoch=1;const hep=new Int32Array(HS);
+  let nbits=9,maxcode=511,free=258;
+  if(!data.length){put(256,9);put(257,9);if(nacc)out.push((acc<<(8-nacc))&255);return Uint8Array.from(out)}
+  put(256,nbits);let ent=data[0];
+  for(let i=1;i<data.length;i++){const c=data[i],key=(ent<<8)|c;let hpos=key%HS,found=-1;
+    while(hep[hpos]===epoch){if(hkey[hpos]===key){found=hval[hpos];break}hpos=(hpos+1)%HS}
+    if(found>=0){ent=found;continue}
+    put(ent,nbits);ent=c;hep[hpos]=epoch;hkey[hpos]=key;hval[hpos]=free++;
+    if(free===4094){put(256,nbits);nbits=9;maxcode=511;free=258;epoch++}
+    else if(free>maxcode){nbits++;maxcode=(1<<nbits)-1}}
+  put(ent,nbits);free++;
+  if(free===4094){put(256,nbits);nbits=9}else if(free>maxcode)nbits++;
+  put(257,nbits);if(nacc)out.push((acc<<(8-nacc))&255);
+  return Uint8Array.from(out);
+}
+const GEO_TAGS=[33550,33922,34264,34735,34736,34737];
+// rowSource(y0,rows) -> Uint8Array rows*W*spp ; compression: 'lzw'|'deflate'|'none'
+async function writeTiff(W,H,spp,rowSource,opts,progress){
+  const rps=Math.max(1,Math.min(H,Math.floor(65536/(W*spp))||1)),nStrips=Math.ceil(H/rps);
+  const comp=opts.compression,strips=[];
+  for(let s=0;s<nStrips;s++){const y0=s*rps,rows=Math.min(rps,H-y0);let d=rowSource(y0,rows);
+    if(comp!=='none'){ // horizontal predictor
+      d=Uint8Array.from(d);for(let r=0;r<rows;r++){const b=r*W*spp;for(let i=W*spp-1;i>=spp;i--)d[b+i]=(d[b+i]-d[b+i-spp])&255}}
+    strips.push(comp==='lzw'?lzwEncode(d):comp==='deflate'?await deflate(d):d);
+    if(progress&&s%16===0)await progress(s/nStrips)}
+  const entries=[[256,4,[W]],[257,4,[H]],[258,3,new Array(spp).fill(8)],[259,3,[comp==='lzw'?5:comp==='deflate'?8:1]],[262,3,[2]],
+    [273,4,null],[277,3,[spp]],[278,4,[rps]],[279,4,strips.map(s=>s.length)],[284,3,[1]],[305,2,'XYZ water clip tool']];
+  if(comp!=='none')entries.push([317,3,[2]]);
+  if(spp===4)entries.push([338,3,[2]]);
+  if(opts.nodata!=null)entries.push([42113,2,String(opts.nodata)]);
+  for(const[t,v]of Object.entries(opts.geo||{}))entries.push([+t,v.type,v.vals]);
+  entries.sort((a,b)=>a[0]-b[0]);
+  let pos=8;const stripOff=[];for(const s of strips){stripOff.push(pos);pos+=s.length;if(pos&1)pos++}
+  entries.find(e=>e[0]===273)[2]=stripOff;
+  const ifdPos=pos,ifdSize=2+entries.length*12+4;let extraPos=ifdPos+ifdSize;
+  const extra=[],ifd=new DataView(new ArrayBuffer(ifdSize));ifd.setUint16(0,entries.length,true);
+  const sz={2:1,3:2,4:4,12:8};
+  entries.forEach(([tag,type,vals],i)=>{
+    let bytes;if(type===2){const s=vals+'\0';bytes=new Uint8Array([...s].map(c=>c.charCodeAt(0)&255))}
+    else{bytes=new Uint8Array(vals.length*sz[type]);const dv=new DataView(bytes.buffer);vals.forEach((v,k)=>{if(type===3)dv.setUint16(k*2,v,true);else if(type===4)dv.setUint32(k*4,v,true);else dv.setFloat64(k*8,v,true)})}
+    const e=2+i*12;ifd.setUint16(e,tag,true);ifd.setUint16(e+2,type,true);ifd.setUint32(e+4,type===2?bytes.length:vals.length,true);
+    if(bytes.length<=4){for(let k=0;k<bytes.length;k++)ifd.setUint8(e+8+k,bytes[k])}
+    else{ifd.setUint32(e+8,extraPos,true);extra.push(bytes);extraPos+=bytes.length;if(extraPos&1){extra.push(new Uint8Array(1));extraPos++}}});
+  ifd.setUint32(ifdSize-4,0,true);
+  const head=new DataView(new ArrayBuffer(8));head.setUint16(0,0x4949);head.setUint16(2,42,true);head.setUint32(4,ifdPos,true);
+  const parts=[head.buffer];for(const s of strips){parts.push(s);if(s.length&1)parts.push(new Uint8Array(1))}
+  parts.push(ifd.buffer,...extra);
+  if(extraPos>4294967295)throw Error('Output exceeds 4 GB (classic TIFF limit).');
+  return parts;
+}
+// Row generator for the output image. keep: 'land' | 'water'; alpha: true -> RGBA, false -> RGB with nodata 0
+function makeRowSource(img,F,maskF,keep,alpha){
+  const{width:W,rgb,valid}=img,{w,h,f}=F,spp=alpha?4:3;
+  return(y0,rows)=>{const out=new Uint8Array(rows*W*spp);
+    for(let r=0;r<rows;r++){const y=y0+r;let v=(y+0.5)/f-0.5;v=Math.min(h-1,Math.max(0,v));const j0=Math.floor(v),j1=Math.min(h-1,j0+1),fy=v-j0;
+      for(let x=0;x<W;x++){let u=(x+0.5)/f-0.5;u=Math.min(w-1,Math.max(0,u));const i0=Math.floor(u),i1=Math.min(w-1,i0+1),fx=u-i0;
+        const m=(maskF[j0*w+i0]*(1-fx)+maskF[j0*w+i1]*fx)*(1-fy)+(maskF[j1*w+i0]*(1-fx)+maskF[j1*w+i1]*fx)*fy;
+        const p=y*W+x,s=p*3,o=(r*W+x)*spp,isWater=m>=0.5;
+        let keepPx=keep==='water'?isWater:!isWater;
+        if(valid&&!valid[p])keepPx=false;
+        if(keepPx){let R=rgb[s],G=rgb[s+1],B=rgb[s+2];if(!alpha&&R===0&&G===0&&B===0)R=G=B=1;out[o]=R;out[o+1]=G;out[o+2]=B;if(alpha)out[o+3]=255}
+      }}
+    return out}}
+
+// ===================== Water / Land Clip page =====================
+const $=id=>document.getElementById(id);
+let IMG=null,F=null,GEO=null,COLOR=null,RES=null,EDITS=[],tfwFromFile=null,srcName='image',busy=false,TOOL='remove',K=1;
+const tick=()=>new Promise(r=>setTimeout(r,15));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const say=(t,kind)=>{$('wcStatus').innerHTML='<div class="'+(kind||'info')+'" style="white-space:pre-wrap">'+esc(t)+'</div>'};
+const prog=p=>{const e=$('wcProgress');if(p==null){e.style.display='none';return}e.style.display='block';e.value=Math.round(p*100)};
+const fmt=v=>v.toLocaleString(undefined,{maximumFractionDigits:2});
+function pixelArea(){const ps=GEO?Math.hypot(GEO[0],GEO[1]):1;return(ps*F.f)**2}
+function setBusy(b){busy=b;
+  $('wcDetect').disabled=b||!$('wcTif').files[0];
+  $('wcUndo').disabled=$('wcClearEd').disabled=b||!EDITS.length;
+  $('wcDlTif').style.display=RES?'inline-block':'none';$('wcDlTif').disabled=b;
+  $('wcDlTfw').style.display=RES&&GEO?'inline-block':'none';$('wcDlTfw').disabled=b;
+  const stem=outStem();$('wcDlTif').dataset.outputName=stem+'.tif';$('wcDlTfw').dataset.outputName=stem+'.tfw'}
+function resetAll(){IMG=F=RES=COLOR=null;EDITS=[];$('wcTools').style.display='none';prog(null);setBusy(false)}
+$('wcTif').addEventListener('change',()=>{resetAll();say($('wcTif').files[0]?'Click "Detect water".':'Choose a TIFF file to begin.')});
+$('wcTfw').addEventListener('change',async()=>{tfwFromFile=null;const f=$('wcTfw').files[0];if(f){try{tfwFromFile=parseTfw(await f.text());if(IMG){GEO=tfwFromFile;if(RES)run()}}catch(e){say('TFW: '+e.message,'error')}}});
+$('wcTol').addEventListener('input',()=>{$('wcTolV').textContent=(+$('wcTol').value).toFixed(2)});
+for(const id of['wcTol','wcMinW','wcFill'])$(id).addEventListener('change',()=>{if(RES&&!busy)run()});
+for(const id of['wcKeep','wcView','wcZoom'])$(id).addEventListener('change',()=>{if(RES)draw();setBusy(busy)});
+document.querySelectorAll('#ciClipPane .wc-tool').forEach(b=>b.addEventListener('click',()=>{TOOL=b.dataset.tool;document.querySelectorAll('#ciClipPane .wc-tool').forEach(x=>x.classList.toggle('active',x===b))}));
+
+$('wcDetect').addEventListener('click',async()=>{
+  const f=$('wcTif').files[0];if(!f)return;setBusy(true);
+  try{
+    if(!IMG){
+      srcName=f.name.replace(/\.[^.]+$/,'');
+      say('Reading '+f.name+' ('+fmt(f.size/1048576)+' MB) …');prog(0);await tick();
+      let buf=await f.arrayBuffer();
+      IMG=await decodeTiff(buf,async p=>{say('Decoding image … '+Math.round(p*100)+'%');prog(p*0.7);await tick()});buf=null;
+      GEO=tfwFromFile||geoFromTags(IMG.tags);
+      say('Analysing '+fmt(IMG.width)+' × '+fmt(IMG.height)+' pixels …');prog(0.75);await tick();
+      F=buildFeatures(IMG,Math.max(1,Math.ceil(Math.sqrt(IMG.width*IMG.height/13e6))));
+      COLOR=autoWaterColor(F);
+    }
+    await run();
+  }catch(e){console.error(e);say('Error: '+(e.message||e),'error');IMG=F=RES=null}
+  prog(null);setBusy(false);
+});
+
+async function run(){
+  const pa=pixelArea();
+  RES=classify(F,{color:COLOR,tolerance:+$('wcTol').value,minWaterPx:(+$('wcMinW').value||0)/pa,fillPx:(+$('wcFill').value||0)/pa});
+  const msgs=applyEdits();
+  RES.maskF=smoothMask(RES.mask,F.w,F.h);
+  let n=0;for(const v of RES.mask)n+=v;let valid=0;for(const v of F.nod)if(!v)valid++;
+  const units=GEO?'sq ft':'sq px',wa=n*pa,la=(valid-n)*pa;
+  $('wcChip').style.background='rgb('+COLOR.mu.map(Math.round)+')';
+  say('Image: '+fmt(IMG.width)+' × '+fmt(IMG.height)+' px'+(GEO?', pixel size '+fmt(Math.hypot(GEO[0],GEO[1]))+' (georeferencing '+(tfwFromFile?'from TFW file':'from GeoTIFF tags')+')':' — no georeferencing found (choose a TFW to get map units and a TFW download)')+
+    '\nWater: '+fmt(wa)+' '+units+(GEO?' ('+fmt(wa/43560)+' acres)':'')+
+    '\nLand:  '+fmt(la)+' '+units+(GEO?' ('+fmt(la/43560)+' acres)':'')+
+    (EDITS.length?'\nCorrections applied: '+EDITS.length:'')+(msgs.length?'\n'+msgs.join('\n'):'')+
+    '\n\nCheck the preview and click on it to correct, then download.','success');
+  $('wcTools').style.display='block';draw();setBusy(false);
+}
+function applyEdits(){const{w,h}=F,m=RES.mask,N=w*h,msgs=[];const stack=new Int32Array(N);
+  for(const e of EDITS){
+    const x0=Math.min(w-1,Math.floor(e.x)),y0=Math.min(h-1,Math.floor(e.y));
+    if(e.type==='remove'){let s=-1;const RR=Math.max(6,Math.ceil(2*K));for(let r=0;r<=RR&&s<0;r++)for(let dy=-r;dy<=r&&s<0;dy++)for(let dx=-r;dx<=r;dx++){const x=x0+dx,y=y0+dy;if(x>=0&&y>=0&&x<w&&y<h&&m[y*w+x]){s=y*w+x;break}}
+      if(s<0)continue;let sp=0;stack[sp++]=s;m[s]=0;
+      while(sp){const p=stack[--sp],x=p%w,y=(p-x)/w;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=w||ny>=h)continue;const q=ny*w+nx;if(m[q]){m[q]=0;stack[sp++]=q}}}}
+    else{const R=Math.max(4,Math.ceil(2*K)),tried=new Set();let done=false,big=false;
+      for(let r=0;r<=R&&!done;r++)for(let dy=-r;dy<=r&&!done;dy++)for(let dx=-r;dx<=r&&!done;dx++){
+        if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=x0+dx,y=y0+dy;if(x<0||y<0||x>=w||y>=h)continue;const s=y*w+x;
+        if(m[s]||F.nod[s]||tried.has(s))continue;
+        const seen=new Uint8Array(N);let sp=0,cnt=0,list=[],tooBig=false;stack[sp++]=s;seen[s]=1;
+        while(sp){const p=stack[--sp];list.push(p);if(++cnt>N*0.03){tooBig=true;break}const px=p%w,py=(p-px)/w;
+          for(const[ex,ey]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=px+ex,ny=py+ey;if(nx<0||ny<0||nx>=w||ny>=h)continue;const q=ny*w+nx;if(!m[q]&&!seen[q]&&!F.nod[q]){seen[q]=1;stack[sp++]=q}}}
+        if(tooBig){big=true;for(const p of list)tried.add(p);continue}
+        for(const p of list)m[p]=1;done=true}
+      if(!done&&big)msgs.push('One "add water" click was ignored: that area connects to a large land area. Zoom in and click inside the gap itself.')}}
+  return msgs}
+
+// ---------- preview ----------
+const cv=$('wcCv');
+function draw(){
+  if(!RES)return;
+  const{w,h}=F,z=+$('wcZoom').value,boxW=Math.max(300,$('wcWrap').clientWidth-4);
+  K=Math.max(1,Math.ceil(Math.max(w/boxW,h/Math.max(450,window.innerHeight*0.74))))/z;K=Math.max(K,1/4);
+  const cw=Math.floor(w/K),ch=Math.floor(h/K);cv.width=cw;cv.height=ch;
+  const g=cv.getContext('2d'),id=g.createImageData(cw,ch),D=id.data,{R,G,B}=F.preview,m=RES.mask,mode=$('wcView').value,keepLand=$('wcKeep').value==='land';
+  for(let y=0;y<ch;y++){const sy=Math.min(h-1,Math.floor(y*K));for(let x=0;x<cw;x++){const sx=Math.min(w-1,Math.floor(x*K)),s=sy*w+sx,o=(y*cw+x)*4;
+    let r=R[s],gg=G[s],b=B[s];const water=m[s]===1;
+    if(mode==='overlay'){if(water){r=r*0.45;gg=gg*0.45+50;b=b*0.45+140}}
+    else{const keep=F.nod[s]?false:(keepLand?!water:water);if(!keep){const c=((x>>3)+(y>>3))&1?235:250;r=gg=b=c}}
+    D[o]=r;D[o+1]=gg;D[o+2]=b;D[o+3]=255}}
+  g.putImageData(id,0,0);cv.style.width=cw+'px';
+  for(const e of EDITS){g.beginPath();g.arc(e.x/K,e.y/K,5,0,7);g.fillStyle=e.type==='remove'?'#e63946':'#2a9d8f';g.fill();g.strokeStyle='#fff';g.stroke()}
+}
+cv.addEventListener('click',async e=>{
+  if(busy||!RES)return;const rc=cv.getBoundingClientRect();const x=(e.clientX-rc.left)*(cv.width/rc.width)*K,y=(e.clientY-rc.top)*(cv.height/rc.height)*K;
+  setBusy(true);say('Updating …');await tick();
+  try{if(TOOL==='pick')COLOR=pickColorAt(F,x,y,6);else EDITS.push({type:TOOL,x,y});await run()}catch(err){say('Error: '+err.message,'error')}
+  setBusy(false);
+});
+$('wcUndo').onclick=async()=>{EDITS.pop();setBusy(true);await tick();await run()};
+$('wcClearEd').onclick=async()=>{EDITS=[];setBusy(true);await tick();await run()};
+window.addEventListener('resize',()=>{if(RES&&$('ciClipPane').classList.contains('active'))draw()});
+
+// ---------- downloads ----------
+function download(name,parts,type){const blob=new Blob(parts,{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000)}
+function outStem(){return srcName+'_'+$('wcKeep').value+'_only'}
+$('wcDlTif').addEventListener('click',async()=>{
+  if(!RES||busy)return;setBusy(true);
+  try{
+    const alpha=$('wcBg').value==='alpha',keep=$('wcKeep').value;
+    const geo={};for(const k of GEO_TAGS)if(IMG.tags[k])geo[k]={type:IMG.tags[k].type,vals:IMG.tags[k].vals};
+    if(tfwFromFile||(!geo[34264]&&!geo[33922]&&GEO)){delete geo[33550];delete geo[33922];const[A,D,Bx,E,C,Fy]=GEO;geo[34264]={type:12,vals:[A,Bx,0,C-A/2-Bx/2,D,E,0,Fy-D/2-E/2,0,0,0,0,0,0,0,1]}}
+    for(const k in geo){const t=geo[k].type;if(t!==2&&t!==3&&t!==12)geo[k].type=(t===4?4:12)}
+    prog(0);
+    const parts=await writeTiff(IMG.width,IMG.height,alpha?4:3,makeRowSource(IMG,F,RES.maskF,keep,alpha),{compression:$('wcComp').value,geo,nodata:alpha?null:0},
+      async p=>{say('Writing TIFF … '+Math.round(p*100)+'%');prog(p);await tick()});
+    download(outStem()+'.tif',parts,'image/tiff');
+    say('TIFF saved: '+outStem()+'.tif'+(GEO?'\nAlso download the TFW so programs without GeoTIFF support place it correctly.':''),'success');
+  }catch(e){console.error(e);say('Error writing TIFF: '+e.message,'error')}
+  prog(null);setBusy(false);
+});
+$('wcDlTfw').addEventListener('click',()=>{if(!GEO)return;download(outStem()+'.tfw',[GEO.map(v=>String(v)).join('\r\n')+'\r\n'],'text/plain')});
+const clr=$('clearAllBtn');if(clr)clr.addEventListener('click',()=>{$('wcTif').value='';$('wcTfw').value='';tfwFromFile=null;GEO=null;resetAll();say('Choose a TIFF file to begin.')});
+setBusy(false);
+
+})();
+</script>
+
+<script>
+/* ============================================================
+   EXTRACT XYZ TAB: XYZ -> Border .brd/.dxf (self-contained)
+============================================================ */
+(function(){
+"use strict";
+// ---------- Delaunay triangulation (sweep-hull, after Delaunator by Mapbox, ISC licence) ----------
+const DL_EPS=Math.pow(2,-52);
+function Delaunay(coords){
+  const n=coords.length>>1;
+  const maxT=Math.max(2*n-5,0);
+  const triangles=new Uint32Array(maxT*3), halfedges=new Int32Array(maxT*3);
+  const hashSize=Math.ceil(Math.sqrt(n));
+  const hullPrev=new Uint32Array(n), hullNext=new Uint32Array(n), hullTri=new Uint32Array(n), hullHash=new Int32Array(hashSize).fill(-1);
+  const ids=new Uint32Array(n), dists=new Float64Array(n);
+  const STACK=new Uint32Array(512);
+  let trianglesLen=0, hullStart=0, cxC=0, cyC=0;
+  const X=i=>coords[2*i], Y=i=>coords[2*i+1];
+  function link(a,b){halfedges[a]=b;if(b!==-1)halfedges[b]=a}
+  function addTri(i0,i1,i2,a,b,c){const t=trianglesLen;triangles[t]=i0;triangles[t+1]=i1;triangles[t+2]=i2;link(t,a);link(t+1,b);link(t+2,c);trianglesLen+=3;return t}
+  function hashKey(x,y){return Math.floor(pseudoAngle(x-cxC,y-cyC)*hashSize)%hashSize}
+  function legalize(a){
+    let i=0,ar=0;
+    while(true){
+      const b=halfedges[a];const a0=a-a%3;ar=a0+(a+2)%3;
+      if(b===-1){if(i===0)break;a=STACK[--i];continue}
+      const b0=b-b%3,al=a0+(a+1)%3,bl=b0+(b+2)%3;
+      const p0=triangles[ar],pr=triangles[a],pl=triangles[al],p1=triangles[bl];
+      if(inCircle(X(p0),Y(p0),X(pr),Y(pr),X(pl),Y(pl),X(p1),Y(p1))){
+        triangles[a]=p1;triangles[b]=p0;
+        const hbl=halfedges[bl];
+        if(hbl===-1){let e=hullStart;do{if(hullTri[e]===bl){hullTri[e]=a;break}e=hullPrev[e]}while(e!==hullStart)}
+        link(a,hbl);link(b,halfedges[ar]);link(ar,bl);
+        const br=b0+(b+1)%3;
+        if(i<STACK.length)STACK[i++]=br;
+      }else{if(i===0)break;a=STACK[--i]}
+    }
+    return ar;
+  }
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  for(let i=0;i<n;i++){const x=X(i),y=Y(i);if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y;ids[i]=i}
+  const cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+  let i0=0,i1=0,i2=0;
+  for(let i=0,md=Infinity;i<n;i++){const d=sqd(cx,cy,X(i),Y(i));if(d<md){i0=i;md=d}}
+  const i0x=X(i0),i0y=Y(i0);
+  for(let i=0,md=Infinity;i<n;i++){if(i===i0)continue;const d=sqd(i0x,i0y,X(i),Y(i));if(d<md&&d>0){i1=i;md=d}}
+  let i1x=X(i1),i1y=Y(i1),minR=Infinity;
+  for(let i=0;i<n;i++){if(i===i0||i===i1)continue;const r=circumradius(i0x,i0y,i1x,i1y,X(i),Y(i));if(r<minR){i2=i;minR=r}}
+  let i2x=X(i2),i2y=Y(i2);
+  if(minR===Infinity)throw Error('All points lie on a single line; a boundary area cannot be formed.');
+  if(orient(i0x,i0y,i1x,i1y,i2x,i2y)){const i=i1,x=i1x,y=i1y;i1=i2;i1x=i2x;i1y=i2y;i2=i;i2x=x;i2y=y}
+  const c=circumcenter(i0x,i0y,i1x,i1y,i2x,i2y);cxC=c.x;cyC=c.y;
+  for(let i=0;i<n;i++)dists[i]=sqd(X(i),Y(i),c.x,c.y);
+  quicksort(ids,dists,0,n-1);
+  hullStart=i0;let hullSize=3;
+  hullNext[i0]=hullPrev[i2]=i1;hullNext[i1]=hullPrev[i0]=i2;hullNext[i2]=hullPrev[i1]=i0;
+  hullTri[i0]=0;hullTri[i1]=1;hullTri[i2]=2;
+  hullHash[hashKey(i0x,i0y)]=i0;hullHash[hashKey(i1x,i1y)]=i1;hullHash[hashKey(i2x,i2y)]=i2;
+  addTri(i0,i1,i2,-1,-1,-1);
+  for(let k=0,xp=0,yp=0;k<n;k++){
+    const i=ids[k],x=X(i),y=Y(i);
+    if(k>0&&Math.abs(x-xp)<=DL_EPS&&Math.abs(y-yp)<=DL_EPS)continue;
+    xp=x;yp=y;
+    if(i===i0||i===i1||i===i2)continue;
+    let start=0;
+    for(let j=0,key=hashKey(x,y);j<hashSize;j++){start=hullHash[(key+j)%hashSize];if(start!==-1&&start!==hullNext[start])break}
+    start=hullPrev[start];
+    let e=start,q;
+    while(q=hullNext[e],!orient(x,y,X(e),Y(e),X(q),Y(q))){e=q;if(e===start){e=-1;break}}
+    if(e===-1)continue;
+    let t=addTri(e,i,hullNext[e],-1,-1,hullTri[e]);
+    hullTri[i]=legalize(t+2);hullTri[e]=t;hullSize++;
+    let nn=hullNext[e];
+    while(q=hullNext[nn],orient(x,y,X(nn),Y(nn),X(q),Y(q))){t=addTri(nn,i,q,hullTri[i],-1,hullTri[nn]);hullTri[i]=legalize(t+2);hullNext[nn]=nn;hullSize--;nn=q}
+    if(e===start){while(q=hullPrev[e],orient(x,y,X(q),Y(q),X(e),Y(e))){t=addTri(q,i,e,-1,hullTri[e],hullTri[q]);legalize(t+2);hullTri[q]=t;hullNext[e]=e;hullSize--;e=q}}
+    hullStart=hullPrev[i]=e;hullNext[e]=hullPrev[nn]=i;hullNext[i]=nn;
+    hullHash[hashKey(x,y)]=i;hullHash[hashKey(X(e),Y(e))]=e;
+  }
+  return {triangles:triangles.subarray(0,trianglesLen),halfedges:halfedges.subarray(0,trianglesLen)};
+}
+function pseudoAngle(dx,dy){const p=dx/(Math.abs(dx)+Math.abs(dy));return(dy>0?3-p:1+p)/4}
+function sqd(ax,ay,bx,by){const dx=ax-bx,dy=ay-by;return dx*dx+dy*dy}
+function orient(px,py,qx,qy,rx,ry){return(qy-py)*(rx-qx)-(qx-px)*(ry-qy)<0}
+function inCircle(ax,ay,bx,by,cx,cy,px,py){const dx=ax-px,dy=ay-py,ex=bx-px,ey=by-py,fx=cx-px,fy=cy-py;const ap=dx*dx+dy*dy,bp=ex*ex+ey*ey,cp=fx*fx+fy*fy;return dx*(ey*cp-bp*fy)-dy*(ex*cp-bp*fx)+ap*(ex*fy-ey*fx)<0}
+function circumradius(ax,ay,bx,by,cx,cy){const dx=bx-ax,dy=by-ay,ex=cx-ax,ey=cy-ay,bl=dx*dx+dy*dy,cl=ex*ex+ey*ey,d=0.5/(dx*ey-dy*ex),x=(ey*bl-dy*cl)*d,y=(dx*cl-ex*bl)*d;return x*x+y*y}
+function circumcenter(ax,ay,bx,by,cx,cy){const dx=bx-ax,dy=by-ay,ex=cx-ax,ey=cy-ay,bl=dx*dx+dy*dy,cl=ex*ex+ey*ey,d=0.5/(dx*ey-dy*ex);return{x:ax+(ey*bl-dy*cl)*d,y:ay+(dx*cl-ex*bl)*d}}
+function quicksort(ids,dists,left,right){
+  if(right-left<=20){for(let i=left+1;i<=right;i++){const temp=ids[i],td=dists[temp];let j=i-1;while(j>=left&&dists[ids[j]]>td)ids[j+1]=ids[j--];ids[j+1]=temp}}
+  else{const median=(left+right)>>1;let i=left+1,j=right;swap(ids,median,i);
+    if(dists[ids[left]]>dists[ids[right]])swap(ids,left,right);
+    if(dists[ids[i]]>dists[ids[right]])swap(ids,i,right);
+    if(dists[ids[left]]>dists[ids[i]])swap(ids,left,i);
+    const temp=ids[i],td=dists[temp];
+    while(true){do i++;while(dists[ids[i]]<td);do j--;while(dists[ids[j]]>td);if(j<i)break;swap(ids,i,j)}
+    ids[left+1]=ids[j];ids[j]=temp;
+    if(right-i+1>=j-left){quicksort(ids,dists,i,right);quicksort(ids,dists,left,j-1)}
+    else{quicksort(ids,dists,left,j-1);quicksort(ids,dists,i,right)}}
+}
+function swap(a,i,j){const t=a[i];a[i]=a[j];a[j]=t}
+
+// ---------- Concave outer boundary (chi-shape: peel long outer triangle edges) ----------
+// coords: Float64Array [x0,y0,x1,y1,...] already shifted near the origin.
+// Starts from the Delaunay triangulation (whose outline is the convex hull) and repeatedly removes the
+// outer triangle behind the longest boundary edge while that edge is longer than maxLen.
+// A triangle is only removed if its inner vertex is not already on the boundary, so the outline
+// always stays ONE simple polygon: it never crosses itself and never pinches through a narrow neck.
+function spacingStats(coords,del){
+  const n=coords.length>>1,nn=new Float64Array(n).fill(Infinity),{triangles:T}=del;
+  for(let e=0;e<T.length;e++){const a=T[e],b=T[e%3===2?e-2:e+1];const d=Math.sqrt(sqd(coords[2*a],coords[2*a+1],coords[2*b],coords[2*b+1]));if(d<nn[a])nn[a]=d;if(d<nn[b])nn[b]=d}
+  const v=[];for(let i=0;i<n;i++)if(nn[i]<Infinity)v.push(nn[i]);
+  v.sort((a,b)=>a-b);
+  // trimmed mean (drop top 2%) so a few isolated stray points don't inflate the spacing
+  const keep=v.slice(0,Math.max(1,Math.floor(v.length*0.98)));
+  const mean=keep.reduce((s,x)=>s+x,0)/keep.length;
+  return{meanNN:mean,medianNN:v[v.length>>1]};
+}
+function concaveBoundary(coords,del,maxLen){
+  const{triangles:T,halfedges:H}=del,m=T.length,n=coords.length>>1;
+  const nxt=e=>e%3===2?e-2:e+1;
+  const half=Int32Array.from(H);              // working copy; -1 = boundary edge
+  const alive=new Uint8Array(m/3).fill(1);
+  const onB=new Uint8Array(n);
+  const len=e=>{const a=T[e],b=T[nxt(e)];return Math.sqrt(sqd(coords[2*a],coords[2*a+1],coords[2*b],coords[2*b+1]))};
+  // max-heap of boundary edges
+  const hp=[],hk=[];
+  const push=(e,k)=>{hp.push(e);hk.push(k);let i=hp.length-1;while(i>0){const p=(i-1)>>1;if(hk[p]>=hk[i])break;[hp[p],hp[i]]=[hp[i],hp[p]];[hk[p],hk[i]]=[hk[i],hk[p]];i=p}};
+  const pop=()=>{const e=hp[0],k=hk[0],le=hp.pop(),lk=hk.pop();if(hp.length){hp[0]=le;hk[0]=lk;let i=0;for(;;){const l=2*i+1,r=l+1;let b=i;if(l<hp.length&&hk[l]>hk[b])b=l;if(r<hp.length&&hk[r]>hk[b])b=r;if(b===i)break;[hp[b],hp[i]]=[hp[i],hp[b]];[hk[b],hk[i]]=[hk[i],hk[b]];i=b}}return[e,k]};
+  for(let e=0;e<m;e++)if(half[e]===-1){onB[T[e]]=1;const k=len(e);if(k>maxLen)push(e,k)}
+  let removed=0;
+  while(hp.length){
+    const[e]=pop();const t=(e/3)|0;
+    if(!alive[t]||half[e]!==-1)continue;
+    const e1=nxt(e),e2=nxt(e1),v=T[e2];      // v = inner vertex opposite the boundary edge
+    if(onB[v])continue;                       // would pinch the polygon at v -> keep this edge
+    alive[t]=0;removed++;onB[v]=1;
+    for(const f of[e1,e2]){const tw=half[f];half[f]=-2;if(tw>=0){half[tw]=-1;const k=len(tw);if(k>maxLen)push(tw,k)}}
+  }
+  // walk the remaining outer boundary
+  const out=new Int32Array(n).fill(-1);let count=0,first=-1;
+  for(let e=0;e<m;e++)if(alive[(e/3)|0]&&half[e]===-1){out[T[e]]=T[nxt(e)];count++;if(first<0)first=T[e]}
+  const ring=[];let v=first;
+  for(let i=0;i<=count;i++){ring.push(v);v=out[v];if(v===first)break}
+  if(ring.length!==count)throw Error('Internal error tracing the boundary ('+ring.length+' of '+count+' edges).');
+  return{ring,removed};
+}
+
+// ---------- Extract XYZ -> Border page logic ----------
+const $=id=>document.getElementById(id);
+const typeSel=$('extractType'),stdPanel=$('extractStdPanel'),panel=$('bdPanel');
+let state=null,result=null,view=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const say=(t,kind)=>{$('bdStatus').innerHTML=t?'<div class="'+(kind||'info')+'">'+esc(t)+'</div>':''};
+const fmt=v=>v.toLocaleString(undefined,{maximumFractionDigits:2});
+const tick=()=>new Promise(r=>setTimeout(r,20));
+function syncPanel(){const on=typeSel.value==='border';panel.style.display=on?'block':'none';stdPanel.style.display=on?'none':'block';if(on&&result){view=null;draw()}}
+typeSel.addEventListener('change',syncPanel);
+function parseXYZ(txt){
+  const seen=new Set(),xs=[],ys=[];
+  const lines=txt.replace(/^﻿/,'').split(/\r?\n/);
+  for(let k=0;k<lines.length;k++){const s=lines[k].trim();if(!s||s[0]==='#'||s[0]===';')continue;
+    const a=s.split(/[\s,;]+/);if(a.length<2)continue;const x=+a[0],y=+a[1];if(!Number.isFinite(x)||!Number.isFinite(y))continue;
+    const key=a[0]+'|'+a[1];if(seen.has(key))continue;seen.add(key);xs.push(x);ys.push(y)}
+  return{xs,ys};
+}
+function prepare(xs,ys){
+  const n=xs.length;let ox=Infinity,oy=Infinity;
+  for(let i=0;i<n;i++){if(xs[i]<ox)ox=xs[i];if(ys[i]<oy)oy=ys[i]}
+  const coords=new Float64Array(2*n);for(let i=0;i<n;i++){coords[2*i]=xs[i]-ox;coords[2*i+1]=ys[i]-oy}
+  const del=Delaunay(coords);
+  const T=del.triangles,H=del.halfedges,nn=new Float64Array(n).fill(Infinity);let edges=new Float64Array(T.length),ne=0;
+  for(let e=0;e<T.length;e++){const a=T[e],b=T[e%3===2?e-2:e+1];const d=Math.hypot(coords[2*a]-coords[2*b],coords[2*a+1]-coords[2*b+1]);
+    if(d<nn[a])nn[a]=d;if(d<nn[b])nn[b]=d;if(H[e]<e)edges[ne++]=d}
+  edges=edges.subarray(0,ne).sort();
+  let sm=0,c=0;for(const v of nn)if(v<Infinity){sm+=v;c++}const meanNN=sm/c;
+  const p99=edges[Math.min(edges.length-1,Math.floor(edges.length*0.99))];
+  return{coords,del,ox,oy,stats:{meanNN,auto:Math.max(1.15*p99,1.5*meanNN)}};
+}
+function makeBoundary(L){
+  const{coords,del,ox,oy}=state;const{ring}=concaveBoundary(coords,del,L);
+  let pts=ring.map(i=>({x:coords[2*i]+ox,y:coords[2*i+1]+oy}));
+  let A=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];A+=a.x*b.y-b.x*a.y}
+  if(A>0)pts.reverse();
+  let s=0;for(let i=1;i<pts.length;i++)if(pts[i].y<pts[s].y||(pts[i].y===pts[s].y&&pts[i].x<pts[s].x))s=i;
+  return{pts:pts.slice(s).concat(pts.slice(0,s)),area:Math.abs(A/2)};
+}
+function dxf(points){let s='0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nPOLYLINE\n8\nBOUNDARY\n66\n1\n10\n0.0\n20\n0.0\n30\n0.0\n70\n1\n';for(const p of points)s+='0\nVERTEX\n8\nBOUNDARY\n10\n'+p.x.toFixed(4)+'\n20\n'+p.y.toFixed(4)+'\n30\n0.0\n';return s+'0\nSEQEND\n8\nBOUNDARY\n0\nENDSEC\n0\nEOF\n'}
+function brd(points){const p=points.slice();p.push(p[0]);return p.map(q=>q.x.toFixed(2)+' '+q.y.toFixed(2)).join('\r\n')+'\r\n'}
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function showDl(on){for(const id of['bdDlBrd','bdDlDxf'])$(id).style.display=on?'inline-block':'none';
+  if(result){$('bdDlBrd').dataset.outputName=result.stem+'_border.brd';$('bdDlDxf').dataset.outputName=result.stem+'_border.dxf'}}
+function reset(msg){state=null;result=null;showDl(false);$('bdUseAuto').disabled=true;$('bdWrap').style.display='none';$('bdResult').textContent='';say(msg||'')}
+
+$('bdFile').addEventListener('change',()=>{const f=$('bdFile').files[0];$('bdFileName').textContent=f?f.name:'No file selected';$('bdProcessBtn').disabled=!f;reset()});
+$('bdUseAuto').addEventListener('click',()=>{if(state)$('bdMax').value=state.stats.auto.toFixed(1)});
+$('bdClearBtn').addEventListener('click',()=>{$('bdFile').value='';$('bdMax').value='';$('bdFileName').textContent='No file selected';$('bdProcessBtn').disabled=true;reset()});
+const clr=$('clearAllBtn');if(clr)clr.addEventListener('click',()=>{$('bdClearBtn').click();syncPanel()});
+
+$('bdProcessBtn').addEventListener('click',async()=>{
+  const f=$('bdFile').files[0];if(!f)return;
+  const raw=$('bdMax').value.trim(),manual=raw===''?null:Number(raw);
+  if(manual!==null&&(!Number.isFinite(manual)||manual<=0)){say('Enter a positive maximum segment length in feet, or leave it blank for automatic.','error');return}
+  const btn=$('bdProcessBtn');btn.disabled=true;
+  try{
+    if(!state||state.file!==f){
+      say('Reading '+f.name+' …');await tick();
+      const{xs,ys}=parseXYZ(await f.text());
+      if(xs.length<3)throw Error('Could not find at least 3 valid XY points. Expected X Y [Z] values separated by spaces, commas or tabs.');
+      say('Triangulating '+fmt(xs.length)+' points …');await tick();
+      state=Object.assign(prepare(xs,ys),{xs,ys,file:f});$('bdUseAuto').disabled=false;
+    }
+    const L=manual??state.stats.auto;say('Tracing border …');await tick();
+    const{pts,area}=makeBoundary(L);
+    let longest=0,over=0;for(let i=0;i<pts.length;i++){const d=Math.hypot(pts[i].x-pts[(i+1)%pts.length].x,pts[i].y-pts[(i+1)%pts.length].y);if(d>longest)longest=d;if(d>L*1.000001)over++}
+    result={pts,L,stem:f.name.replace(/\.[^.]+$/,'')};
+    $('bdResult').textContent='Unique XY points:          '+fmt(state.xs.length)+'\nAverage point spacing:     '+fmt(state.stats.meanNN)+' ft\nAutomatic max segment:     '+fmt(state.stats.auto)+' ft\nMax segment used:          '+fmt(L)+' ft'+(manual===null?' (automatic)':' (manual)')+
+      '\nBorder vertices:           '+fmt(pts.length)+' (all real survey points)\nLongest border segment:    '+fmt(longest)+' ft\nEnclosed area:             '+fmt(area)+' sq ft ('+fmt(area/43560)+' acres)';
+    say('Border created.'+(over?' '+over+' segment(s) are longer than the limit; they were kept because going inward there would cross the border or cut through a narrow neck.':'')+' Download the BRD or DXF.','success');
+    $('bdWrap').style.display='block';view=null;draw();showDl(true);
+  }catch(e){console.error(e);say('Could not create border: '+e.message,'error');showDl(false)}
+  finally{btn.disabled=!$('bdFile').files[0]}
+});
+$('bdDlBrd').addEventListener('click',()=>{if(result)download(result.stem+'_border.brd',brd(result.pts),'text/plain')});
+$('bdDlDxf').addEventListener('click',()=>{if(result)download(result.stem+'_border.dxf',dxf(result.pts),'application/dxf')});
+
+// ---------- preview ----------
+const cv=$('bdCv');
+function fitView(){const W=cv.clientWidth,H=cv.clientHeight;let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;for(const p of result.pts){if(p.x<x0)x0=p.x;if(p.x>x1)x1=p.x;if(p.y<y0)y0=p.y;if(p.y>y1)y1=p.y}
+  return{s:0.92*Math.min(W/((x1-x0)||1),H/((y1-y0)||1)),cx:(x0+x1)/2,cy:(y0+y1)/2}}
+function draw(){
+  if(!result||!cv.clientWidth)return;const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,W,H);
+  if(!view)view=fitView();const{s,cx,cy}=view,tx=x=>W/2+(x-cx)*s,ty=y=>H/2-(y-cy)*s;
+  const{xs,ys}=state,n=xs.length,step=Math.max(1,Math.floor(n/250000));
+  g.fillStyle='#9aa4ae';const r=s*state.stats.meanNN>6?2:1.2;
+  for(let i=0;i<n;i+=step){const X=tx(xs[i]),Y=ty(ys[i]);if(X<-2||Y<-2||X>W+2||Y>H+2)continue;g.fillRect(X-r/2,Y-r/2,r,r)}
+  const P=result.pts;g.strokeStyle='#d62828';g.lineWidth=1.6;g.lineJoin='round';g.beginPath();
+  for(let i=0;i<=P.length;i++){const p=P[i%P.length];i?g.lineTo(tx(p.x),ty(p.y)):g.moveTo(tx(p.x),ty(p.y))}g.stroke();
+  if(P.length<3000||s*state.stats.meanNN>4){g.fillStyle='#d62828';for(const p of P){const X=tx(p.x),Y=ty(p.y);if(X>-3&&Y>-3&&X<W+3&&Y<H+3)g.fillRect(X-1.5,Y-1.5,3,3)}}
+}
+cv.addEventListener('wheel',e=>{if(!view)return;e.preventDefault();const rc=cv.getBoundingClientRect(),W=cv.clientWidth,H=cv.clientHeight,mx=e.clientX-rc.left,my=e.clientY-rc.top;
+  const wx=view.cx+(mx-W/2)/view.s,wy=view.cy-(my-H/2)/view.s;view.s*=Math.exp(-e.deltaY*0.0015);view.cx=wx-(mx-W/2)/view.s;view.cy=wy+(my-H/2)/view.s;draw()},{passive:false});
+let drag=null;
+cv.addEventListener('pointerdown',e=>{if(!view)return;drag={x:e.clientX,y:e.clientY,cx:view.cx,cy:view.cy};cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
+cv.addEventListener('pointermove',e=>{if(!drag)return;view.cx=drag.cx-(e.clientX-drag.x)/view.s;view.cy=drag.cy+(e.clientY-drag.y)/view.s;draw()});
+cv.addEventListener('pointerup',()=>{drag=null;cv.style.cursor='grab'});
+cv.addEventListener('dblclick',()=>{view=null;draw()});
+window.addEventListener('resize',()=>{if(panel.style.display!=='none')draw()});
+document.querySelectorAll('.tab-button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{if(panel.offsetParent)draw()},0)));
+syncPanel();
+
+})();
+</script>
+
+<script>
+/* ============================================================
+   CREATE CONTOURS TAB (self-contained TIN contour generator)
+============================================================ */
+(function(){
+"use strict";
+// ---------- Delaunay triangulation (sweep-hull, after Delaunator by Mapbox, ISC licence) ----------
+const DL_EPS=Math.pow(2,-52);
+function Delaunay(coords){
+  const n=coords.length>>1;
+  const maxT=Math.max(2*n-5,0);
+  const triangles=new Uint32Array(maxT*3), halfedges=new Int32Array(maxT*3);
+  const hashSize=Math.ceil(Math.sqrt(n));
+  const hullPrev=new Uint32Array(n), hullNext=new Uint32Array(n), hullTri=new Uint32Array(n), hullHash=new Int32Array(hashSize).fill(-1);
+  const ids=new Uint32Array(n), dists=new Float64Array(n);
+  const STACK=new Uint32Array(512);
+  let trianglesLen=0, hullStart=0, cxC=0, cyC=0;
+  const X=i=>coords[2*i], Y=i=>coords[2*i+1];
+  function link(a,b){halfedges[a]=b;if(b!==-1)halfedges[b]=a}
+  function addTri(i0,i1,i2,a,b,c){const t=trianglesLen;triangles[t]=i0;triangles[t+1]=i1;triangles[t+2]=i2;link(t,a);link(t+1,b);link(t+2,c);trianglesLen+=3;return t}
+  function hashKey(x,y){return Math.floor(pseudoAngle(x-cxC,y-cyC)*hashSize)%hashSize}
+  function legalize(a){
+    let i=0,ar=0;
+    while(true){
+      const b=halfedges[a];const a0=a-a%3;ar=a0+(a+2)%3;
+      if(b===-1){if(i===0)break;a=STACK[--i];continue}
+      const b0=b-b%3,al=a0+(a+1)%3,bl=b0+(b+2)%3;
+      const p0=triangles[ar],pr=triangles[a],pl=triangles[al],p1=triangles[bl];
+      if(inCircle(X(p0),Y(p0),X(pr),Y(pr),X(pl),Y(pl),X(p1),Y(p1))){
+        triangles[a]=p1;triangles[b]=p0;
+        const hbl=halfedges[bl];
+        if(hbl===-1){let e=hullStart;do{if(hullTri[e]===bl){hullTri[e]=a;break}e=hullPrev[e]}while(e!==hullStart)}
+        link(a,hbl);link(b,halfedges[ar]);link(ar,bl);
+        const br=b0+(b+1)%3;
+        if(i<STACK.length)STACK[i++]=br;
+      }else{if(i===0)break;a=STACK[--i]}
+    }
+    return ar;
+  }
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  for(let i=0;i<n;i++){const x=X(i),y=Y(i);if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y;ids[i]=i}
+  const cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+  let i0=0,i1=0,i2=0;
+  for(let i=0,md=Infinity;i<n;i++){const d=sqd(cx,cy,X(i),Y(i));if(d<md){i0=i;md=d}}
+  const i0x=X(i0),i0y=Y(i0);
+  for(let i=0,md=Infinity;i<n;i++){if(i===i0)continue;const d=sqd(i0x,i0y,X(i),Y(i));if(d<md&&d>0){i1=i;md=d}}
+  let i1x=X(i1),i1y=Y(i1),minR=Infinity;
+  for(let i=0;i<n;i++){if(i===i0||i===i1)continue;const r=circumradius(i0x,i0y,i1x,i1y,X(i),Y(i));if(r<minR){i2=i;minR=r}}
+  let i2x=X(i2),i2y=Y(i2);
+  if(minR===Infinity)throw Error('All points lie on a single line; a boundary area cannot be formed.');
+  if(orient(i0x,i0y,i1x,i1y,i2x,i2y)){const i=i1,x=i1x,y=i1y;i1=i2;i1x=i2x;i1y=i2y;i2=i;i2x=x;i2y=y}
+  const c=circumcenter(i0x,i0y,i1x,i1y,i2x,i2y);cxC=c.x;cyC=c.y;
+  for(let i=0;i<n;i++)dists[i]=sqd(X(i),Y(i),c.x,c.y);
+  quicksort(ids,dists,0,n-1);
+  hullStart=i0;let hullSize=3;
+  hullNext[i0]=hullPrev[i2]=i1;hullNext[i1]=hullPrev[i0]=i2;hullNext[i2]=hullPrev[i1]=i0;
+  hullTri[i0]=0;hullTri[i1]=1;hullTri[i2]=2;
+  hullHash[hashKey(i0x,i0y)]=i0;hullHash[hashKey(i1x,i1y)]=i1;hullHash[hashKey(i2x,i2y)]=i2;
+  addTri(i0,i1,i2,-1,-1,-1);
+  for(let k=0,xp=0,yp=0;k<n;k++){
+    const i=ids[k],x=X(i),y=Y(i);
+    if(k>0&&Math.abs(x-xp)<=DL_EPS&&Math.abs(y-yp)<=DL_EPS)continue;
+    xp=x;yp=y;
+    if(i===i0||i===i1||i===i2)continue;
+    let start=0;
+    for(let j=0,key=hashKey(x,y);j<hashSize;j++){start=hullHash[(key+j)%hashSize];if(start!==-1&&start!==hullNext[start])break}
+    start=hullPrev[start];
+    let e=start,q;
+    while(q=hullNext[e],!orient(x,y,X(e),Y(e),X(q),Y(q))){e=q;if(e===start){e=-1;break}}
+    if(e===-1)continue;
+    let t=addTri(e,i,hullNext[e],-1,-1,hullTri[e]);
+    hullTri[i]=legalize(t+2);hullTri[e]=t;hullSize++;
+    let nn=hullNext[e];
+    while(q=hullNext[nn],orient(x,y,X(nn),Y(nn),X(q),Y(q))){t=addTri(nn,i,q,hullTri[i],-1,hullTri[nn]);hullTri[i]=legalize(t+2);hullNext[nn]=nn;hullSize--;nn=q}
+    if(e===start){while(q=hullPrev[e],orient(x,y,X(q),Y(q),X(e),Y(e))){t=addTri(q,i,e,-1,hullTri[e],hullTri[q]);legalize(t+2);hullTri[q]=t;hullNext[e]=e;hullSize--;e=q}}
+    hullStart=hullPrev[i]=e;hullNext[e]=hullPrev[nn]=i;hullNext[i]=nn;
+    hullHash[hashKey(x,y)]=i;hullHash[hashKey(X(e),Y(e))]=e;
+  }
+  return {triangles:triangles.subarray(0,trianglesLen),halfedges:halfedges.subarray(0,trianglesLen)};
+}
+function pseudoAngle(dx,dy){const p=dx/(Math.abs(dx)+Math.abs(dy));return(dy>0?3-p:1+p)/4}
+function sqd(ax,ay,bx,by){const dx=ax-bx,dy=ay-by;return dx*dx+dy*dy}
+function orient(px,py,qx,qy,rx,ry){return(qy-py)*(rx-qx)-(qx-px)*(ry-qy)<0}
+function inCircle(ax,ay,bx,by,cx,cy,px,py){const dx=ax-px,dy=ay-py,ex=bx-px,ey=by-py,fx=cx-px,fy=cy-py;const ap=dx*dx+dy*dy,bp=ex*ex+ey*ey,cp=fx*fx+fy*fy;return dx*(ey*cp-bp*fy)-dy*(ex*cp-bp*fx)+ap*(ex*fy-ey*fx)<0}
+function circumradius(ax,ay,bx,by,cx,cy){const dx=bx-ax,dy=by-ay,ex=cx-ax,ey=cy-ay,bl=dx*dx+dy*dy,cl=ex*ex+ey*ey,d=0.5/(dx*ey-dy*ex),x=(ey*bl-dy*cl)*d,y=(dx*cl-ex*bl)*d;return x*x+y*y}
+function circumcenter(ax,ay,bx,by,cx,cy){const dx=bx-ax,dy=by-ay,ex=cx-ax,ey=cy-ay,bl=dx*dx+dy*dy,cl=ex*ex+ey*ey,d=0.5/(dx*ey-dy*ex);return{x:ax+(ey*bl-dy*cl)*d,y:ay+(dx*cl-ex*bl)*d}}
+function quicksort(ids,dists,left,right){
+  if(right-left<=20){for(let i=left+1;i<=right;i++){const temp=ids[i],td=dists[temp];let j=i-1;while(j>=left&&dists[ids[j]]>td)ids[j+1]=ids[j--];ids[j+1]=temp}}
+  else{const median=(left+right)>>1;let i=left+1,j=right;swap(ids,median,i);
+    if(dists[ids[left]]>dists[ids[right]])swap(ids,left,right);
+    if(dists[ids[i]]>dists[ids[right]])swap(ids,i,right);
+    if(dists[ids[left]]>dists[ids[i]])swap(ids,left,i);
+    const temp=ids[i],td=dists[temp];
+    while(true){do i++;while(dists[ids[i]]<td);do j--;while(dists[ids[j]]>td);if(j<i)break;swap(ids,i,j)}
+    ids[left+1]=ids[j];ids[j]=temp;
+    if(right-i+1>=j-left){quicksort(ids,dists,i,right);quicksort(ids,dists,left,j-1)}
+    else{quicksort(ids,dists,left,j-1);quicksort(ids,dists,i,right)}}
+}
+function swap(a,i,j){const t=a[i];a[i]=a[j];a[j]=t}
+
+// ---------- Concave outer boundary (chi-shape: peel long outer triangle edges) ----------
+// coords: Float64Array [x0,y0,x1,y1,...] already shifted near the origin.
+// Starts from the Delaunay triangulation (whose outline is the convex hull) and repeatedly removes the
+// outer triangle behind the longest boundary edge while that edge is longer than maxLen.
+// A triangle is only removed if its inner vertex is not already on the boundary, so the outline
+// always stays ONE simple polygon: it never crosses itself and never pinches through a narrow neck.
+function spacingStats(coords,del){
+  const n=coords.length>>1,nn=new Float64Array(n).fill(Infinity),{triangles:T}=del;
+  for(let e=0;e<T.length;e++){const a=T[e],b=T[e%3===2?e-2:e+1];const d=Math.sqrt(sqd(coords[2*a],coords[2*a+1],coords[2*b],coords[2*b+1]));if(d<nn[a])nn[a]=d;if(d<nn[b])nn[b]=d}
+  const v=[];for(let i=0;i<n;i++)if(nn[i]<Infinity)v.push(nn[i]);
+  v.sort((a,b)=>a-b);
+  // trimmed mean (drop top 2%) so a few isolated stray points don't inflate the spacing
+  const keep=v.slice(0,Math.max(1,Math.floor(v.length*0.98)));
+  const mean=keep.reduce((s,x)=>s+x,0)/keep.length;
+  return{meanNN:mean,medianNN:v[v.length>>1]};
+}
+function concaveBoundary(coords,del,maxLen){
+  const{triangles:T,halfedges:H}=del,m=T.length,n=coords.length>>1;
+  const nxt=e=>e%3===2?e-2:e+1;
+  const half=Int32Array.from(H);              // working copy; -1 = boundary edge
+  const alive=new Uint8Array(m/3).fill(1);
+  const onB=new Uint8Array(n);
+  const len=e=>{const a=T[e],b=T[nxt(e)];return Math.sqrt(sqd(coords[2*a],coords[2*a+1],coords[2*b],coords[2*b+1]))};
+  // max-heap of boundary edges
+  const hp=[],hk=[];
+  const push=(e,k)=>{hp.push(e);hk.push(k);let i=hp.length-1;while(i>0){const p=(i-1)>>1;if(hk[p]>=hk[i])break;[hp[p],hp[i]]=[hp[i],hp[p]];[hk[p],hk[i]]=[hk[i],hk[p]];i=p}};
+  const pop=()=>{const e=hp[0],k=hk[0],le=hp.pop(),lk=hk.pop();if(hp.length){hp[0]=le;hk[0]=lk;let i=0;for(;;){const l=2*i+1,r=l+1;let b=i;if(l<hp.length&&hk[l]>hk[b])b=l;if(r<hp.length&&hk[r]>hk[b])b=r;if(b===i)break;[hp[b],hp[i]]=[hp[i],hp[b]];[hk[b],hk[i]]=[hk[i],hk[b]];i=b}}return[e,k]};
+  for(let e=0;e<m;e++)if(half[e]===-1){onB[T[e]]=1;const k=len(e);if(k>maxLen)push(e,k)}
+  let removed=0;
+  while(hp.length){
+    const[e]=pop();const t=(e/3)|0;
+    if(!alive[t]||half[e]!==-1)continue;
+    const e1=nxt(e),e2=nxt(e1),v=T[e2];      // v = inner vertex opposite the boundary edge
+    if(onB[v])continue;                       // would pinch the polygon at v -> keep this edge
+    alive[t]=0;removed++;onB[v]=1;
+    for(const f of[e1,e2]){const tw=half[f];half[f]=-2;if(tw>=0){half[tw]=-1;const k=len(tw);if(k>maxLen)push(tw,k)}}
+  }
+  // walk the remaining outer boundary
+  const out=new Int32Array(n).fill(-1);let count=0,first=-1;
+  for(let e=0;e<m;e++)if(alive[(e/3)|0]&&half[e]===-1){out[T[e]]=T[nxt(e)];count++;if(first<0)first=T[e]}
+  const ring=[];let v=first;
+  for(let i=0;i<=count;i++){ring.push(v);v=out[v];if(v===first)break}
+  if(ring.length!==count)throw Error('Internal error tracing the boundary ('+ring.length+' of '+count+' edges).');
+  return{ring,removed,alive};
+}
+// ===================== TIN model + smooth contouring =====================
+// Points: Float64Array xs, ys (shifted to origin), zs.
+function dedupePoints(X,Y,Z){
+  const map=new Map(),xs=[],ys=[],zs=[],cnt=[];
+  for(let i=0;i<X.length;i++){const k=X[i]+'|'+Y[i];const j=map.get(k);
+    if(j===undefined){map.set(k,xs.length);xs.push(X[i]);ys.push(Y[i]);zs.push(Z[i]);cnt.push(1)}
+    else{zs[j]+=Z[i];cnt[j]++}}
+  let dups=0;for(let j=0;j<zs.length;j++)if(cnt[j]>1){zs[j]/=cnt[j];dups+=cnt[j]-1}
+  return{xs,ys,zs,dups};
+}
+function edgeStats(coords,del){
+  const T=del.triangles,H=del.halfedges,n=coords.length>>1,nn=new Float64Array(n).fill(Infinity);let edges=new Float64Array(T.length),ne=0;
+  for(let e=0;e<T.length;e++){const a=T[e],b=T[e%3===2?e-2:e+1];const d=Math.hypot(coords[2*a]-coords[2*b],coords[2*a+1]-coords[2*b+1]);
+    if(d<nn[a])nn[a]=d;if(d<nn[b])nn[b]=d;if(H[e]<e)edges[ne++]=d}
+  edges=edges.subarray(0,ne).sort();let s=0,c=0;for(const v of nn)if(v<Infinity){s+=v;c++}
+  const p99=edges[Math.min(edges.length-1,Math.floor(edges.length*0.99))];
+  return{meanNN:s/c,autoMaxEdge:Math.max(1.15*p99,1.5*s/c)};
+}
+// Which triangles form the TIN. mode 'all' = drop any triangle with a side > maxEdge (HYPACK style);
+// 'outer' = only peel long triangles from the outside (no interior holes).
+function tinTriangles(coords,del,maxEdge,mode){
+  const T=del.triangles,nt=T.length/3,alive=new Uint8Array(nt).fill(1);
+  if(!(maxEdge>0))return alive;
+  if(mode==='outer')return concaveBoundary(coords,del,maxEdge).alive;
+  const L=(a,b)=>Math.hypot(coords[2*a]-coords[2*b],coords[2*a+1]-coords[2*b+1]);
+  for(let t=0;t<nt;t++){const a=T[3*t],b=T[3*t+1],c=T[3*t+2];if(L(a,b)>maxEdge||L(b,c)>maxEdge||L(c,a)>maxEdge)alive[t]=0}
+  return alive;
+}
+// Area-weighted vertex gradients from the surrounding TIN triangles
+function vertexGradients(coords,zs,T,alive){
+  const n=zs.length,gx=new Float64Array(n),gy=new Float64Array(n),wt=new Float64Array(n);
+  for(let t=0;t<alive.length;t++){if(!alive[t])continue;const a=T[3*t],b=T[3*t+1],c=T[3*t+2];
+    const x1=coords[2*a],y1=coords[2*a+1],x2=coords[2*b],y2=coords[2*b+1],x3=coords[2*c],y3=coords[2*c+1];
+    const d=(x2-x1)*(y3-y1)-(x3-x1)*(y2-y1);if(Math.abs(d)<1e-12)continue;
+    const dz2=zs[b]-zs[a],dz3=zs[c]-zs[a];
+    const px=(dz2*(y3-y1)-dz3*(y2-y1))/d,py=((x2-x1)*dz3-(x3-x1)*dz2)/d,w=Math.abs(d);
+    for(const v of[a,b,c]){gx[v]+=px*w;gy[v]+=py*w;wt[v]+=w}}
+  for(let i=0;i<n;i++)if(wt[i]>0){gx[i]/=wt[i];gy[i]/=wt[i]}
+  return{gx,gy};
+}
+// Extract contour segments from the TIN. level n = subdivision (1 = plain linear TIN).
+// Surface: cubic Bezier triangle per TIN triangle (edge controls from vertex slopes, clamped so
+// every edge stays monotone between its end values -> no invented bumps or false contours).
+function contourTIN(coords,zs,del,alive,levels,n,tension,onProgress){
+  const T=del.triangles,H=del.halfedges,N=zs.length,nt=alive.length;
+  const G=n>1?vertexGradients(coords,zs,T,alive):null;
+  const nl=levels.length,L0=levels[0],step=nl>1?levels[1]-levels[0]:1;
+  const segs=levels.map(()=>({keys:[],pts:[]}));          // keys: [k1,k2,...], pts: [x1,y1,x2,y2,...]
+  const nv=(n+1)*(n+2)/2,ni=(n-1)*(n-2)/2,edgeBase=N,intBase=N+3*nt*Math.max(0,n-1);
+  const sx=new Float64Array(nv),sy=new Float64Array(nv),sz=new Float64Array(nv),sid=new Float64Array(nv);
+  const idx=(i,j)=>{/* row j has n+1-j entries */return j*(n+1)-(j*(j-1))/2+i};
+  const clamp=(v,a,b)=>v<Math.min(a,b)?Math.min(a,b):v>Math.max(a,b)?Math.max(a,b):v;
+  const ctrl=(a,b)=>{ // control value near a on edge a->b
+    const dx=coords[2*b]-coords[2*a],dy=coords[2*b+1]-coords[2*a+1];return clamp(zs[a]+tension*(G.gx[a]*dx+G.gy[a]*dy)/3,zs[a],zs[b])};
+  const lvlRange=(lo,hi)=>{let i0=Math.ceil((lo-L0)/step-1e-9),i1=Math.floor((hi-L0)/step+1e-9);return[Math.max(0,i0),Math.min(nl-1,i1)]};
+  for(let t=0;t<nt;t++){
+    if(!alive[t])continue;
+    const v=[T[3*t],T[3*t+1],T[3*t+2]],z=[zs[v[0]],zs[v[1]],zs[v[2]]];
+    let lo=Math.min(z[0],z[1],z[2]),hi=Math.max(z[0],z[1],z[2]);
+    const [l0,l1]=lvlRange(lo,hi);if(l0>l1)continue;           // controls are clamped inside [lo,hi]
+    const X=[coords[2*v[0]],coords[2*v[1]],coords[2*v[2]]],Y=[coords[2*v[0]+1],coords[2*v[1]+1],coords[2*v[2]+1]];
+    // edge ids: edge k joins local vertex k and k+1 (halfedge 3t+k)
+    const eid=[0,1,2].map(k=>{const e=3*t+k,h=H[e];return h>=0&&h<e?h:e});
+    let b210,b120,b201,b102,b021,b012,b111;
+    if(n>1){b210=ctrl(v[0],v[1]);b120=ctrl(v[1],v[0]);b021=ctrl(v[1],v[2]);b012=ctrl(v[2],v[1]);b102=ctrl(v[2],v[0]);b201=ctrl(v[0],v[2]);
+      const E=(b210+b120+b021+b012+b102+b201)/6,V=(z[0]+z[1]+z[2])/3;b111=clamp(E+(E-V)/2,lo,hi);}
+    // fill sub-vertices
+    for(let j=0;j<=n;j++)for(let i=0;i+j<=n;i++){
+      const k=idx(i,j),u=(n-i-j)/n,vv=i/n,w=j/n;
+      sx[k]=u*X[0]+vv*X[1]+w*X[2];sy[k]=u*Y[0]+vv*Y[1]+w*Y[2];
+      let id,zz;
+      if(i===0&&j===0){id=v[0];zz=z[0]}else if(i===n){id=v[1];zz=z[1]}else if(j===n){id=v[2];zz=z[2]}
+      else{
+        let ea=-1,eb,steps;   // edge sub-vertex: canonical evaluation from the lower vertex id
+        if(j===0){ea=0;eb=1;steps=i}else if(i+j===n){ea=1;eb=2;steps=j}else if(i===0){ea=2;eb=0;steps=n-j}
+        if(ea>=0){
+          const a=v[ea],b=v[eb],eIdx=ea,lowFirst=a<b,p=lowFirst?a:b,q=lowFirst?b:a,s=lowFirst?steps:n-steps;
+          id=edgeBase+eid[eIdx]*(n-1)+(s-1);
+          const tt=s/n,c1=ctrl(p,q),c2=ctrl(q,p),m=1-tt;
+          zz=m*m*m*zs[p]+3*m*m*tt*c1+3*m*tt*tt*c2+tt*tt*tt*zs[q];
+        }else{
+          id=intBase+t*nv+k;   // unique per triangle
+          zz=u*u*u*z[0]+vv*vv*vv*z[1]+w*w*w*z[2]+3*u*u*vv*b210+3*u*vv*vv*b120+3*u*u*w*b201+3*u*w*w*b102+3*vv*vv*w*b021+3*vv*w*w*b012+6*u*vv*w*b111;
+        }
+      }
+      sid[k]=id;sz[k]=zz;
+    }
+    // contour each sub-triangle
+    const tri=(a,b,c)=>{
+      const za=sz[a],zb=sz[b],zc=sz[c];const[m0,m1]=lvlRange(Math.min(za,zb,zc),Math.max(za,zb,zc));
+      for(let li=m0;li<=m1;li++){const Lv=levels[li];const A=za>=Lv,B=zb>=Lv,C=zc>=Lv;if(A===B&&B===C)continue;
+        const S=segs[li];let first=true;
+        for(const[p,q,zp,zq,P,Q]of[[a,b,za,zb,A,B],[b,c,zb,zc,B,C],[c,a,zc,za,C,A]]){if(P===Q)continue;
+          const r=(Lv-zp)/(zq-zp),ip=sid[p],iq=sid[q];
+          S.keys.push(ip<iq?ip+','+iq:iq+','+ip);S.pts.push(sx[p]+r*(sx[q]-sx[p]),sy[p]+r*(sy[q]-sy[p]))}}};
+    for(let j=0;j<n;j++)for(let i=0;i+j<n;i++){tri(idx(i,j),idx(i+1,j),idx(i,j+1));if(i+j<n-1)tri(idx(i+1,j),idx(i+1,j+1),idx(i,j+1))}
+    if(onProgress&&(t&65535)===0)onProgress(t/nt);
+  }
+  return segs;
+}
+// Join segments that share crossing keys into polylines
+function stitch(S){
+  const ns=S.keys.length/2,map=new Map();
+  for(let k=0;k<S.keys.length;k++){const key=S.keys[k],l=map.get(key);if(l===undefined)map.set(key,k);else map.set(key,[l,k].flat())}
+  const used=new Uint8Array(ns),lines=[];
+  const other=(k)=>{const v=map.get(S.keys[k]);if(typeof v==='number')return -1;for(const o of v)if(o!==k)return o;return -1};
+  const pt=k=>({x:S.pts[2*k],y:S.pts[2*k+1]});
+  for(let s0=0;s0<ns;s0++){if(used[s0])continue;used[s0]=1;
+    // extend forward from end 2*s0+1, backward from end 2*s0
+    const fwd=[pt(2*s0),pt(2*s0+1)];let e=2*s0+1,closed=false;
+    while(true){const o=other(e);if(o<0)break;const s=o>>1;if(used[s]){if(s===s0)closed=true;break}used[s]=1;const far=o^1;fwd.push(pt(far));e=far}
+    if(!closed){const back=[];e=2*s0;
+      while(true){const o=other(e);if(o<0)break;const s=o>>1;if(used[s])break;used[s]=1;const far=o^1;back.push(pt(far));e=far}
+      lines.push({pts:back.reverse().concat(fwd),closed:false})}
+    else{fwd.pop();lines.push({pts:fwd,closed:true})}
+  }
+  return lines;
+}
+function chaikin(p,closed,passes){
+  for(let k=0;k<passes;k++){if(p.length<3)return p;const r=[];const n=p.length;
+    if(!closed)r.push(p[0]);
+    const lim=closed?n:n-1;
+    for(let i=0;i<lim;i++){const a=p[i],b=p[(i+1)%n];r.push({x:.75*a.x+.25*b.x,y:.75*a.y+.25*b.y},{x:.25*a.x+.75*b.x,y:.25*a.y+.75*b.y})}
+    if(!closed)r.push(p[n-1]);p=r}
+  return p}
+function douglasPeucker(p,tol,closed){
+  if(tol<=0||p.length<3)return p;
+  if(closed){ // split loop at the farthest point from p[0]
+    let far=0,fd=-1;for(let i=1;i<p.length;i++){const d=(p[i].x-p[0].x)**2+(p[i].y-p[0].y)**2;if(d>fd){fd=d;far=i}}
+    const a=douglasPeucker(p.slice(0,far+1),tol,false),b=douglasPeucker(p.slice(far).concat([p[0]]),tol,false);
+    return a.concat(b.slice(1,-1))}
+  const keep=new Uint8Array(p.length);keep[0]=keep[p.length-1]=1;const st=[[0,p.length-1]],t2=tol*tol;
+  while(st.length){const[s,e]=st.pop();const ax=p[s].x,ay=p[s].y,dx=p[e].x-ax,dy=p[e].y-ay,L=dx*dx+dy*dy;let md=-1,mi=-1;
+    for(let i=s+1;i<e;i++){let d;if(L===0)d=(p[i].x-ax)**2+(p[i].y-ay)**2;else{const c=(p[i].x-ax)*dy-(p[i].y-ay)*dx;d=c*c/L}if(d>md){md=d;mi=i}}
+    if(md>t2){keep[mi]=1;st.push([s,mi],[mi,e])}}
+  return p.filter((_,i)=>keep[i])}
+function polyLength(p,closed){let s=0;for(let i=1;i<p.length;i++)s+=Math.hypot(p[i].x-p[i-1].x,p[i].y-p[i-1].y);if(closed&&p.length>1)s+=Math.hypot(p[0].x-p[p.length-1].x,p[0].y-p[p.length-1].y);return s}
+// Outline of the TIN (all boundary edges of the kept triangles, chained into rings)
+function tinOutline(del,alive){
+  const T=del.triangles,H=del.halfedges,nx=e=>e%3===2?e-2:e+1,next=new Map();
+  for(let e=0;e<T.length;e++){const t=(e/3)|0;if(!alive[t])continue;const h=H[e];if(h>=0&&alive[(h/3)|0])continue;
+    const a=T[e];if(!next.has(a))next.set(a,[]);next.get(a).push(T[nx(e)])}
+  const rings=[];
+  for(const[s]of next){while(next.get(s)&&next.get(s).length){const ring=[s];let v=next.get(s).pop();
+      while(v!==s){ring.push(v);const l=next.get(v);if(!l||!l.length)break;v=l.pop()}
+      rings.push(ring)}}
+  return rings}
+// Noise filter: Gaussian-weighted average of Z within radius R (isotropic, uses a grid index).
+function smoothZ(coords,zs,R){
+  if(!(R>0))return zs;
+  const n=zs.length,cs=R;let minx=Infinity,miny=Infinity,maxx=-Infinity,maxy=-Infinity;
+  for(let i=0;i<n;i++){const x=coords[2*i],y=coords[2*i+1];if(x<minx)minx=x;if(y<miny)miny=y;if(x>maxx)maxx=x;if(y>maxy)maxy=y}
+  const gw=Math.floor((maxx-minx)/cs)+1,gh=Math.floor((maxy-miny)/cs)+1;
+  if(gw*gh>5e7)throw Error('Noise filter radius is too small for this area.');
+  const head=new Int32Array(gw*gh).fill(-1),nxt=new Int32Array(n);
+  for(let i=0;i<n;i++){const c=Math.floor((coords[2*i+1]-miny)/cs)*gw+Math.floor((coords[2*i]-minx)/cs);nxt[i]=head[c];head[c]=i}
+  const out=new Float64Array(n),s2=2*(R/2)**2,R2=R*R;
+  for(let i=0;i<n;i++){const x=coords[2*i],y=coords[2*i+1],cx=Math.floor((x-minx)/cs),cy=Math.floor((y-miny)/cs);let sw=0,sz=0;
+    for(let gy=Math.max(0,cy-1);gy<=Math.min(gh-1,cy+1);gy++)for(let gx=Math.max(0,cx-1);gx<=Math.min(gw-1,cx+1);gx++){
+      for(let j=head[gy*gw+gx];j>=0;j=nxt[j]){const dx=coords[2*j]-x,dy=coords[2*j+1]-y,d2=dx*dx+dy*dy;if(d2>R2)continue;const w=Math.exp(-d2/s2);sw+=w;sz+=w*zs[j]}}
+    out[i]=sz/sw}
+  return out}
+
+// ===================== App =====================
+const $=id=>document.getElementById('ct_'+id);
+const status=(t,cls)=>{const e=$('status');e.textContent=t;e.className='ct-status'+(cls?' '+cls:'')};
+const num=id=>Number($(id).value);
+const pause=()=>new Promise(r=>setTimeout(r,10));
+const fmt=(v,d=3)=>Number(v).toLocaleString(undefined,{maximumFractionDigits:d});
+const bar=p=>$('bar').style.width=Math.round(p)+'%';
+let S=null;          // loaded data and TIN
+let RESULT=null;     // {contours, rings, alive, levels, step}
+let fileName='contours';
+
+const PRESETS={none:{subdiv:1,noise:0,passes:0,tol:0},light:{subdiv:2,noise:1.5,passes:1,tol:0.02},medium:{subdiv:4,noise:2.5,passes:2,tol:0.05},strong:{subdiv:6,noise:4,passes:3,tol:0.1}};
+function applyPreset(){const p=PRESETS[$('preset').value];if(!p)return;
+  $('subdiv').value=p.subdiv;$('passes').value=p.passes;$('tol').value=p.tol;
+  if(S)$('noise').value=p.noise?+(p.noise*S.stats.meanNN).toFixed(2):0;else{$('noise').value='';$('noise').placeholder=p.noise?'Auto ('+p.noise+'× spacing)':'0'}}
+$('preset').onchange=applyPreset;
+for(const id of['subdiv','noise','passes','tol'])$(id).addEventListener('input',()=>{$('preset').value='custom'});
+applyPreset();
+
+function parseXYZ(txt){
+  const X=[],Y=[],Z=[];
+  const lines=txt.split(/\r?\n/);
+  for(let k=0;k<lines.length;k++){const s=lines[k].trim();if(!s||s[0]==='#'||s[0]===';')continue;
+    const a=s.split(/[,\s;]+/);if(a.length<3)continue;const x=+a[0],y=+a[1],z=+a[2];
+    if(Number.isFinite(x)&&Number.isFinite(y)&&Number.isFinite(z)){X.push(x);Y.push(y);Z.push(z)}}
+  return{X,Y,Z};
+}
+$('file').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  S=null;RESULT=null;$('download').disabled=true;$('download').style.display='none';$('generate').disabled=true;draw();
+  try{
+    status('Reading '+f.name+' …');await pause();
+    const{X,Y,Z}=parseXYZ(await f.text());
+    if(X.length<3)throw Error('At least 3 valid X Y Z points are required.');
+    fileName=f.name.replace(/\.[^.]+$/,'');$('outName').value=fileName+'_contours';
+    let ox=Infinity,oy=Infinity;for(let i=0;i<X.length;i++){if(X[i]<ox)ox=X[i];if(Y[i]<oy)oy=Y[i]}
+    for(let i=0;i<X.length;i++){X[i]-=ox;Y[i]-=oy}
+    const D=dedupePoints(X,Y,Z);const n=D.xs.length;
+    const coords=new Float64Array(2*n);for(let i=0;i<n;i++){coords[2*i]=D.xs[i];coords[2*i+1]=D.ys[i]}
+    status('Triangulating '+n.toLocaleString()+' points …');await pause();
+    const del=Delaunay(coords);const stats=edgeStats(coords,del);
+    let zmin=Infinity,zmax=-Infinity;for(const z of D.zs){if(z<zmin)zmin=z;if(z>zmax)zmax=z}
+    S={ox,oy,coords,zs:Float64Array.from(D.zs),del,stats,zmin,zmax,n,raw:X.length,dups:D.dups,cache:{}};
+    applyPreset();
+    $('maxEdge').placeholder='Auto ('+fmt(stats.autoMaxEdge,1)+')';
+    const range=zmax-zmin,nice=[0.1,0.2,0.25,0.5,1,2,5,10,20,25,50,100];
+    $('summary').textContent='File: '+f.name+'\nPoints: '+X.length.toLocaleString()+(D.dups?' ('+D.dups.toLocaleString()+' duplicate XY averaged)':'')+
+      '\nZ range: '+fmt(zmin)+' to '+fmt(zmax)+'\nAverage point spacing: '+fmt(stats.meanNN,2)+' ft';
+    status('Loaded '+n.toLocaleString()+' points. Z range '+fmt(zmin)+' to '+fmt(zmax)+(range/num('step')>400?'\nTip: '+fmt(range/num('step'),0)+' contour levels at the current interval — consider a larger interval.':'')+'\nClick "Generate contours".','good');
+    $('generate').disabled=false;view=null;draw();
+  }catch(err){console.error(err);status('Could not read file: '+err.message,'bad')}
+});
+
+$('generate').onclick=async()=>{
+  if(!S)return;$('generate').disabled=true;$('download').disabled=true;bar(3);
+  try{
+    const step=num('step');if(!(step>0))throw Error('Contour interval must be greater than zero.');
+    const rawMax=$('maxEdge').value.trim(),maxEdge=rawMax===''?S.stats.autoMaxEdge:Number(rawMax),trim=$('trim').value;
+    if(!(maxEdge>=0))throw Error('Enter a valid max triangle side, or leave it blank for automatic.');
+    status('Building TIN …');await pause();
+    const tk=trim+'|'+maxEdge;
+    if(S.cache.tinKey!==tk){S.cache.alive=trim==='none'?new Uint8Array(S.del.triangles.length/3).fill(1):tinTriangles(S.coords,S.del,maxEdge,trim);S.cache.tinKey=tk;S.cache.zKey=null}
+    const alive=S.cache.alive;let nAlive=0;for(const a of alive)nAlive+=a;
+    if(!nAlive)throw Error('No triangles left. Increase the max triangle side.');
+    let noiseR=$('noise').value.trim()===''?0:num('noise');if(!(noiseR>=0))noiseR=0;
+    if(noiseR>0&&S.cache.zKey!==noiseR){status('Noise filter (radius '+fmt(noiseR,2)+' ft) …');await pause();S.cache.zs=smoothZ(S.coords,S.zs,noiseR);S.cache.zKey=noiseR}
+    const zs=noiseR>0?S.cache.zs:S.zs;
+    // elevation range of the vertices used by the TIN
+    let zmin=Infinity,zmax=-Infinity;const T=S.del.triangles;
+    for(let t=0;t<alive.length;t++)if(alive[t])for(let k=0;k<3;k++){const z=zs[T[3*t+k]];if(z<zmin)zmin=z;if(z>zmax)zmax=z}
+    const levels=[];for(let i=Math.ceil(zmin/step-1e-9);i*step<=zmax+1e-9;i++){levels.push(+(i*step).toFixed(8));if(levels.length>5000)throw Error('More than 5000 contour levels. Use a larger contour interval.')}
+    if(!levels.length)throw Error('No contour level falls inside the Z range ('+fmt(zmin)+' to '+fmt(zmax)+').');
+    const n=+$('subdiv').value,passes=+$('passes').value,tol=Math.max(0,num('tol')||0),minLoop=Math.max(0,num('minLoop')||0);
+    status('Contouring '+levels.length+' levels on '+nAlive.toLocaleString()+' triangles …');bar(10);await pause();
+    const segs=contourTIN(S.coords,zs,S.del,alive,levels,n,1);
+    bar(70);status('Joining and smoothing lines …');await pause();
+    const majorEvery=Math.max(0,Math.round(num('major')||0)),contours=[];let removed=0;
+    for(let li=0;li<levels.length;li++){
+      const z=levels[li],isMajor=majorEvery>0&&Math.abs(Math.round(z/step)%majorEvery)===0;
+      for(const l of stitch(segs[li])){
+        let p=l.pts;if(passes)p=chaikin(p,l.closed,passes);if(tol>0)p=douglasPeucker(p,tol,l.closed);
+        if(p.length<2||(l.closed&&p.length<3))continue;
+        if(l.closed&&minLoop>0&&polyLength(p,true)<minLoop){removed++;continue}
+        contours.push({z,closed:l.closed,major:isMajor,pts:p})}
+      segs[li]=null;
+    }
+    bar(90);
+    const rings=tinOutline(S.del,alive);
+    RESULT={contours,rings,alive,levels,step,zs};
+    const verts=contours.reduce((a,c)=>a+c.pts.length,0),closed=contours.filter(c=>c.closed).length;
+    $('summary').textContent='Points: '+S.raw.toLocaleString()+'\nTIN triangles: '+nAlive.toLocaleString()+' (max side '+fmt(maxEdge,2)+' ft, '+(trim==='all'?'trimmed everywhere':trim==='outer'?'trimmed at outer edge':'not trimmed')+')'+
+      '\nContour levels: '+levels.length+' ('+step+' ft interval, '+fmt(levels[0])+' to '+fmt(levels[levels.length-1])+')'+
+      '\nContour lines: '+contours.length.toLocaleString()+' ('+closed.toLocaleString()+' closed)'+(removed?'\nSmall closed contours removed: '+removed:'')+
+      '\nVertices: '+verts.toLocaleString()+
+      '\nSmoothing: TIN level '+$('subdiv').selectedOptions[0].text.split(' ')[0]+', noise radius '+fmt(noiseR,2)+' ft, '+passes+' line passes, simplify '+tol+' ft';
+    bar(100);status('Done. Download the DXF.','good');
+    $('download').disabled=false;$('download').style.display='inline-block';syncName();draw();
+  }catch(err){console.error(err);status('Generation failed: '+err.message,'bad');bar(0)}
+  finally{$('generate').disabled=false}
+};
+
+// Preview removed
+let view=null;function draw(){}
+
+// ---------- DXF (AutoCAD R12 ASCII) ----------
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function plen(p){let s=0;for(let i=1;i<p.length;i++)s+=dist(p[i-1],p[i]);return s}
+function interpAt(p,d){let run=0;for(let i=1;i<p.length;i++){const l=dist(p[i-1],p[i]);if(run+l>=d){const t=(d-run)/(l||1),a=p[i-1],b=p[i];return{p:{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t},angle:Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI}}run+=l}return{p:p[p.length-1],angle:0}}
+function slicePath(p,lo,hi){const out=[interpAt(p,lo).p];let run=0;for(let i=1;i<p.length;i++){run+=dist(p[i-1],p[i]);if(run>lo&&run<hi)out.push(p[i])}out.push(interpAt(p,hi).p);return out}
+// ---------- HYPACK colour file (.hcf) ----------
+// Line 1 = number of colours, lines 2-4 = min, max, step, then "Z COLORREF" rows
+// (Windows COLORREF = 0x00BBGGRR). A Z value takes the colour of the last row whose Z is <= it.
+let HCF=null,hcfName='';
+function parseHCF(txt){
+  const L=txt.split(/\r?\n/).map(t=>t.trim()),n=parseInt(L[0],10);
+  if(!(n>0))throw Error('This is not a HYPACK colour file (first line must be the number of colours).');
+  const out=[];
+  for(let i=4;i<L.length&&out.length<n;i++){const a=L[i].split(/\s+/);if(a.length<2)continue;const z=+a[0],c=+a[1];
+    if(!Number.isFinite(z)||!Number.isFinite(c))continue;out.push({z,r:c&255,g:(c>>>8)&255,b:(c>>>16)&255})}
+  if(!out.length)throw Error('No Z / colour rows found in the colour file.');
+  out.sort((a,b)=>a.z-b.z);
+  return{list:out,allPositive:out.every(e=>e.z>=0)};
+}
+function hcfColor(z){
+  const{list,allPositive}=HCF;if(allPositive&&z<0)z=-z;   // depth colour files use positive depths
+  let lo=0,hi=list.length-1,k=0;
+  if(z<list[0].z)return list[0];
+  while(lo<=hi){const m=(lo+hi)>>1;if(list[m].z<=z+1e-9){k=m;lo=m+1}else hi=m-1}
+  return list[k];
+}
+// AutoCAD Color Index palette (R12 DXF layers use ACI colours)
+const ACI=(()=>{const p=[[0,0,0],[255,0,0],[255,255,0],[0,255,0],[0,255,255],[0,0,255],[255,0,255],[255,255,255],[128,128,128],[192,192,192]];
+  for(let i=10;i<250;i++){const h=(Math.floor(i/10)-1)*15,s=i%10,v=[1,.65,.5,.3,.15][s>>1];
+    const c=n=>{const k=(n+h/60)%6;return 1-Math.max(0,Math.min(k,4-k,1))};
+    let rgb=[c(5),c(3),c(1)];if(s&1)rgb=rgb.map(x=>.5+.5*x);p.push(rgb.map(x=>Math.round(x*v*255)))}
+  [51,91,132,173,214,255].forEach(g=>p.push([g,g,g]));return p})();
+function nearestACI(r,g,b){let best=7,bd=Infinity;
+  for(let i=1;i<256;i++){const q=ACI[i],dr=q[0]-r,dg=q[1]-g,db=q[2]-b,d=2*dr*dr+4*dg*dg+3*db*db;if(d<bd){bd=d;best=i}}return best}
+function hcfUI(){const bar=$('hcfBar'),info=$('hcfInfo');
+  if(!HCF){bar.style.display='none';info.textContent='Optional. Gives each contour layer the colour for its Z value. Without it: minor white/black, major red.';info.style.color='';return}
+  const l=HCF.list,z0=l[0].z,z1=l[l.length-1].z,span=(z1-z0)||1;
+  bar.style.background='linear-gradient(to right,'+l.map(e=>'rgb('+e.r+','+e.g+','+e.b+') '+((e.z-z0)/span*100).toFixed(2)+'%').join(',')+')';
+  bar.style.display='block';info.style.color='';
+  info.textContent=hcfName+': '+l.length+' colours, Z '+fmt(z0,2)+' to '+fmt(z1,2)+'. Layer colours use the nearest CAD colour.';
+}
+$('hcf').addEventListener('change',async e=>{const f=e.target.files[0];HCF=null;hcfName='';
+  if(f){try{HCF=parseHCF(await f.text());hcfName=f.name}catch(err){hcfUI();$('hcfInfo').textContent='Colour file: '+err.message;$('hcfInfo').style.color='var(--bad)';$('hcf').value='';return}}
+  hcfUI()});
+function makeDXF(){
+  const prec=num('coordDecimals')||3,zmul=Number($('zSign').value)||1,ox=S.ox,oy=S.oy;
+  const N=v=>{const t=Number(v).toFixed(prec);return/^-0\.?0*$/.test(t)?t.slice(1):t};
+  const is3d=$('exportType').value==='3d';
+  const spacing=Math.max(1,num('labelSpacing')),gap=Math.max(0,num('labelGap')),dec=+$('decimals').value;
+  const onLine=$('labelsOnLine').checked,h=num('labelHeight')>0?num('labelHeight'):2;
+  const Lb='TIN_BOUNDARY';
+  // One layer per elevation (contour + its labels). All entities are BYLAYER, so colour and
+  // line type are set per layer and can be changed in the CAD layer manager after opening.
+  const layers=new Map();     // name -> [ACI colour, linetype, sortKey]
+  const zLayer=z=>{let v=Number(z.toFixed(4)).toString();if(v==='-0')v='0';if(/e/i.test(v))v=z.toFixed(4);if(v==='0')v='0.0';return v.slice(0,31)};
+  const ents=[];let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
+  const ext=(x,y,z)=>{if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;if(z<minZ)minZ=z;if(z>maxZ)maxZ=z};
+  const E=(c,v)=>ents.push(c+'\r\n'+v+'\r\n');
+  function polyline(pts,z,layer,closed,force2d){if(pts.length<2)return;const d3=is3d&&!force2d;
+    E(0,'POLYLINE');E(8,layer);E(66,1);E(10,N(0));E(20,N(0));E(30,N(0));E(70,(d3?8:0)+(closed?1:0));
+    for(const p of pts){const X=p.x+ox,Y=p.y+oy,Z=d3?z:0;ext(X,Y,Z);E(0,'VERTEX');E(8,layer);E(10,N(X));E(20,N(Y));E(30,N(Z));if(d3)E(70,32)}
+    E(0,'SEQEND');E(8,layer)}
+  if($('contours').checked)for(const c of RESULT.contours){
+    const z=c.z*zmul,L=zLayer(z);
+    if(!layers.has(L)){let col=c.major?1:7;if(HCF){const h=hcfColor(c.z);col=nearestACI(h.r,h.g,h.b)}layers.set(L,[col,'CONTINUOUS',z])}
+    const path=c.closed?c.pts.concat([c.pts[0]]):c.pts,total=plen(path),pos=[];
+    const nlab=Math.max(c.closed||total>spacing*0.6?1:0,Math.floor(total/spacing+0.5));for(let i=0;i<nlab;i++)pos.push(total*(i+0.5)/nlab);
+    const cuts=onLine?pos.filter(d=>total>gap*1.5).map(d=>[Math.max(0,d-gap/2),Math.min(total,d+gap/2)]):[];
+    if(!cuts.length)polyline(c.pts,z,L,c.closed);
+    else{let cur=0;for(const[a,b]of cuts){if(a>cur+1e-6)polyline(slicePath(path,cur,a),z,L,false);cur=Math.max(cur,b)}if(cur<total-1e-6)polyline(slicePath(path,cur,total),z,L,false)}
+    for(const d of(onLine||!cuts.length?pos:[])){const a=interpAt(path,d);let ang=onLine?a.angle:0;if(ang>90)ang-=180;if(ang<-90)ang+=180;
+      let val=z.toFixed(dec);if(/^-0\.?0*$/.test(val))val=val.slice(1);
+      const X=a.p.x+ox,Y=a.p.y+oy,Z=is3d?z:0;ext(X,Y,Z);
+      E(0,'TEXT');E(8,L);E(10,N(X));E(20,N(Y));E(30,N(Z));E(40,h);E(1,val);E(50,ang.toFixed(3));E(72,1);E(73,2);E(11,N(X));E(21,N(Y));E(31,N(Z))}
+  }
+  if($('boundary').checked){layers.set(Lb,[8,'CONTINUOUS',1e9]);for(const r of RESULT.rings)polyline(r.map(v=>({x:S.coords[2*v],y:S.coords[2*v+1]})),0,Lb,true,true)}
+  if(!isFinite(minX)){minX=minY=minZ=maxX=maxY=maxZ=0}
+  const out=[],P=(c,v)=>out.push(c+'\r\n'+v+'\r\n');
+  P(0,'SECTION');P(2,'HEADER');P(9,'$ACADVER');P(1,'AC1009');P(9,'$INSBASE');P(10,'0.0');P(20,'0.0');P(30,'0.0');
+  P(9,'$EXTMIN');P(10,N(minX));P(20,N(minY));P(30,N(minZ));P(9,'$EXTMAX');P(10,N(maxX));P(20,N(maxY));P(30,N(maxZ));P(9,'$LTSCALE');P(40,1);P(0,'ENDSEC');
+  P(0,'SECTION');P(2,'TABLES');P(0,'TABLE');P(2,'LTYPE');P(70,5);
+  const lt=(name,desc,len,els)=>{P(0,'LTYPE');P(2,name);P(70,0);P(3,desc);P(72,65);P(73,els.length);P(40,len);els.forEach(e=>P(49,e))};
+  lt('CONTINUOUS','Solid line',0,[]);lt('DASHED','Dashed __ __ __',0.6,[0.4,-0.2]);lt('DOTTED','Dotted . . . .',0.2,[0,-0.2]);lt('CENTER','Center ____ _ ____',2,[1.25,-0.25,0.25,-0.25]);lt('HIDDEN','Hidden __ __ __',0.375,[0.25,-0.125]);
+  P(0,'ENDTAB');
+  const names=[['0',[7,'CONTINUOUS',-1e9]]].concat([...layers.entries()].filter(e=>e[0]!=='0').sort((a,b)=>a[1][2]-b[1][2]));
+  P(0,'TABLE');P(2,'LAYER');P(70,names.length);for(const[nm,[c,l]]of names){P(0,'LAYER');P(2,nm);P(70,0);P(62,c);P(6,l)}P(0,'ENDTAB');P(0,'ENDSEC');
+  P(0,'SECTION');P(2,'ENTITIES');
+  return{parts:out.concat(ents,['0\r\nENDSEC\r\n0\r\nEOF\r\n']),layers:names.length-1,entities:ents.length};
+}
+$('download').onclick=()=>{
+  if(!RESULT)return;
+  try{const{parts,layers}=makeDXF();const txt=parts.join('');if(/NaN|Infinity|undefined/.test(txt))throw Error('The DXF contained an invalid number.');
+    const name=(($('outName').value||fileName+'_contours').trim().replace(/\.dxf$/i,'').replace(/[\\/:*?"<>|]+/g,'_'))||'contours';
+    const blob=new Blob([txt],{type:'application/dxf'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name+'.dxf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+    status('DXF saved: '+name+'.dxf ('+(blob.size/1048576).toFixed(2)+' MB, '+layers+' layers'+(HCF?', colours from '+hcfName:'')+').','good')}
+  catch(err){console.error(err);status('Could not write DXF: '+err.message,'bad')}
+};
+function syncName(){const n=(($('outName').value||fileName+'_contours').trim().replace(/\.dxf$/i,'').replace(/[\\/:*?"<>|]+/g,'_'))||'contours';$('download').dataset.outputName=n+'.dxf'}
+$('outName').addEventListener('input',syncName);
+const DEFAULTS=[...document.querySelectorAll('#contourTab input:not([type=file]),#contourTab select')].map(e=>[e,e.type==='checkbox'?e.checked:e.value]);
+$('reset').onclick=()=>{for(const[e,v]of DEFAULTS){if(e.type==='checkbox')e.checked=v;else e.value=v}
+  if(S){$('outName').value=fileName+'_contours'}applyPreset();syncName();status(S?'Options reset. Click "Generate contours" to apply them.':'Choose an XYZ file to begin.')};
+const clr=document.getElementById('clearAllBtn');
+if(clr)clr.addEventListener('click',()=>{$('file').value='';$('hcf').value='';HCF=null;hcfName='';hcfUI();S=null;RESULT=null;$('generate').disabled=true;$('download').style.display='none';$('summary').textContent='No file loaded.';bar(0);$('reset').onclick();view=null;draw()});
+document.querySelectorAll('.tab-button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{if(document.getElementById('contourTab').classList.contains('active')){if(!view&&S)view=null;draw()}},0)));
+draw();
+
+})();
 </script>
 
 <script>
